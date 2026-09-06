@@ -1,0 +1,2 @@
+img/index/Banner_mobile.png
+img/index/Banner_mobile.webp

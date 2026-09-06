@@ -1,0 +1,5 @@
+img/icons/favicon.png
+img/index/gold_frame_bar.png
+img/news/gold_frame_big.png
+img/news/gold_frame.png
+img/news/gold_frame_small.png

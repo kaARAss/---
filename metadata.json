@@ -1,6 +1,6 @@
 {
-  "name": "Burlesque Cabaret",
-  "description": "Ticket booking for Burlesque Cabaret The Bat",
+  "name": "MyCompany",
+  "description": "Ticket booking for MyCompany",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

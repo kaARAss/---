@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         imgBg.className = 'background-image';
 
         const imgOverlay = document.createElement('img');
-        imgOverlay.src = '/wp-content/themes/burlesqueshow-2/img/index/red_frame.png';
+        imgOverlay.src = './red_frame.png';
         imgOverlay.alt = 'red frame';
         imgOverlay.className = 'overlay-image';
 
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const prev = document.createElement('a');
         prev.className = 'black_button event_prev';
         prev.href = '#';
-        const prevIcon = `<img src="/wp-content/themes/burlesqueshow-2/img/icons/arrow_left.svg" alt="arrow left">`;
+        const prevIcon = `<img src="./Arrow.svg" alt="arrow left">`;
         const prevText = document.createElement('span');
         const prevMonthNum = monthNum === 1 ? 12 : monthNum - 1;
         const prevMonthKey = String(prevMonthNum).padStart(2, "0");
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const next = document.createElement('a');
         next.className = 'black_button event_next';
         next.href = '#';
-        const nextIcon = `<img src="/wp-content/themes/burlesqueshow-2/img/icons/arrow_right.svg" alt="arrow right">`;
+        const nextIcon = `<img src="./Arrow.svg" alt="arrow right">`;
         const nextText = document.createElement('span');
 
         const nextMonthNum = monthNum === 12 ? 1 : monthNum + 1;
@@ -186,7 +186,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const closeBtn = document.createElement('a');
         closeBtn.className = 'close_event_tickets';
         closeBtn.href = '#';
-        closeBtn.innerHTML = `<img src="/wp-content/themes/burlesqueshow-2/img/icons/close_popup.svg" alt="close icon">`;
+        closeBtn.innerHTML = `<img src="./close_popup.svg" alt="close icon">`;
         closeBtn.addEventListener('click', function(e) {
             e.preventDefault();
             eventTickets.remove();

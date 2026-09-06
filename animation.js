@@ -12,8 +12,16 @@
   const header = document.querySelector('header');
   const banner = document.querySelector('.banner');
 
-  if (!overlay || !white || !gray || !star) return;
-  if (MIN_WIDTH && window.innerWidth < MIN_WIDTH) return;
+  if (!overlay || !white || !gray || !star) {
+      if (overlay) overlay.remove();
+      html.classList.remove('intro-lock');
+      return;
+    }
+  if (MIN_WIDTH && window.innerWidth < MIN_WIDTH) {
+      if (overlay) overlay.remove();
+      html.classList.remove('intro-lock');
+      return;
+    }
 
 
   function getBackgroundImageUrl(el){
@@ -172,6 +180,8 @@
   };
 
   (async () => {
+    try {
+      
     try { if (star.decode) await star.decode(); } catch(e) {}
     await whiteCollapse.finished;
     await starAppear().finished;
@@ -216,5 +226,12 @@
     await star.animate([{opacity:1},{opacity:0}], { duration: 300, fill:'forwards' }).finished;
     await overlay.animate([{opacity:1},{opacity:0}], { duration: 200, fill:'forwards' }).finished;
     overlay.remove();
+  
+    } catch(e) {
+      console.error(e);
+    } finally {
+      if (overlay && overlay.parentNode) overlay.remove();
+      html.classList.remove('intro-lock');
+    }
   })();
 })();

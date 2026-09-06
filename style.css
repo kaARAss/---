@@ -1,16 +1,16 @@
 /*!
-Theme Name: burlesqueshow 2
+Theme Name: mycompany 2
 Theme URI: http://sibdev.pro/
 Author: SibDev
 Author URI: http://sibdev.pro/
-Description: burlesqueshow design 2
+Description: mycompany design 2
 Version: 1.0.0
 Tested up to: 5.4
 Requires PHP: 5.6
 License: GNU General Public License v2 or later
 License URI: LICENSE
-Text Domain: burlesqueshow
-Tags: burlesqueshow-theme
+Text Domain: mycompany
+Tags: mycompany-theme
 */
 :root {
     --container-padding: 16px;
@@ -743,4 +743,8 @@ html, body {
 }
 .intro-lock {
     overflow: hidden !important;
+}
+
+#intro[hidden] {
+    display: none !important;
 }

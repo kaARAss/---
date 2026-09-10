@@ -398,7 +398,7 @@ document.addEventListener('DOMContentLoaded', function () {
     formData.append('order_number', orderNumber);
     
     $.ajax({
-        url: '/wp-admin/admin-ajax.php',
+        url: '/api/handler',
         type: 'POST',
         data: formData,
         processData: false,

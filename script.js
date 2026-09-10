@@ -60,7 +60,7 @@ jQuery(document).ready(function($) {
         // inputElement.value = orderNumber;
     
         $.ajax({
-            url: '/wp-admin/admin-ajax.php',
+            url: '/api/handler',
             type: 'POST',
             data: {
                 action: 'check_seat_availability',
@@ -95,7 +95,7 @@ jQuery(document).ready(function($) {
     
                     if (giftCode && amountSale) {
                         $.ajax({
-                            url: '/wp-admin/admin-ajax.php',
+                            url: '/api/handler',
                             type: 'POST',
                             data: {
                                 action: 'update_gift_code_usage',
@@ -111,7 +111,7 @@ jQuery(document).ready(function($) {
                                     formData.append('id', $('#event-id').val());
     
                                     $.ajax({
-                                        url: '/wp-admin/admin-ajax.php',
+                                        url: '/api/handler',
                                         type: 'POST',
                                         data: formData,
                                         processData: false,
@@ -121,7 +121,7 @@ jQuery(document).ready(function($) {
                                                 // $('#loader-order').hide();
                                                 if (inputTotal == 0) {
                                                     $.ajax({
-                                                        url: '/wp-admin/admin-ajax.php',
+                                                        url: '/api/handler',
                                                         type: 'POST',
                                                         data: {
                                                             action: 'use_full_discount',
@@ -167,7 +167,7 @@ jQuery(document).ready(function($) {
                         formData.append('id', $('#event-id').val());
     
                         $.ajax({
-                            url: '/wp-admin/admin-ajax.php',
+                            url: '/api/handler',
                             type: 'POST',
                             data: formData,
                             processData: false,
@@ -223,7 +223,7 @@ jQuery(document).ready(function($) {
     //     formData.append('action', 'refund_order');
         
     //     $.ajax({
-    //         url: '/wp-admin/admin-ajax.php',
+    //         url: '/api/handler',
     //         type: 'POST',
     //         data: formData,
     //         processData: false,
@@ -290,7 +290,7 @@ jQuery(document).ready(function($) {
         var formData = $(this).serialize();
         $.ajax({
             type: 'POST',
-            url: '/wp-admin/admin-ajax.php',
+            url: '/api/handler',
             data: formData + '&action=process_contact_form',
             success: function(response) {
                 if (response.success) {
@@ -651,7 +651,7 @@ $('#order-certs-form').on('submit', function(e) {
     // };
     
     $.ajax({
-        url: '/wp-admin/admin-ajax.php',
+        url: '/api/handler',
         type: 'POST',
         data: formData,
         // data: {
@@ -729,7 +729,7 @@ $('#submit-code').on('click', function () {
 
     $.ajax({
         type: 'POST',
-        url: '/wp-admin/admin-ajax.php',
+        url: '/api/handler',
         data: formData,
         success: function (response) {
             $('#loader-order').hide();

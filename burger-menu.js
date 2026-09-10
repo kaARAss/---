@@ -10,7 +10,7 @@ burger.addEventListener('click', () => {
   document.body.classList.toggle('no-scroll');
 });
 
-dropdownTrigger.addEventListener('click', function (e) {
+if (dropdownTrigger) dropdownTrigger.addEventListener('click', function (e) {
     if (window.innerWidth <= 1024) {
         const linkRect = this.getBoundingClientRect();
         const triggerZone = linkRect.width * 0.3;
@@ -29,4 +29,14 @@ document.addEventListener('click', function (e) {
     if (!isDropdown && window.innerWidth <= 1024) {
         document.querySelectorAll('.has-dropdown.open').forEach(drop => drop.classList.remove('open'));
     }
+});
+document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        if (window.innerWidth <= 1024) {
+            burger.classList.remove('active');
+            nav.classList.remove('active');
+            if(buttons) buttons.classList.remove('hide-desktop-buttons');
+            document.body.classList.remove('no-scroll');
+        }
+    });
 });

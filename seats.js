@@ -76,7 +76,12 @@ document.addEventListener('DOMContentLoaded', function() {
         content.className = 'content';
 
         const title = document.createElement('h2');
-        title.textContent = monthText;
+        title.textContent = 'НАЗВАНИЕ ШОУ'; 
+        const divider = document.createElement('hr');
+        divider.className = 'card-divider';
+        const subtitle = document.createElement('p');
+        subtitle.className = 'card-subtitle';
+        subtitle.textContent = 'ОПИСАНИЕ ШОУ'; // Keeping month as subtitle so it matches original data loosely
 
         const button = document.createElement('a');
         button.className = 'event-item_button';
@@ -100,6 +105,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         content.appendChild(title);
+        content.appendChild(divider);
+        content.appendChild(subtitle);
         content.appendChild(button);
 
         eventItem.appendChild(imgBg);
@@ -242,7 +249,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const eventsList = eventTickets.querySelector('.events_list');
         eventsList.innerHTML = '';
 
-        fetch(`/wp-admin/admin-ajax.php?action=get_events_for_month&month=${monthNum}&year=${year}`)
+        fetch(`/api/handler?action=get_events_for_month&month=${monthNum}&year=${year}`)
             .then(res => res.json())
             .then(events => {
                 events.forEach(event => {
@@ -1039,7 +1046,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 eventIdInput.value = eventId;
                 $('#loader').css('display', 'flex');
 
-                fetch(`/wp-admin/admin-ajax.php?action=get_event_details&event_id=${eventId}`)
+                fetch(`/api/handler?action=get_event_details&event_id=${eventId}`)
                     .then(response => response.json())
                     .then(data => {
                         //console.log(data);

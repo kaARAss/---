@@ -1,8 +1,8 @@
 /*!
 Theme Name: mycompany 2
-Theme URI: http://sibdev.pro/
-Author: SibDev
-Author URI: http://sibdev.pro/
+
+Author: MyCompany
+
 Description: mycompany design 2
 Version: 1.0.0
 Tested up to: 5.4
@@ -654,9 +654,7 @@ footer .footer_section {
     flex-wrap: wrap;
     justify-content: center;
 }
-.banner_main {
-    padding: 115px 5% !important;
-}
+
 .contacts {
     padding: 60px 5% !important;
 }
@@ -747,4 +745,253 @@ html, body {
 
 #intro[hidden] {
     display: none !important;
+}
+
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+}
+
+/* Fix events grid for desktop to be 5 columns, 2 rows */
+@media (min-width: 1025px) {
+    .events .event-seasons {
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 15px !important;
+        justify-content: center !important;
+    }
+    .events .event-item {
+        max-width: 100% !important;
+        width: 100% !important;
+        aspect-ratio: 4/5 !important;
+        position: relative;
+    }
+    .events .event-item .content h2 {
+        font-size: 32px !important; /* Smaller text so it fits */
+        margin-bottom: 10px !important;
+    }
+    .events .event-item .content .card-divider {
+        width: 80% !important;
+        border-color: #f8e7bc !important;
+        margin-bottom: 10px !important;
+    }
+    .events .event-item .content .card-subtitle {
+        font-size: 14px !important;
+        color: #f8e7bc !important;
+        margin-bottom: 20px !important;
+    }
+}
+
+/* Base styles for new elements in cards */
+.events .event-item .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+}
+
+.events .event-item .content h2 {
+    text-align: center;
+    font-family: Rosemaria, serif !important;
+}
+
+.events .event-item .content .card-divider {
+    width: 60%;
+    border: none;
+    border-top: 1px solid #f8e7bc;
+    margin: 15px 0;
+}
+
+.events .event-item .content .card-subtitle {
+    text-align: center;
+    color: #f8e7bc;
+    font-size: 16px;
+    margin-bottom: 25px;
+    font-family: Onest, sans-serif;
+}
+
+/* Override the hardcoded margin from style.min.css to center things nicely */
+.events .event-seasons .event-item .content h2 {
+    margin: 0 0 10px 0 !important; /* Adjusted margin */
+}
+
+/* Completely overriding the sizes for desktop to allow 5 cards per row */
+@media (min-width: 1025px) {
+    .events .event-seasons {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 15px !important;
+    }
+    .events .event-seasons .event-item {
+        width: calc(20% - 12px) !important;
+        max-width: none !important;
+        aspect-ratio: 540 / 359 !important; /* Original aspect ratio */
+        height: auto !important;
+        max-height: none !important;
+        font-size: 1vw !important; /* Base size for scaling */
+    }
+    
+    /* Make the content container scale with the card */
+    .events .event-seasons .event-item .content {
+        width: 42% !important; /* approx 228/540 */
+        height: 86.6% !important; /* approx 311/359 */
+        top: 6.8% !important;
+        left: 4.5% !important;
+        padding: 10px !important;
+        box-sizing: border-box;
+    }
+
+    .events .event-seasons .event-item .overlay-image {
+        width: 42% !important;
+        height: 86.6% !important;
+        max-width: none !important;
+        max-height: none !important;
+        top: 6.8% !important;
+        left: 4.5% !important;
+    }
+
+    .events .event-item .content h2 {
+        font-size: 1.5vw !important; /* Scaled font size */
+        margin-bottom: 5px !important;
+    }
+
+    .events .event-item .content .card-divider {
+        width: 80% !important;
+        margin: 5px 0 !important;
+    }
+
+    .events .event-item .content .card-subtitle {
+        font-size: 0.8vw !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .events .event-item .content .event-item_button {
+        padding: 5px 10px !important;
+        font-size: 0.8vw !important;
+    }
+}
+
+/* Update the style for "Что вас ждет на шоу" */
+.about_show h2 {
+    color: #f8e7bc !important;
+    font-family: Rosemaria, serif !important;
+    font-size: 52px !important;
+    text-transform: uppercase;
+}
+
+@media only screen and (max-width: 760px) {
+    .about_show h2 {
+        font-size: 36px !important;
+        margin: 40px auto !important;
+    }
+}
+
+/* Update Footer Font and Spacing */
+footer .footer_section .footer_block a {
+    font-family: Onest, sans-serif !important;
+    font-size: 16px !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    margin-bottom: 12px !important;
+    transition: color 0.3s ease;
+}
+footer .footer_section .footer_block a:hover {
+    color: #f8e7bc !important;
+}
+
+/* Legal text bottom alignment */
+footer .section_down .footer_block a {
+    font-size: 14px !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+footer .section_down .footer_block a:hover {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Fix social buttons hover */
+footer .social_btn:hover {
+    color: #f8e7bc !important;
+}
+footer .social_btn:hover svg {
+    stroke: #f8e7bc !important;
+}
+
+/* Fix footer logo max-width override */
+footer .footer_section .first_footer_block img[alt="logo footer"] {
+    max-width: none !important;
+    height: 90px !important;
+    width: auto !important;
+    object-fit: contain;
+    margin-bottom: 20px;
+}
+
+/* Adjust social icons image width inside link_block */
+footer .footer_section .footer_block .link_block img,
+footer .footer_section .footer_block .link_block svg {
+    max-width: 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+}
+/* Увеличенная кнопка на главном баннере */
+.banner_content .red_button {
+    padding: 16px 36px !important;
+    font-size: 20px !important;
+    border-radius: 12px !important;
+}
+
+@media only screen and (max-width: 760px) {
+    .banner_content .red_button {
+        padding: 14px 28px !important;
+        font-size: 18px !important;
+        width: auto !important;
+        max-width: fit-content !important;
+        margin: 0 auto !important;
+    }
+}
+
+/* Позиционирование кнопки на баннере */
+.banner_image {
+    position: relative;
+    display: flex;
+}
+
+.banner_content.desktop_only {
+    position: absolute !important;
+    bottom: 8% !important;
+    left: 15% !important;
+    margin: 0 !important;
+    width: auto !important;
+}
+
+@media only screen and (max-width: 1024px) {
+    .banner_content.desktop_only {
+        left: 4% !important;
+    }
+}
+
+@media only screen and (max-width: 760px) {
+    .banner_content.mobile_only {
+        margin-top: -60px !important;
+        position: relative;
+        z-index: 10;
+        display: flex;
+        justify-content: center;
+    }
+    .banner_content.mobile_only .red_button {
+        margin: 0 auto !important;
+    }
+}
+
+/* Увеличиваем высоту баннера, чтобы скрыть черные полосы снизу */
+
+
+@media only screen and (max-width: 1024px) {
+    .banner_main {
+        min-height: auto;
+    }
+}
+
+.banner_main {
+    min-height: 100vh !important;
 }

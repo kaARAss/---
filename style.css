@@ -659,7 +659,7 @@ footer .footer_section {
     padding: 60px 5% !important;
 }
 footer .footer_section {
-    padding: 80px 5% !important;
+    padding: 10px 5% 5px 5% !important;
     width: 100% !important;
     max-width: 100% !important;
 }
@@ -676,7 +676,7 @@ footer .footer_section {
 
 footer {
     width: 100%;
-    margin-top: 50px;
+    margin-top: 20px;
     position: relative;
 }
 
@@ -893,7 +893,7 @@ footer .footer_section .footer_block a {
     font-family: Onest, sans-serif !important;
     font-size: 16px !important;
     color: rgba(255, 255, 255, 0.8) !important;
-    margin-bottom: 12px !important;
+    margin-bottom: 6px !important;
     transition: color 0.3s ease;
 }
 footer .footer_section .footer_block a:hover {
@@ -994,4 +994,144 @@ footer .footer_section .footer_block .link_block svg {
 
 .banner_main {
     min-height: 100vh !important;
+    padding-top: 80px !important;
+    align-items: flex-start !important;
+}
+
+body {
+    background-image: url('./img/main-bg.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat !important;
+    background-color: transparent !important;
+}
+
+.banner_image {
+    transition: background-image 0.3s ease-in-out !important;
+}
+
+.banner_image:hover {
+    background-image: url('./img/index/Banner_hover.png') !important;
+}
+
+
+.about .about_us .section_title {
+    text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6);
+}
+
+.about .about_show h2 {
+    text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6);
+}
+
+.about .about_us .section_title,
+.about .about_show h2 {
+    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 0.8), 0px 0px 50px rgba(0, 0, 0, 0.8) !important;
+}
+
+.footer_section .footer_block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+footer .footer_section .section_up, footer .footer_section .section_down {
+    margin-bottom: 16px !important;
+}
+footer .footer_section .first_footer_block img[alt="logo footer"] {
+    height: 60px !important;
+    margin-bottom: 10px !important;
+}
+
+.footer_hr { margin: 8px 0 !important; }
+
+footer .footer_section .section_up {
+    margin-bottom: 8px !important;
+}
+footer .footer_section .section_down {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+}
+
+footer { background-color: rgba(0, 0, 0, 0.8) !important; }
+
+footer .footer_section .section_up { align-items: center !important; }
+
+footer .footer_section .footer_block {
+    justify-content: center !important;
+}
+
+@media only screen and (max-width: 900px) {
+    .new_modal_layout .modal-body-container {
+        flex-direction: column !important;
+        overflow-y: auto !important;
+    }
+    .new_modal_layout .modal-body-container > div:first-child { /* thumbsCol */
+        flex-direction: row !important;
+        width: 100% !important;
+        height: 100px !important;
+        overflow-x: auto !important;
+        overflow-y: hidden !important;
+    }
+    .new_modal_layout .modal-body-container > div:first-child > div {
+        width: 120px !important;
+        height: 80px !important;
+    }
+    .new_modal_layout .modal-body-container > div:nth-child(2) { /* mainFrame */
+        min-height: 250px !important;
+    }
+    .new_modal_layout .modal-body-container > div:nth-child(3) { /* detailsCol */
+        width: 100% !important;
+        height: auto !important;
+    }
+    .new_modal_layout .event_title h1 {
+        font-size: 16px !important;
+    }
+    .new_modal_layout .event_prev, .new_modal_layout .event_next {
+        min-width: 80px !important;
+        font-size: 12px !important;
+        padding: 8px !important;
+    }
+}
+
+
+
+/* Make the ticket banner slightly bigger */
+.banner_image {
+    transform: scaleX(1.05);
+    transform-origin: center top;
+}
+@media only screen and (max-width: 1024px) {
+    .banner_image {
+        transform: scaleX(1.02);
+    }
+}
+@media only screen and (max-width: 760px) {
+    .banner_image {
+        transform: scaleX(1);
+    }
+}
+
+.red_button { text-align: center; }
+
+header .buttons .red_button {
+    white-space: nowrap;
+    height: 44px; /* Same height as black_button might be */
+    padding: 8px 16px !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+header .buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+header .buttons .black_button {
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px !important;
+    margin: 0 !important;
 }

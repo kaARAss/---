@@ -1,35 +1,35 @@
 const fs = require('fs');
 
-// 1. Remove red button width override
-let css = fs.readFileSync('style.css', 'utf8');
-css = css.replace("/* Override red button width to allow text to fit */\nheader .buttons .red_button, header .mobile-only .red_button {\n    max-width: fit-content !important;\n    padding: 10px 24px !important;\n}\n", "");
-fs.writeFileSync('style.css', css);
+// 1. Update index.html
+let html = fs.readFileSync('index.html', 'utf8');
 
-let mincss = fs.readFileSync('style.min.css', 'utf8');
-mincss = mincss.replace("header .buttons .red_button, header .mobile-only .red_button{max-width:fit-content!important;padding:10px 24px!important}", "");
-fs.writeFileSync('style.min.css', mincss);
+const modalDescHtml = `<h3 style="color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;">О шоу</h3><p style="margin-bottom: 15px;">✨ Завораживающее шоу светящихся крыльев, которое погружает в атмосферу магии, свободы и ночного неба. Это не просто танец — это настоящая феерия света, где реальность отступает перед волшебством.</p><p style="margin-bottom: 15px;">🌌 В полной темноте зала вспыхивают яркие огни. Они складываются в причудливые узоры, а затем — в образы таинственных птиц. Артисты, облаченные в светящиеся костюмы, движутся с невероятной грацией. Кажется, будто они парят в воздухе, а их крылья сотканы из тысяч мерцающих звезд. Зрители замирают, наблюдая за этим гипнотическим действом, которое дарит ощущение чуда и абсолютной свободы.</p><p style="margin-bottom: 15px;">💫 Каждое выступление — это история, рассказанная языком света и пластики. Она уносит прочь от повседневности, заставляя поверить в сказку. Это идеальный финал для любого вечера, который запомнится надолго.</p>`;
 
-// 2. Increase banner size slightly (5% instead of 10%)
-css += `
-/* Make the ticket banner slightly bigger */
-.banner_image {
-    transform: scale(1.05);
-    transform-origin: center top;
+html = html.replace('"title":"Ночные птицы (световой номер)"', '"title":"Ночные птицы", "detailsText": ' + JSON.stringify(modalDescHtml));
+
+// Put the short description back just in case
+const newDescStr = '"description": "✨ Завораживающее шоу светящихся крыльев, которое погружает в атмосферу магии, свободы и ночного неба. Это не просто танец — это настоящая феерия света, где реальность отступает перед волшебством.\\n\\n🌌 В полной темноте зала вспыхивают яркие огни. Они складываются в причудливые узоры, а затем — в образы таинственных птиц. Артисты, облаченные в светящиеся костюмы, движутся с невероятной грацией. Кажется, будто они парят в воздухе, а их крылья сотканы из тысяч мерцающих звезд. Зрители замирают, наблюдая за этим гипнотическим действом, которое дарит ощущение чуда и абсолютной свободы.\\n\\n💫 Каждое выступление — это история, рассказанная языком света и пластики. Она уносит прочь от повседневности, заставляя поверить в сказку. Это идеальный финал для любого вечера, который запомнится надолго."';
+
+html = html.replace(newDescStr, '"description":"Уникальное сочетание бурлеска и световых эффектов, погружающее в гипнотическую атмосферу ночи."');
+
+fs.writeFileSync('index.html', html);
+
+// 2. Update seats.js
+let seats = fs.readFileSync('seats.js', 'utf8');
+
+seats = seats.replace("heading.textContent = 'НАЗВАНИЕ МЕРОПРИЯТИЯ';", "heading.textContent = monthData.title || 'НАЗВАНИЕ МЕРОПРИЯТИЯ';");
+
+// Make sure arrows are not appended
+if (!seats.includes('// thumbsWrapper.appendChild(leftArrow);')) {
+    seats = seats.replace('thumbsWrapper.appendChild(leftArrow);', '// thumbsWrapper.appendChild(leftArrow);');
 }
-@media only screen and (max-width: 1024px) {
-    .banner_image {
-        transform: scale(1.02);
-    }
+if (!seats.includes('// thumbsWrapper.appendChild(rightArrow);')) {
+    seats = seats.replace('thumbsWrapper.appendChild(rightArrow);', '// thumbsWrapper.appendChild(rightArrow);');
 }
-@media only screen and (max-width: 760px) {
-    .banner_image {
-        transform: scale(1);
-    }
-}
-`;
-fs.writeFileSync('style.css', css);
 
-mincss += '.banner_image{transform:scale(1.05);transform-origin:center top}@media only screen and (max-width:1024px){.banner_image{transform:scale(1.02)}}@media only screen and (max-width:760px){.banner_image{transform:scale(1)}}';
-fs.writeFileSync('style.min.css', mincss);
+// In case the previous run did not do it or did it wrong, replace them securely:
+// if it's already commented, we are fine.
 
-console.log('Fixed everything');
+fs.writeFileSync('seats.js', seats);
+
+console.log('Fixed');

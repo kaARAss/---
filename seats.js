@@ -76,42 +76,62 @@ document.addEventListener('DOMContentLoaded', function() {
         content.className = 'content';
 
         const title = document.createElement('h2');
-        title.textContent = 'НАЗВАНИЕ ШОУ'; 
+        title.textContent = monthData.title || 'НАЗВАНИЕ ШОУ'; 
         const divider = document.createElement('hr');
         divider.className = 'card-divider';
         const subtitle = document.createElement('p');
         subtitle.className = 'card-subtitle';
-        subtitle.textContent = 'ОПИСАНИЕ ШОУ'; // Keeping month as subtitle so it matches original data loosely
+        subtitle.textContent = monthData.description || 'ОПИСАНИЕ ШОУ'; // Keeping month as subtitle so it matches original data loosely
 
-        const button = document.createElement('a');
-        button.className = 'event-item_button';
-        button.textContent = 'Подробнее';
-        button.href = '#';
-        button.dataset.month = `${monthNum}/${year}`;
-
-        button.addEventListener('click', function(e) {
+        
+        eventItem.style.cursor = 'pointer';
+        eventItem.addEventListener('click', function(e) {
             e.preventDefault();
-
             const existingModal = document.querySelector(`#event_tickets_${monthYear}`);
-
             if (existingModal) {
                 openEventTickets(monthYear);
                 return;
             }
-
             const eventTickets = createEventTickets(monthData, index);
             document.body.appendChild(eventTickets);
             openEventTickets(monthYear);
         });
-
-        content.appendChild(title);
-        content.appendChild(divider);
-        content.appendChild(subtitle);
-        content.appendChild(button);
-
-        eventItem.appendChild(imgBg);
-        eventItem.appendChild(imgOverlay);
+        
+        if (!monthData.is_custom_image) {
+            content.appendChild(title);
+            content.appendChild(divider);
+            content.appendChild(subtitle);
+            eventItem.appendChild(imgBg);
+            eventItem.appendChild(imgOverlay);
+        } else {
+            content.classList.add('custom-image-content');
+            eventItem.appendChild(imgBg);
+            
+            imgBg.style.position = 'absolute';
+            imgBg.style.top = '0';
+            imgBg.style.left = '0';
+            imgBg.style.width = '100%';
+            imgBg.style.height = '100%';
+            imgBg.style.objectFit = 'cover';
+            if (monthData.image.includes('show1')) {
+                imgBg.style.objectPosition = 'left center'; 
+                imgBg.style.transform = 'scale(1.05)'; 
+                imgBg.style.transformOrigin = 'left center';
+            } else if (monthData.image.includes('show2')) {
+                imgBg.style.objectPosition = 'left center';
+                imgBg.style.transform = 'scale(1.15)';
+                imgBg.style.transformOrigin = 'left center';
+            } else if (monthData.image.includes('show3')) {
+                imgBg.style.objectPosition = 'center 35%'; 
+                imgBg.style.transform = 'none';
+            } else {
+                imgBg.style.objectPosition = 'center';
+                imgBg.style.transform = 'none';
+            }
+        }
         eventItem.appendChild(content);
+
+
 
         return eventItem;
     }
@@ -157,16 +177,19 @@ function createEventTickets(monthData, index) {
     eventTitle.className = 'event_title';
     eventTitle.style.display = 'flex';
     eventTitle.style.alignItems = 'center';
-    eventTitle.style.justifyContent = 'space-between';
+    eventTitle.style.justifyContent = 'center';
     eventTitle.style.marginBottom = '20px';
-    eventTitle.style.padding = '0'; // reset existing padding
+    eventTitle.style.padding = '0';
+    eventTitle.style.position = 'relative'; // For close button positioning
 
     const prev = document.createElement('a');
-    prev.className = 'black_button event_prev';
+    prev.className = 'black_button event_prev desktop-only-btn';
     prev.href = '#';
     prev.textContent = 'Предыдущее';
     prev.style.minWidth = '140px';
     prev.style.textAlign = 'center';
+    prev.style.position = 'absolute';
+    prev.style.left = '0';
     if (index === 0) {
         prev.style.opacity = '0.4';
         prev.style.pointerEvents = 'none';
@@ -178,20 +201,22 @@ function createEventTickets(monthData, index) {
     }
 
     const heading = document.createElement('h1');
-    heading.textContent = 'НАЗВАНИЕ МЕРОПРИЯТИЯ';
+    heading.textContent = monthData.title || 'НАЗВАНИЕ МЕРОПРИЯТИЯ';
     heading.style.margin = '0';
     heading.style.fontSize = 'clamp(18px, 4vw, 32px)';
     heading.style.color = '#f8e7bc';
     heading.style.textAlign = 'center';
-    heading.style.flex = '1';
     heading.style.fontFamily = 'Playfair Display, serif';
+    heading.style.flex = '1';
 
     const next = document.createElement('a');
-    next.className = 'black_button event_next';
+    next.className = 'black_button event_next desktop-only-btn';
     next.href = '#';
     next.textContent = 'Следующее';
     next.style.minWidth = '140px';
     next.style.textAlign = 'center';
+    next.style.position = 'absolute';
+    next.style.right = '50px';
     if (index === window.monthsData.length - 1) {
         next.style.opacity = '0.4';
         next.style.pointerEvents = 'none';
@@ -206,7 +231,8 @@ function createEventTickets(monthData, index) {
     closeBtn.className = 'close_event_tickets';
     closeBtn.href = '#';
     closeBtn.innerHTML = `<img src="./close_popup.svg" alt="close icon" style="width: 32px; height: 32px; filter: brightness(0) invert(1);">`;
-    closeBtn.style.marginLeft = '20px';
+    closeBtn.style.position = 'absolute';
+    closeBtn.style.right = '0';
     closeBtn.addEventListener('click', function(e) {
         e.preventDefault();
         eventTickets.style.display = 'none';
@@ -232,19 +258,47 @@ function createEventTickets(monthData, index) {
     bodyContainer.style.overflow = 'hidden';
 
     // Left Column: Thumbnails
+    
+    const thumbsWrapper = document.createElement('div');
+    thumbsWrapper.className = 'thumbs-wrapper';
+    thumbsWrapper.style.display = 'flex';
+    thumbsWrapper.style.alignItems = 'center';
+    thumbsWrapper.style.gap = '10px';
+    thumbsWrapper.style.width = '100%';
+
+    const leftArrow = document.createElement('button');
+    leftArrow.innerHTML = '&#10094;';
+    leftArrow.className = 'thumb-arrow thumb-arrow-left';
+    leftArrow.style.background = 'transparent';
+    leftArrow.style.border = 'none';
+    leftArrow.style.color = '#f8e7bc';
+    leftArrow.style.fontSize = '24px';
+    leftArrow.style.cursor = 'pointer';
+
+    const rightArrow = document.createElement('button');
+    rightArrow.innerHTML = '&#10095;';
+    rightArrow.className = 'thumb-arrow thumb-arrow-right';
+    rightArrow.style.background = 'transparent';
+    rightArrow.style.border = 'none';
+    rightArrow.style.color = '#f8e7bc';
+    rightArrow.style.fontSize = '24px';
+    rightArrow.style.cursor = 'pointer';
+
     const thumbsCol = document.createElement('div');
+    thumbsCol.className = 'thumbs-col';
+
     thumbsCol.style.display = 'flex';
     thumbsCol.style.flexDirection = 'column';
     thumbsCol.style.gap = '15px';
     thumbsCol.style.width = '140px';
     thumbsCol.style.overflowY = 'auto';
-    thumbsCol.style.paddingRight = '5px';
+    thumbsCol.style.paddingRight = '0px';
 
-    const createThumb = (text, isVideo) => {
+    const createThumb = (text, isVideo, bgUrl) => {
         const t = document.createElement('div');
         t.style.width = '100%';
         t.style.height = '90px';
-        t.style.backgroundColor = 'rgba(0,0,0,0.5)';
+        t.style.backgroundColor = 'rgba(0,0,0,0.8)';
         t.style.display = 'flex';
         t.style.alignItems = 'center';
         t.style.justifyContent = 'center';
@@ -256,50 +310,145 @@ function createEventTickets(monthData, index) {
         t.style.fontSize = '14px';
         t.style.flexShrink = '0';
         t.style.transition = 'all 0.3s ease';
-        t.textContent = text;
-        if (isVideo) {
-            t.innerHTML = `▶ ${text}`;
+        t.style.position = 'relative';
+        t.style.overflow = 'hidden';
+        
+        t.onmouseenter = () => {
+            t.style.borderColor = '#8b1014';
+            
+        };
+        t.onmouseleave = () => {
+            t.style.borderColor = t.style.borderWidth === '2px' ? (t.style.borderColor === 'rgb(139, 16, 20)' || t.style.borderColor === '#8b1014' ? '#444' : t.style.borderColor) : '#444';
+            
+        };
+        
+        if (bgUrl && bgUrl !== '') {
+            if (isVideo) {
+                const vid = document.createElement('video');
+                vid.src = bgUrl;
+                vid.style.position = 'absolute';
+                vid.style.top = '0';
+                vid.style.left = '0';
+                vid.style.width = '100%';
+                vid.style.height = '100%';
+                vid.style.objectFit = 'cover';
+                vid.muted = true;
+                vid.playsInline = true;
+                vid.preload = 'metadata';
+                vid.onloadedmetadata = () => {
+                    vid.currentTime = 1; // Seek to 1 second to ensure a frame is loaded
+                };
+                t.appendChild(vid);
+                
+                // Add play icon overlay without text
+                t.innerHTML += `<span style="position: relative; z-index: 2; font-size: 24px; text-shadow: 0 2px 8px rgba(0,0,0,0.9);">▶</span>`;
+            } else {
+                 const bg = document.createElement('div');
+                 bg.style.position = 'absolute';
+                 bg.style.top = '0';
+                 bg.style.left = '0';
+                 bg.style.width = '100%';
+                 bg.style.height = '100%';
+                 bg.style.backgroundImage = `url('${bgUrl}')`;
+                 bg.style.backgroundSize = 'cover';
+                 bg.style.backgroundPosition = 'center';
+                 t.appendChild(bg);
+            }
+        } else {
+            t.textContent = text;
+            if (isVideo) {
+                t.innerHTML = `<span style="font-size: 24px;">▶</span>`;
+            }
         }
+        
         return t;
     };
 
-    const tVideo = createThumb('Видео', true);
-    const tPhoto1 = createThumb('Фото 1');
-    const tPhoto2 = createThumb('Фото 2');
-    const tPhoto3 = createThumb('Фото 3');
-    const tPhoto4 = createThumb('Фото 4');
     
-    tVideo.style.border = '2px solid #f8e7bc'; // initially selected
+    const mediaItems = monthData.media || [
+        { type: 'video', label: 'Видео', url: '' },
+        { type: 'image', label: 'Фото 1', url: '' },
+        { type: 'image', label: 'Фото 2', url: '' },
+        { type: 'image', label: 'Фото 3', url: '' },
+        { type: 'image', label: 'Фото 4', url: '' }
+    ];
 
-    thumbsCol.appendChild(tVideo);
-    thumbsCol.appendChild(tPhoto1);
-    thumbsCol.appendChild(tPhoto2);
-    thumbsCol.appendChild(tPhoto3);
-    thumbsCol.appendChild(tPhoto4);
+    const thumbsElements = [];
+    mediaItems.forEach((item, i) => {
+        const thumb = createThumb(item.label, item.type === 'video', item.url);
+        if (i === 0) thumb.style.border = '2px solid #f8e7bc';
+        thumbsCol.appendChild(thumb);
+        thumbsElements.push({ el: thumb, data: item });
+    });
 
     // Middle Column: Main Frame
     const mainFrame = document.createElement('div');
     mainFrame.style.flex = '1';
-    mainFrame.style.backgroundColor = 'rgba(0,0,0,0.8)';
-    mainFrame.style.borderRadius = '12px';
-    mainFrame.style.border = '1px solid #333';
+    mainFrame.style.backgroundColor = 'transparent';
+    
+    mainFrame.style.border = 'none';
     mainFrame.style.display = 'flex';
     mainFrame.style.alignItems = 'center';
     mainFrame.style.justifyContent = 'center';
     mainFrame.style.overflow = 'hidden';
+    mainFrame.style.position = 'relative';
 
-    const mainImg = document.createElement('div');
-    mainImg.style.width = '100%';
-    mainImg.style.height = '100%';
-    mainImg.style.display = 'flex';
-    mainImg.style.alignItems = 'center';
-    mainImg.style.justifyContent = 'center';
-    mainImg.style.color = '#777';
-    mainImg.style.fontFamily = 'Onest, sans-serif';
-    mainImg.style.fontSize = '18px';
-    mainImg.textContent = 'Здесь будет большое видео';
-
-    mainFrame.appendChild(mainImg);
+    const mainDisplay = document.createElement('div');
+    mainDisplay.style.width = '100%';
+    mainDisplay.style.height = '100%';
+    mainDisplay.style.display = 'flex';
+    mainDisplay.style.alignItems = 'center';
+    mainDisplay.style.justifyContent = 'center';
+    mainDisplay.style.color = '#777';
+    mainDisplay.style.fontFamily = 'Onest, sans-serif';
+    mainDisplay.style.fontSize = '18px';
+    mainFrame.appendChild(mainDisplay);
+    
+    function renderMedia(item) {
+        mainDisplay.innerHTML = '';
+        if (!item.url) {
+            mainDisplay.textContent = 'Здесь будет большое ' + (item.type === 'video' ? 'видео' : 'фото');
+            return;
+        }
+        
+        if (item.type === 'video') {
+            const video = document.createElement('video');
+            video.src = item.url;
+            video.onerror = () => { video.style.display = 'none'; };
+            video.controls = true;
+            video.style.maxWidth = '100%';
+            video.style.maxHeight = '100%';
+            video.style.width = 'auto';
+            video.style.height = 'auto';
+            video.style.objectFit = 'contain';
+            video.style.borderRadius = '12px';
+            video.style.border = '1px solid #333';
+            video.style.backgroundColor = 'rgba(0,0,0,0.8)';
+            mainDisplay.appendChild(video);
+        } else {
+            const img = document.createElement('img');
+            img.src = item.url;
+            img.onerror = () => { img.style.display = 'none'; mainDisplay.textContent = 'Здесь будет большое фото'; };
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'contain';
+            img.style.maxWidth = '100%';
+            img.style.maxHeight = '100%';
+            img.style.width = 'auto';
+            img.style.height = 'auto';
+            img.style.borderRadius = '12px';
+            img.style.border = '1px solid #333';
+            img.style.backgroundColor = 'rgba(0,0,0,0.8)';
+            
+            
+            mainDisplay.appendChild(img);
+        }
+    }
+    
+    // Initial render
+    if (mediaItems.length > 0) {
+        renderMedia(mediaItems[0]);
+    }
 
     // Right Column: Details
     const detailsCol = document.createElement('div');
@@ -316,7 +465,7 @@ function createEventTickets(monthData, index) {
     desc.style.lineHeight = '1.6';
     desc.style.overflowY = 'auto';
     desc.style.paddingRight = '10px';
-    desc.innerHTML = `
+    desc.innerHTML = monthData.detailsText || `
         <h3 style="color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;">О шоу</h3>
         <p style="margin-bottom: 15px;">Уникальные номера, потрясающие костюмы и незабываемые эмоции. Погрузитесь в атмосферу настоящего праздника.</p>
         <p>Расскажем все подробности позже!</p>
@@ -336,7 +485,22 @@ function createEventTickets(monthData, index) {
     detailsCol.appendChild(desc);
     detailsCol.appendChild(orderBtn);
 
-    bodyContainer.appendChild(thumbsCol);
+    leftArrow.addEventListener('click', (e) => {
+        e.preventDefault();
+        thumbsCol.scrollBy({ left: -100, behavior: 'smooth' });
+        thumbsCol.scrollBy({ top: -100, behavior: 'smooth' }); // for desktop vertical scroll
+    });
+    rightArrow.addEventListener('click', (e) => {
+        e.preventDefault();
+        thumbsCol.scrollBy({ left: 100, behavior: 'smooth' });
+        thumbsCol.scrollBy({ top: 100, behavior: 'smooth' }); // for desktop vertical scroll
+    });
+
+    // thumbsWrapper.appendChild(leftArrow);
+    thumbsWrapper.appendChild(thumbsCol);
+    // thumbsWrapper.appendChild(rightArrow);
+
+    bodyContainer.appendChild(thumbsWrapper);
     bodyContainer.appendChild(mainFrame);
     bodyContainer.appendChild(detailsCol);
 
@@ -345,14 +509,14 @@ function createEventTickets(monthData, index) {
     eventTickets.appendChild(bodyContainer);
 
     // Add interactivity to thumbs
-    const allThumbs = [tVideo, tPhoto1, tPhoto2, tPhoto3, tPhoto4];
-    allThumbs.forEach(t => {
-        t.addEventListener('click', () => {
-            allThumbs.forEach(x => x.style.border = '2px solid #444');
-            t.style.border = '2px solid #f8e7bc';
-            mainImg.textContent = `Просмотр: ${t.textContent.replace('▶ ', '')}`;
+    thumbsElements.forEach(thumbObj => {
+        thumbObj.el.addEventListener('click', () => {
+            thumbsElements.forEach(x => x.el.style.border = '2px solid #444');
+            thumbObj.el.style.border = '2px solid #f8e7bc';
+            renderMedia(thumbObj.data);
         });
     });
+
 
     return eventTickets;
 }

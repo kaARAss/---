@@ -1,6 +1,6 @@
 {
-  "name": "MyCompany",
-  "description": "Ticket booking for MyCompany",
+  "name": "Ta-is DANCE",
+  "description": "Танцевальное шоу Ta-is DANCE | Самара, Тольятти, Сызрань",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

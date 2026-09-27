@@ -650,9 +650,9 @@ footer .footer_section {
 
 
 .events .event-seasons {
-    max-width: 95% !important;
-    flex-wrap: wrap;
-    justify-content: center;
+    width: 95% !important;
+    max-width: 1560px !important;
+    margin: 0 auto !important;
 }
 
 .contacts {
@@ -753,123 +753,118 @@ html {
 }
 
 /* Fix events grid for desktop to be 5 columns, 2 rows */
-@media (min-width: 1025px) {
-    .events .event-seasons {
-        display: grid !important;
-        grid-template-columns: repeat(5, 1fr) !important;
-        gap: 15px !important;
-        justify-content: center !important;
-    }
-    .events .event-item {
-        max-width: 100% !important;
-        width: 100% !important;
-        aspect-ratio: 4/5 !important;
-        position: relative;
-    }
-    .events .event-item .content h2 {
-        font-size: 32px !important; /* Smaller text so it fits */
-        margin-bottom: 10px !important;
-    }
-    .events .event-item .content .card-divider {
-        width: 80% !important;
-        border-color: #f8e7bc !important;
-        margin-bottom: 10px !important;
-    }
-    .events .event-item .content .card-subtitle {
-        font-size: 14px !important;
-        color: #f8e7bc !important;
-        margin-bottom: 20px !important;
-    }
+.events {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    padding: 20px 0 60px 0 !important;
+    box-sizing: border-box !important;
 }
 
-/* Base styles for new elements in cards */
+.events .event-seasons {
+    width: 95% !important;
+    max-width: 1560px !important;
+    margin: 0 auto !important;
+    padding: 30px 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(5, 1fr) !important;
+    gap: 16px !important;
+    box-sizing: border-box !important;
+    justify-content: center !important;
+}
+
+.events .event-seasons .event-item,
+.events .event-item {
+    width: 100% !important;
+    max-width: none !important;
+    aspect-ratio: 540 / 359 !important;
+    height: auto !important;
+    max-height: none !important;
+    position: relative !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    cursor: pointer !important;
+    box-sizing: border-box !important;
+    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.events .event-seasons .event-item:hover,
+.events .event-item:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7) !important;
+}
+
+.events .event-seasons .event-item .background-image,
+.events .event-item .background-image {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 16px !important;
+}
+
+.events .event-seasons .event-item .overlay-image,
+.events .event-item .overlay-image {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    pointer-events: none !important;
+}
+
+.events .event-seasons .event-item .content,
 .events .event-item .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+    padding: 10px !important;
 }
 
 .events .event-item .content h2 {
-    text-align: center;
+    text-align: center !important;
     font-family: Rosemaria, serif !important;
+    font-size: 20px !important;
+    color: #f8e7bc !important;
+    margin: 0 0 6px 0 !important;
 }
 
 .events .event-item .content .card-divider {
-    width: 60%;
-    border: none;
-    border-top: 1px solid #f8e7bc;
-    margin: 15px 0;
+    width: 60% !important;
+    border: none !important;
+    border-top: 1px solid #f8e7bc !important;
+    margin: 6px 0 !important;
 }
 
 .events .event-item .content .card-subtitle {
-    text-align: center;
-    color: #f8e7bc;
-    font-size: 16px;
-    margin-bottom: 25px;
-    font-family: Onest, sans-serif;
+    text-align: center !important;
+    color: #f8e7bc !important;
+    font-size: 13px !important;
+    margin-bottom: 8px !important;
+    font-family: Onest, sans-serif !important;
 }
 
-/* Override the hardcoded margin from style.min.css to center things nicely */
-.events .event-seasons .event-item .content h2 {
-    margin: 0 0 10px 0 !important; /* Adjusted margin */
+.certificates, .gift-cert, .cert_banner {
+    display: none !important;
 }
 
-/* Completely overriding the sizes for desktop to allow 5 cards per row */
-@media (min-width: 1025px) {
+@media (max-width: 1100px) and (min-width: 761px) {
     .events .event-seasons {
-        display: flex !important;
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 15px !important;
-    }
-    .events .event-seasons .event-item {
-        width: calc(20% - 12px) !important;
-        max-width: none !important;
-        aspect-ratio: 540 / 359 !important; /* Original aspect ratio */
-        height: auto !important;
-        max-height: none !important;
-        font-size: 1vw !important; /* Base size for scaling */
-    }
-    
-    /* Make the content container scale with the card */
-    .events .event-seasons .event-item .content {
-        width: 42% !important; /* approx 228/540 */
-        height: 86.6% !important; /* approx 311/359 */
-        top: 6.8% !important;
-        left: 4.5% !important;
-        padding: 10px !important;
-        box-sizing: border-box;
-    }
-
-    .events .event-seasons .event-item .overlay-image {
-        width: 42% !important;
-        height: 86.6% !important;
-        max-width: none !important;
-        max-height: none !important;
-        top: 6.8% !important;
-        left: 4.5% !important;
-    }
-
-    .events .event-item .content h2 {
-        font-size: 1.5vw !important; /* Scaled font size */
-        margin-bottom: 5px !important;
-    }
-
-    .events .event-item .content .card-divider {
-        width: 80% !important;
-        margin: 5px 0 !important;
-    }
-
-    .events .event-item .content .card-subtitle {
-        font-size: 0.8vw !important;
-        margin-bottom: 10px !important;
-    }
-    
-    .events .event-item .content .event-item_button {
-        padding: 5px 10px !important;
-        font-size: 0.8vw !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 14px !important;
     }
 }
 

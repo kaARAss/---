@@ -473,7 +473,7 @@ function createEventTickets(monthData, index) {
 
     const orderBtn = document.createElement('a');
     orderBtn.className = 'red_button';
-    orderBtn.href = 'https://vk.me/taisdanceschool'; // link to VK
+    orderBtn.href = 'https://vk.me/danceshowtais'; // link to VK
     orderBtn.target = '_blank';
     orderBtn.textContent = 'Заказать мероприятие';
     orderBtn.style.textAlign = 'center';

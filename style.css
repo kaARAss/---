@@ -12,6 +12,11 @@ License URI: LICENSE
 Text Domain: mycompany
 Tags: mycompany-theme
 */
+html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
 :root {
     --container-padding: 16px;
 }
@@ -1490,7 +1495,7 @@ html body .events .event-seasons .event-item .content.custom-image-content .even
 
 @media only screen and (min-width: 1025px) {
     .banner .banner_image:hover {
-        background-image: url(img/index/banner_hover.png?v=1789330000) !important;
+        background-image: url('img/index/banner_hover.webp?v=1789350000') !important;
     }
 }
 
@@ -1620,7 +1625,7 @@ html body #events .event-seasons .event-item .background-image[src*="show10"] {
     height: 100% !important;
 }
 
-/* --- Text readability without dark background boxes (matches "БАЛЕТНОЕ ШОУ НА МЕРОПРИЯТИЯ" & "Что вас ждет на шоу") --- */
+/* --- Text readability without dark background boxes (matches "ТАНЦЕВАЛЬНОЕ ШОУ НА МЕРОПРИЯТИЯ" & "Что вас ждет на шоу") --- */
 .about_show .show_block .block_info,
 .events-info .events_block {
     background: transparent !important;
@@ -1630,7 +1635,7 @@ html body #events .event-seasons .event-item .background-image[src*="show10"] {
     box-shadow: none !important;
 }
 
-/* Titles: same shadow style as "БАЛЕТНОЕ ШОУ НА МЕРОПРИЯТИЯ" and "Что вас ждет на шоу" */
+/* Titles: same shadow style as "ТАНЦЕВАЛЬНОЕ ШОУ НА МЕРОПРИЯТИЯ" and "Что вас ждет на шоу" */
 .section_title,
 .about .section_title,
 .about_show h2,
@@ -1656,16 +1661,34 @@ html body #events .event-seasons .event-item .background-image[src*="show10"] {
     background: transparent !important;
 }
 
-.contacts_info h3,
-.contacts_info .question {
+.contacts_info h3 {
+    font-size: clamp(36px, 3.8vw, 50px) !important;
+    font-family: 'Playfair Display', serif !important;
+    font-weight: 700 !important;
     color: #f8e7bc !important;
+    line-height: 1.25 !important;
+    margin-bottom: 28px !important;
     text-shadow: 0px 4px 15px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 0.8), 0px 0px 50px rgba(0, 0, 0, 0.8) !important;
 }
 
-.contacts_info a,
-.contacts_info .social_btn {
+.contacts_info .question {
+    font-size: clamp(26px, 2.6vw, 34px) !important;
+    color: #f8e7bc !important;
+    font-weight: 700 !important;
+    margin-bottom: 24px !important;
+    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 0.8) !important;
+}
+
+.contacts_info a {
+    font-size: clamp(22px, 2.2vw, 28px) !important;
     color: #ffffff !important;
-    text-shadow: 0px 3px 12px rgba(0, 0, 0, 1), 0px 0px 24px rgba(0, 0, 0, 0.95), 0px 0px 40px rgba(0, 0, 0, 0.85) !important;
+    text-shadow: 0px 3px 12px rgba(0, 0, 0, 1), 0px 0px 24px rgba(0, 0, 0, 0.95) !important;
+}
+
+.contacts_info .social_btn {
+    font-size: clamp(20px, 2.1vw, 26px) !important;
+    color: #ffffff !important;
+    text-shadow: 0px 3px 12px rgba(0, 0, 0, 1), 0px 0px 24px rgba(0, 0, 0, 0.95) !important;
 }
 
 .contacts_info img,

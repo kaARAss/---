@@ -616,14 +616,14 @@ a.ai_link {
 @media only screen and (max-width: 760px) {
 
     .banner .banner_image {
-        background-image: image-set(url(img/index/Banner_mobile.webp) type("image/webp"), url(img/index/Banner_mobile.png) type("image/png")) !important;
+        background-image: image-set(url(img/index/Banner_mobile.webp?v=1789330000) type("image/webp"), url(img/index/Banner_mobile.png?v=1789330000) type("image/png")) !important;
     }
 }
 
 @media only screen and (max-width: 480px) {
 
     .banner .banner_image {
-        background-image: image-set(url(img/index/Banner_mobile.webp) type("image/webp"), url(img/index/Banner_mobile.png) type("image/png")) !important;
+        background-image: image-set(url(img/index/Banner_mobile.webp?v=1789330000) type("image/webp"), url(img/index/Banner_mobile.png?v=1789330000) type("image/png")) !important;
     }    
 }
 .fade-in-scroll {
@@ -994,7 +994,7 @@ footer .footer_section .footer_block .link_block svg {
 }
 
 body {
-    background-image: url('./img/main-bg.jpg') !important;
+    background-image: url('./img/main-bg.webp') !important;
     background-size: cover !important;
     background-position: center !important;
     background-attachment: fixed !important;
@@ -1002,8 +1002,23 @@ body {
     background-color: transparent !important;
 }
 
-.banner_image {
-    transition: background-image 0.3s ease-in-out !important;
+.banner .banner_image {
+    background-image: url('img/index/banner.webp?v=1789350000') !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+}
+
+@media only screen and (min-width: 1025px) {
+    .banner .banner_image:hover {
+        background-image: url('img/index/banner_hover.webp?v=1789350000') !important;
+        transition: background-image 0.3s ease-in-out !important;
+    }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 761px) {
+    .banner .banner_image {
+        background-image: url('img/index/Banner_tablet.webp?v=1789350000') !important;
+    }
 }
 
 
@@ -1475,7 +1490,7 @@ html body .events .event-seasons .event-item .content.custom-image-content .even
 
 @media only screen and (min-width: 1025px) {
     .banner .banner_image:hover {
-        background-image: url(img/index/Banner_hover.png) !important;
+        background-image: url(img/index/banner_hover.png?v=1789330000) !important;
     }
 }
 
@@ -1506,3 +1521,167 @@ html body .events .event-seasons .event-item .content.custom-image-content .even
     width: 0 !important;
     height: 0 !important;
 }
+
+/* Card alignment and scale for preview cards */
+html body .events .event-seasons .event-item .background-image[src*="show4"],
+html body .events .event-item .background-image[src*="show4"],
+html body #events .event-seasons .event-item .background-image[src*="show4"] {
+    object-position: left center !important;
+    transform: translate(-0.5%, 0) scale(1.08) !important;
+    transform-origin: center !important;
+}
+
+html body .events .event-seasons .event-item .background-image[src*="show5"],
+html body .events .event-item .background-image[src*="show5"],
+html body #events .event-seasons .event-item .background-image[src*="show5"] {
+    object-position: center !important;
+    transform: translate(5%, 0) scale(1.09) !important;
+    transform-origin: center !important;
+}
+
+html body .events .event-seasons .event-item .background-image[src*="show6"],
+html body .events .event-item .background-image[src*="show6"],
+html body #events .event-seasons .event-item .background-image[src*="show6"] {
+    object-position: center !important;
+    transform: translate(3%, 0) scale(1.09) !important;
+    transform-origin: center !important;
+}
+
+html body .events .event-seasons .event-item .background-image[src*="show7"],
+html body .events .event-item .background-image[src*="show7"],
+html body #events .event-seasons .event-item .background-image[src*="show7"] {
+    object-position: center !important;
+    transform: translate(2%, 0) scale(1.09) !important;
+    transform-origin: center !important;
+}
+
+html body .events .event-seasons .event-item .background-image[src*="show8"],
+html body .events .event-item .background-image[src*="show8"],
+html body #events .event-seasons .event-item .background-image[src*="show8"] {
+    object-position: center !important;
+    transform: translate(4%, 0) scale(1.09) !important;
+    transform-origin: center !important;
+}
+
+html body .events .event-seasons .event-item .background-image[src*="show9"],
+html body .events .event-item .background-image[src*="show9"],
+html body #events .event-seasons .event-item .background-image[src*="show9"] {
+    object-position: center !important;
+    transform: translate(6%, 6.5%) scale(1.22) !important;
+    transform-origin: center !important;
+}
+
+html body .events .event-seasons .event-item .background-image[src*="show10"],
+html body .events .event-item .background-image[src*="show10"],
+html body #events .event-seasons .event-item .background-image[src*="show10"] {
+    object-position: center !important;
+    transform: translate(7%, 7.5%) scale(1.24) !important;
+    transform-origin: center !important;
+}
+
+/* Modal video display: vertical rectangular framing without square black box */
+.modal-body-container .modal-main-frame {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.modal-body-container video {
+    background: transparent !important;
+    background-color: transparent !important;
+    object-fit: contain !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+.modal-body-container .modal-main-frame img {
+    background: transparent !important;
+    background-color: transparent !important;
+    object-fit: contain !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
+}
+
+.modal-body-container .thumbs-col img {
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* --- Text readability without dark background boxes (matches "БАЛЕТНОЕ ШОУ НА МЕРОПРИЯТИЯ" & "Что вас ждет на шоу") --- */
+.about_show .show_block .block_info,
+.events-info .events_block {
+    background: transparent !important;
+    background-color: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: none !important;
+}
+
+/* Titles: same shadow style as "БАЛЕТНОЕ ШОУ НА МЕРОПРИЯТИЯ" and "Что вас ждет на шоу" */
+.section_title,
+.about .section_title,
+.about_show h2,
+.events-info .section_title,
+.events-info .events_block .section_title,
+.about_show .show_block .block_info h3 {
+    color: #f8e7bc !important;
+    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 0.8), 0px 0px 50px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* Paragraph text: clear text-shadow without dark background */
+.section_p,
+.events-info .section_p,
+.events-info .events_block .section_p,
+.about_show .show_block .block_info p {
+    color: #ffffff !important;
+    text-shadow: 0px 3px 12px rgba(0, 0, 0, 1), 0px 0px 24px rgba(0, 0, 0, 0.9), 0px 0px 40px rgba(0, 0, 0, 0.85) !important;
+}
+
+/* Contacts section: clear text-shadow without dark background boxes */
+.contacts,
+.contacts_info {
+    background: transparent !important;
+}
+
+.contacts_info h3,
+.contacts_info .question {
+    color: #f8e7bc !important;
+    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 0.8), 0px 0px 50px rgba(0, 0, 0, 0.8) !important;
+}
+
+.contacts_info a,
+.contacts_info .social_btn {
+    color: #ffffff !important;
+    text-shadow: 0px 3px 12px rgba(0, 0, 0, 1), 0px 0px 24px rgba(0, 0, 0, 0.95), 0px 0px 40px rgba(0, 0, 0, 0.85) !important;
+}
+
+.contacts_info img,
+.contacts_info svg,
+.contacts_info span {
+    filter: drop-shadow(0px 3px 10px rgba(0, 0, 0, 0.95)) drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.85)) !important;
+}
+
+/* Prevent document height collapse when modals open so page doesn't scroll to top */
+html.no-scroll,
+body.no-scroll,
+.no-scroll {
+    overflow: hidden !important;
+    height: auto !important;
+    min-height: 100vh !important;
+}
+
+
+

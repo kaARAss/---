@@ -35,6 +35,83 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     });
     
+    let savedScrollPosition = null;
+    let lastClickedEventItem = null;
+
+    function saveScrollPosition(element) {
+        if (element) {
+            lastClickedEventItem = element;
+        }
+        if (savedScrollPosition === null) {
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+            if (currentScroll > 0) {
+                savedScrollPosition = currentScroll;
+            } else if (lastClickedEventItem && typeof lastClickedEventItem.getBoundingClientRect === 'function') {
+                const rect = lastClickedEventItem.getBoundingClientRect();
+                savedScrollPosition = rect.top + (window.pageYOffset || document.documentElement.scrollTop || 0);
+            } else {
+                const eventsEl = document.getElementById('events') || document.querySelector('.event-seasons');
+                if (eventsEl) {
+                    savedScrollPosition = eventsEl.offsetTop;
+                }
+            }
+        }
+    }
+
+    function restoreScrollPosition() {
+        const targetY = savedScrollPosition;
+        const targetItem = lastClickedEventItem;
+        savedScrollPosition = null;
+        
+        const applyRestore = () => {
+            if (typeof targetY === 'number' && targetY > 0) {
+                window.scrollTo({
+                    top: targetY,
+                    left: 0,
+                    behavior: 'instant'
+                });
+            }
+            if (targetItem && typeof targetItem.getBoundingClientRect === 'function') {
+                const rect = targetItem.getBoundingClientRect();
+                if (rect.top < -50 || rect.bottom > (window.innerHeight + 50)) {
+                    targetItem.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
+                }
+            }
+        };
+
+        applyRestore();
+        requestAnimationFrame(applyRestore);
+        setTimeout(applyRestore, 20);
+        setTimeout(applyRestore, 60);
+        setTimeout(applyRestore, 150);
+    }
+
+    function closeCurrentModal() {
+        const openModals = document.querySelectorAll('.event_tickets');
+        openModals.forEach(m => {
+            m.style.display = 'none';
+            m.querySelectorAll('video').forEach(v => {
+                try {
+                    v.pause();
+                    v.currentTime = 0;
+                } catch(e) {}
+            });
+        });
+        if (orderForm) {
+            orderForm.style.display = 'none';
+        }
+        if (typeof bgOverflow !== 'undefined' && bgOverflow) {
+            if (bgOverflow.style) bgOverflow.style.display = 'none';
+            if (bgOverflow[0] && bgOverflow[0].style) bgOverflow[0].style.display = 'none';
+        }
+        if (typeof disableModalZoomLock === 'function') {
+            disableModalZoomLock();
+        }
+        document.body.classList.remove('no-scroll');
+        document.body.classList.remove('hide-content-mode');
+        restoreScrollPosition();
+    }
+
     function enableModalZoomLock() {
       document.documentElement.classList.add('modal-open');
     
@@ -66,6 +143,8 @@ document.addEventListener('DOMContentLoaded', function() {
         imgBg.src = image;
         imgBg.alt = 'afisha background';
         imgBg.className = 'background-image';
+        imgBg.loading = (index < 2 ? 'eager' : 'lazy');
+        imgBg.decoding = 'async';
 
         const imgOverlay = document.createElement('img');
         imgOverlay.src = './red_frame.png';
@@ -87,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
         eventItem.style.cursor = 'pointer';
         eventItem.addEventListener('click', function(e) {
             e.preventDefault();
+            saveScrollPosition(eventItem);
             const existingModal = document.querySelector(`#event_tickets_${monthYear}`);
             if (existingModal) {
                 openEventTickets(monthYear);
@@ -124,6 +204,34 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (monthData.image.includes('show3')) {
                 imgBg.style.objectPosition = 'center 35%'; 
                 imgBg.style.transform = 'none';
+            } else if (monthData.image.includes('show4')) {
+                imgBg.style.setProperty('object-position', 'left center', 'important');
+                imgBg.style.setProperty('transform', 'translate(-0.5%, 0) scale(1.08)', 'important');
+                imgBg.style.setProperty('transform-origin', 'center', 'important');
+            } else if (monthData.image.includes('show5')) {
+                imgBg.style.setProperty('object-position', 'center', 'important');
+                imgBg.style.setProperty('transform', 'translate(5%, 0) scale(1.09)', 'important');
+                imgBg.style.setProperty('transform-origin', 'center', 'important');
+            } else if (monthData.image.includes('show6')) {
+                imgBg.style.setProperty('object-position', 'center', 'important');
+                imgBg.style.setProperty('transform', 'translate(3%, 0) scale(1.09)', 'important');
+                imgBg.style.setProperty('transform-origin', 'center', 'important');
+            } else if (monthData.image.includes('show7')) {
+                imgBg.style.setProperty('object-position', 'center', 'important');
+                imgBg.style.setProperty('transform', 'translate(2%, 0) scale(1.09)', 'important');
+                imgBg.style.setProperty('transform-origin', 'center', 'important');
+            } else if (monthData.image.includes('show8')) {
+                imgBg.style.setProperty('object-position', 'center', 'important');
+                imgBg.style.setProperty('transform', 'translate(4%, 0) scale(1.09)', 'important');
+                imgBg.style.setProperty('transform-origin', 'center', 'important');
+            } else if (monthData.image.includes('show9')) {
+                imgBg.style.setProperty('object-position', 'center', 'important');
+                imgBg.style.setProperty('transform', 'translate(6%, 6.5%) scale(1.22)', 'important');
+                imgBg.style.setProperty('transform-origin', 'center', 'important');
+            } else if (monthData.image.includes('show10')) {
+                imgBg.style.setProperty('object-position', 'center', 'important');
+                imgBg.style.setProperty('transform', 'translate(7%, 7.5%) scale(1.24)', 'important');
+                imgBg.style.setProperty('transform-origin', 'center', 'important');
             } else {
                 imgBg.style.objectPosition = 'center';
                 imgBg.style.transform = 'none';
@@ -184,7 +292,7 @@ function createEventTickets(monthData, index) {
 
     const prev = document.createElement('a');
     prev.className = 'black_button event_prev desktop-only-btn';
-    prev.href = '#';
+    prev.href = 'javascript:void(0);';
     prev.textContent = 'Предыдущее';
     prev.style.minWidth = '140px';
     prev.style.textAlign = 'center';
@@ -211,12 +319,12 @@ function createEventTickets(monthData, index) {
 
     const next = document.createElement('a');
     next.className = 'black_button event_next desktop-only-btn';
-    next.href = '#';
+    next.href = 'javascript:void(0);';
     next.textContent = 'Следующее';
     next.style.minWidth = '140px';
     next.style.textAlign = 'center';
     next.style.position = 'absolute';
-    next.style.right = '50px';
+    next.style.right = '55px';
     if (index === window.monthsData.length - 1) {
         next.style.opacity = '0.4';
         next.style.pointerEvents = 'none';
@@ -229,15 +337,27 @@ function createEventTickets(monthData, index) {
 
     const closeBtn = document.createElement('a');
     closeBtn.className = 'close_event_tickets';
-    closeBtn.href = '#';
-    closeBtn.innerHTML = `<img src="./close_popup.svg" alt="close icon" style="width: 32px; height: 32px; filter: brightness(0) invert(1);">`;
+    closeBtn.href = 'javascript:void(0);';
+    closeBtn.setAttribute('role', 'button');
+    closeBtn.setAttribute('aria-label', 'Закрыть');
+    closeBtn.style.display = 'inline-flex';
+    closeBtn.style.alignItems = 'center';
+    closeBtn.style.justifyContent = 'center';
+    closeBtn.style.width = '36px';
+    closeBtn.style.height = '36px';
+    closeBtn.style.cursor = 'pointer';
     closeBtn.style.position = 'absolute';
     closeBtn.style.right = '0';
+    closeBtn.style.top = '50%';
+    closeBtn.style.transform = 'translateY(-50%)';
+    closeBtn.style.transition = 'opacity 0.2s';
+    closeBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f8e7bc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+    closeBtn.onmouseenter = () => { closeBtn.style.opacity = '0.7'; };
+    closeBtn.onmouseleave = () => { closeBtn.style.opacity = '1'; };
     closeBtn.addEventListener('click', function(e) {
         e.preventDefault();
-        eventTickets.style.display = 'none';
-        document.body.classList.remove('no-scroll');
-        document.body.classList.remove('hide-content-mode');
+        e.stopPropagation();
+        closeCurrentModal();
     });
 
     eventTitle.appendChild(prev);
@@ -294,7 +414,7 @@ function createEventTickets(monthData, index) {
     thumbsCol.style.overflowY = 'auto';
     thumbsCol.style.paddingRight = '0px';
 
-    const createThumb = (text, isVideo, bgUrl) => {
+    const createThumb = (text, isVideo, bgUrl, posterUrl) => {
         const t = document.createElement('div');
         t.style.width = '100%';
         t.style.height = '90px';
@@ -324,35 +444,43 @@ function createEventTickets(monthData, index) {
         
         if (bgUrl && bgUrl !== '') {
             if (isVideo) {
-                const vid = document.createElement('video');
-                vid.src = bgUrl;
-                vid.style.position = 'absolute';
-                vid.style.top = '0';
-                vid.style.left = '0';
-                vid.style.width = '100%';
-                vid.style.height = '100%';
-                vid.style.objectFit = 'cover';
-                vid.muted = true;
-                vid.playsInline = true;
-                vid.preload = 'metadata';
-                vid.onloadedmetadata = () => {
-                    vid.currentTime = 1; // Seek to 1 second to ensure a frame is loaded
-                };
-                t.appendChild(vid);
-                
-                // Add play icon overlay without text
-                t.innerHTML += `<span style="position: relative; z-index: 2; font-size: 24px; text-shadow: 0 2px 8px rgba(0,0,0,0.9);">▶</span>`;
+                const effectivePoster = posterUrl || bgUrl.replace(/\.mp4$/i, '_thumb.jpg').replace(/video(\d+)/i, 'v$1');
+                if (effectivePoster) {
+                    const thumbImg = document.createElement('img');
+                    thumbImg.src = effectivePoster;
+                    thumbImg.loading = 'lazy';
+                    thumbImg.decoding = 'async';
+                    thumbImg.style.position = 'absolute';
+                    thumbImg.style.top = '0';
+                    thumbImg.style.left = '0';
+                    thumbImg.style.width = '100%';
+                    thumbImg.style.height = '100%';
+                    thumbImg.style.objectFit = 'cover';
+                    t.appendChild(thumbImg);
+                }
+                const playBadge = document.createElement('span');
+                playBadge.style.position = 'relative';
+                playBadge.style.zIndex = '2';
+                playBadge.style.fontSize = '24px';
+                playBadge.style.textShadow = '0 2px 8px rgba(0,0,0,0.9)';
+                playBadge.textContent = '▶';
+                t.appendChild(playBadge);
             } else {
-                 const bg = document.createElement('div');
-                 bg.style.position = 'absolute';
-                 bg.style.top = '0';
-                 bg.style.left = '0';
-                 bg.style.width = '100%';
-                 bg.style.height = '100%';
-                 bg.style.backgroundImage = `url('${bgUrl}')`;
-                 bg.style.backgroundSize = 'cover';
-                 bg.style.backgroundPosition = 'center';
-                 t.appendChild(bg);
+                const thumbImg = document.createElement('img');
+                thumbImg.src = bgUrl;
+                thumbImg.loading = 'lazy';
+                thumbImg.decoding = 'async';
+                thumbImg.style.position = 'absolute';
+                thumbImg.style.top = '0';
+                thumbImg.style.left = '0';
+                thumbImg.style.width = '100%';
+                thumbImg.style.height = '100%';
+                thumbImg.style.objectFit = 'cover';
+                thumbImg.onerror = () => {
+                    thumbImg.style.display = 'none';
+                    t.textContent = text || 'Фото';
+                };
+                t.appendChild(thumbImg);
             }
         } else {
             t.textContent = text;
@@ -375,7 +503,7 @@ function createEventTickets(monthData, index) {
 
     const thumbsElements = [];
     mediaItems.forEach((item, i) => {
-        const thumb = createThumb(item.label, item.type === 'video', item.url);
+        const thumb = createThumb(item.label, item.type === 'video', item.url, item.poster);
         if (i === 0) thumb.style.border = '2px solid #f8e7bc';
         thumbsCol.appendChild(thumb);
         thumbsElements.push({ el: thumb, data: item });
@@ -383,9 +511,9 @@ function createEventTickets(monthData, index) {
 
     // Middle Column: Main Frame
     const mainFrame = document.createElement('div');
+    mainFrame.className = 'modal-main-frame';
     mainFrame.style.flex = '1';
     mainFrame.style.backgroundColor = 'transparent';
-    
     mainFrame.style.border = 'none';
     mainFrame.style.display = 'flex';
     mainFrame.style.alignItems = 'center';
@@ -412,35 +540,96 @@ function createEventTickets(monthData, index) {
         }
         
         if (item.type === 'video') {
+            const videoWrap = document.createElement('div');
+            videoWrap.style.position = 'relative';
+            videoWrap.style.width = '100%';
+            videoWrap.style.height = '100%';
+            videoWrap.style.display = 'flex';
+            videoWrap.style.alignItems = 'center';
+            videoWrap.style.justifyContent = 'center';
+
             const video = document.createElement('video');
             video.src = item.url;
-            video.onerror = () => { video.style.display = 'none'; };
+            video.preload = 'none';
+            
+            const effectivePoster = item.poster || (item.url ? item.url.replace(/\.mp4$/i, '_thumb.jpg').replace(/video(\d+)/i, 'v$1') : '');
+            if (effectivePoster) {
+                video.poster = effectivePoster;
+            }
+
             video.controls = true;
+            video.playsInline = true;
             video.style.maxWidth = '100%';
             video.style.maxHeight = '100%';
             video.style.width = 'auto';
-            video.style.height = 'auto';
+            video.style.height = '100%';
+            video.style.aspectRatio = 'auto';
             video.style.objectFit = 'contain';
             video.style.borderRadius = '12px';
-            video.style.border = '1px solid #333';
-            video.style.backgroundColor = 'rgba(0,0,0,0.8)';
-            mainDisplay.appendChild(video);
+            video.style.border = '1px solid rgba(255,255,255,0.2)';
+            video.style.backgroundColor = '#000';
+            video.onerror = () => { videoWrap.textContent = 'Здесь будет большое видео'; };
+
+            const bigPlay = document.createElement('button');
+            bigPlay.setAttribute('type', 'button');
+            bigPlay.setAttribute('aria-label', 'Воспроизвести видео');
+            bigPlay.style.position = 'absolute';
+            bigPlay.style.width = '64px';
+            bigPlay.style.height = '64px';
+            bigPlay.style.borderRadius = '50%';
+            bigPlay.style.backgroundColor = 'rgba(139, 16, 20, 0.85)';
+            bigPlay.style.border = '2px solid #f8e7bc';
+            bigPlay.style.color = '#fff';
+            bigPlay.style.fontSize = '26px';
+            bigPlay.style.display = 'flex';
+            bigPlay.style.alignItems = 'center';
+            bigPlay.style.justifyContent = 'center';
+            bigPlay.style.cursor = 'pointer';
+            bigPlay.style.boxShadow = '0 0 25px rgba(0,0,0,0.8), 0 0 15px rgba(139, 16, 20, 0.6)';
+            bigPlay.style.transition = 'transform 0.2s';
+            bigPlay.style.zIndex = '5';
+            bigPlay.innerHTML = '<span style="margin-left: 4px;">▶</span>';
+            bigPlay.onmouseenter = () => { bigPlay.style.transform = 'scale(1.1)'; };
+            bigPlay.onmouseleave = () => { bigPlay.style.transform = 'scale(1)'; };
+
+            const startPlaying = () => {
+                video.preload = 'auto';
+                video.play().then(() => {
+                    bigPlay.style.display = 'none';
+                }).catch(() => {
+                    bigPlay.style.display = 'none';
+                });
+            };
+
+            bigPlay.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startPlaying();
+            });
+
+            video.onplay = () => {
+                bigPlay.style.display = 'none';
+            };
+            video.onpause = () => {
+                if (video.currentTime === 0) bigPlay.style.display = 'flex';
+            };
+
+            videoWrap.appendChild(video);
+            videoWrap.appendChild(bigPlay);
+            mainDisplay.appendChild(videoWrap);
         } else {
             const img = document.createElement('img');
             img.src = item.url;
+            img.loading = 'eager';
+            img.decoding = 'async';
             img.onerror = () => { img.style.display = 'none'; mainDisplay.textContent = 'Здесь будет большое фото'; };
-            img.style.width = '100%';
-            img.style.height = '100%';
             img.style.objectFit = 'contain';
             img.style.maxWidth = '100%';
             img.style.maxHeight = '100%';
             img.style.width = 'auto';
-            img.style.height = 'auto';
+            img.style.height = '100%';
             img.style.borderRadius = '12px';
-            img.style.border = '1px solid #333';
-            img.style.backgroundColor = 'rgba(0,0,0,0.8)';
-            
-            
+            img.style.border = '1px solid rgba(255,255,255,0.2)';
+            img.style.backgroundColor = 'transparent';
             mainDisplay.appendChild(img);
         }
     }
@@ -534,6 +723,9 @@ function openOrCreateEventTickets(targetIndex) {
 
     
 function openEventTickets(monthYear) {
+    if (savedScrollPosition === null) {
+        saveScrollPosition();
+    }
     document.querySelectorAll('.event_tickets').forEach(t => (t.style.display = 'none'));
     const eventTickets = document.querySelector(`#event_tickets_${monthYear}`);
     if (!eventTickets) {
@@ -1231,34 +1423,24 @@ function loadEventsList(eventTickets, monthNum, year) {
 
     const buttons = document.querySelectorAll('.event-item_button');
     buttons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            let eventTickets = document.querySelector('#event_tickets_' + modalName);
-            // eventTickets.style.display = 'flex';
-    
-            // bgOverflow.style.display = 'block';
+        button.addEventListener('click', function(e) {
+            saveScrollPosition(button.closest('.event-item'));
             document.body.classList.add('no-scroll');
-    document.body.classList.add('hide-content-mode');
+            document.body.classList.add('hide-content-mode');
         });
     });
 
     orderTickets.addEventListener('click', function() {
         let eventTickets = document.querySelector('#event_tickets_' + modalName);
-        eventTickets.style.display = 'block';
+        if (eventTickets) eventTickets.style.display = 'block';
         orderForm.style.display = 'none';
-        // bgOverflow.style.display = 'block';
-        // console.log(selectedSeats);
         resetOrderData();
     });
 
     closeButton.forEach(function(button) {
-        button.addEventListener('click', function() {
-            let eventTickets = document.querySelector('#event_tickets_' + modalName);
-            orderForm.style.display = 'none';
-            disableModalZoomLock();
-            bgOverflow.style.display = 'none';
-            eventTickets.style.display = 'none';
-        document.body.classList.remove('no-scroll');
-        document.body.classList.remove('hide-content-mode');
+        button.addEventListener('click', function(e) {
+            e && e.preventDefault && e.preventDefault();
+            closeCurrentModal();
             resetOrderData();
         });
     });
@@ -1266,6 +1448,8 @@ function loadEventsList(eventTickets, monthNum, year) {
     document.addEventListener('click', (e) => {
         const closeBtn = e.target.closest('.close_management-tickets');
         if (closeBtn) {
+            e.preventDefault();
+            closeCurrentModal();
             resetOrderData();
         }
     });
@@ -1634,10 +1818,28 @@ document.head.appendChild(modalStyle);
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         const openModal = document.querySelector('.event_tickets[style*="display: flex"]');
-        if (openModal) {
-            openModal.style.display = 'none';
-            document.body.classList.remove('no-scroll');
-            document.body.classList.remove('hide-content-mode');
+        const orderForm = document.getElementById('order-event-form');
+        if (openModal || (orderForm && orderForm.style.display === 'flex')) {
+            if (typeof closeCurrentModal === 'function') {
+                closeCurrentModal();
+            } else if (openModal) {
+                openModal.style.display = 'none';
+                document.body.classList.remove('no-scroll');
+                document.body.classList.remove('hide-content-mode');
+            }
         }
+    }
+});
+
+document.addEventListener('click', (e) => {
+    const openModal = document.querySelector('.event_tickets[style*="display: flex"]');
+    if (!openModal) return;
+    if (e.target.closest('.event-item')) return;
+    if (e.target.closest('.event-item_button')) return;
+    if (e.target.closest('.event_tickets')) return;
+    if (e.target.closest('#order-event-form')) return;
+    if (e.target.closest('.event_tickets_overlay')) return;
+    if (typeof closeCurrentModal === 'function') {
+        closeCurrentModal();
     }
 });

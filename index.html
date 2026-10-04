@@ -27,7 +27,7 @@
     <link rel="preload" as="image" href="./img/main-bg.webp" type="image/webp" fetchpriority="high">
     <link rel="preload" as="image" href="./img/index/banner.webp?v=1789400010" type="image/webp" media="(min-width: 961px)" fetchpriority="high">
     <link rel="preload" as="image" href="./img/index/banner_hover.webp?v=1789400010" type="image/webp" media="(min-width: 1025px)">
-    <link rel="preload" as="image" href="./img/index/banner_mobile.webp?v=1789400020" type="image/webp" media="(max-width: 960px)" fetchpriority="high">
+    <link rel="preload" as="image" href="./img/index/banner_mobile.webp?v=1789400060" type="image/webp" media="(max-width: 960px)" fetchpriority="high">
 
     <!-- OpenGraph Social Cards (VK, Telegram, WhatsApp) -->
     <meta property="og:locale" content="ru_RU">
@@ -80,10 +80,10 @@
     <noscript><div><img src="https://mc.yandex.ru/watch/113208523" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
     <!-- /Yandex.Metrika counter -->
 
-    <link rel="stylesheet" href="./style.min.css?v=1789400025">
+    <link rel="stylesheet" href="./style.min.css?v=1789400100">
     <link rel="stylesheet" href="./swiper-bundle.min.css">
-    <link rel="stylesheet" href="./event-order.css?v=1789400025" type="text/css" media="all">
-    <link rel="stylesheet" id="mycompany-style-css" href="./style.css?v=1789400025" media="all">
+    <link rel="stylesheet" href="./event-order.css?v=1789400100" type="text/css" media="all">
+    <link rel="stylesheet" id="mycompany-style-css" href="./style.css?v=1789400100" media="all">
     <script src="./jquery-1.10.2.min.js" defer></script>
     <script src="./swiper-bundle.min.js"></script>
     <style>
@@ -225,12 +225,15 @@
 
     #logo-wrapper {
         height: 42px !important;
+        min-height: unset !important;
+        max-height: 42px !important;
+        flex: none !important;
         width: auto !important;
         margin: 0 !important;
-        margin-top: 5px !important;
         padding: 0 !important;
         display: flex !important;
         align-items: center !important;
+        justify-content: flex-start !important;
     }
 
     #animated-logo {
@@ -239,7 +242,8 @@
         width: auto !important;
         margin: 0 !important;
         position: relative !important;
-        top: 2px !important;
+        top: 0 !important;
+        transform: none !important;
         transition: none !important;
         filter: drop-shadow(0px 2px 8px rgba(0,0,0,0.8)) !important;
     }
@@ -317,13 +321,14 @@
 
     /* 2. Banner Position & Proportions */
     .banner {
-        padding-top: 0 !important;
+        padding-top: 38px !important;
         margin: 0 !important;
         width: 100% !important;
     }
 
     .banner_main {
         padding: 0 16px 16px 16px !important;
+        min-height: auto !important;
         width: 100% !important;
         box-sizing: border-box !important;
     }
@@ -336,7 +341,7 @@
         min-height: unset !important;
         max-height: none !important;
         padding: 0 !important;
-        background-image: url('./img/index/banner_mobile.webp?v=1789400020') !important;
+        background-image: url('./img/index/banner_mobile.webp?v=1789400060') !important;
         background-size: cover !important;
         background-repeat: no-repeat !important;
         background-position: center top !important;
@@ -363,6 +368,7 @@
         margin: 0 auto !important;
         position: relative !important;
         overflow: hidden !important;
+        border-radius: 16px !important;
         padding: 0 !important;
         box-sizing: border-box !important;
     }
@@ -379,6 +385,9 @@
         align-items: stretch !important;
         padding: 0 !important;
         margin: 0 !important;
+        gap: 0 !important;
+        column-gap: 0 !important;
+        row-gap: 0 !important;
         box-sizing: border-box !important;
         grid-template-columns: none !important;
     }
@@ -393,7 +402,9 @@
         display: block !important;
         position: relative !important;
         width: 100% !important;
+        min-width: 100% !important;
         max-width: 100% !important;
+        flex: 0 0 100% !important;
         flex-shrink: 0 !important;
         aspect-ratio: 540 / 359 !important;
         height: auto !important;
@@ -423,7 +434,8 @@
         height: 100% !important;
         max-height: none !important;
         object-fit: cover !important;
-        object-position: center center !important;
+        -o-object-position: left center !important;
+        object-position: left center !important;
         display: block !important;
         transform: none !important;
         border-radius: 16px !important;
@@ -1508,7 +1520,7 @@ window.monthsData = [
 ];
 window.ticketPrices = null;
 </script>
-<script src="./seats.js?v=1789400004"></script>
+<script src="./seats.js?v=1789400100"></script>
 
 <script type="application/ld+json"> 
 [

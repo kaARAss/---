@@ -792,6 +792,33 @@ function loadEventsList(eventTickets, monthNum, year) {
         const total = cards.length || 10;
         if (totalEl) totalEl.textContent = total;
 
+        function updateSlideVisibility(sw) {
+            if (!sw || !sw.slides) return;
+            const activeIdx = sw.activeIndex;
+            sw.slides.forEach((slide, idx) => {
+                if (idx === activeIdx) {
+                    slide.style.opacity = '1';
+                    slide.style.visibility = 'visible';
+                    slide.style.pointerEvents = 'auto';
+                } else {
+                    slide.style.opacity = '0';
+                    slide.style.visibility = 'hidden';
+                    slide.style.pointerEvents = 'none';
+                }
+            });
+        }
+
+        function showAdjacentForTransition(sw) {
+            if (!sw || !sw.slides) return;
+            const activeIdx = sw.activeIndex;
+            sw.slides.forEach((slide, idx) => {
+                if (Math.abs(idx - activeIdx) <= 1) {
+                    slide.style.visibility = 'visible';
+                    slide.style.opacity = '1';
+                }
+            });
+        }
+
         if (isMobile) {
             if (typeof Swiper !== 'undefined') {
                 if (!eventsSwiperInstance) {
@@ -799,13 +826,18 @@ function loadEventsList(eventTickets, monthNum, year) {
                         slidesPerView: 1,
                         slidesPerGroup: 1,
                         spaceBetween: 0,
-                        centeredSlides: true,
+                        centeredSlides: false,
+                        roundLengths: true,
                         speed: 350,
                         grabCursor: true,
                         touchRatio: 1,
                         threshold: 6,
                         touchAngle: 45,
                         watchOverflow: true,
+                        resistance: true,
+                        resistanceRatio: 0.85,
+                        slidesOffsetBefore: 0,
+                        slidesOffsetAfter: 0,
                         navigation: {
                             prevEl: prevBtn,
                             nextEl: nextBtn,
@@ -815,23 +847,35 @@ function loadEventsList(eventTickets, monthNum, year) {
                             init: function(sw) {
                                 if (currentEl) currentEl.textContent = sw.realIndex + 1;
                                 if (totalEl) totalEl.textContent = sw.slides ? sw.slides.length : total;
+                                updateSlideVisibility(sw);
                             },
                             slideChange: function(sw) {
                                 if (currentEl) currentEl.textContent = sw.realIndex + 1;
                             },
-                            touchStart: function() {
+                            slideChangeTransitionStart: function(sw) {
+                                showAdjacentForTransition(sw);
+                            },
+                            slideChangeTransitionEnd: function(sw) {
+                                updateSlideVisibility(sw);
+                            },
+                            touchStart: function(sw) {
                                 window._isSwipingCards = false;
+                                showAdjacentForTransition(sw);
                             },
                             touchMove: function() {
                                 window._isSwipingCards = true;
                             },
-                            touchEnd: function() {
-                                setTimeout(() => { window._isSwipingCards = false; }, 80);
+                            touchEnd: function(sw) {
+                                setTimeout(() => {
+                                    window._isSwipingCards = false;
+                                    updateSlideVisibility(sw);
+                                }, 360);
                             }
                         }
                     });
                 } else {
                     eventsSwiperInstance.update();
+                    updateSlideVisibility(eventsSwiperInstance);
                 }
             }
         } else {
@@ -841,7 +885,12 @@ function loadEventsList(eventTickets, monthNum, year) {
             }
             seasons.style.removeProperty('transform');
             seasons.style.removeProperty('transition');
-            cards.forEach(card => card.style.removeProperty('transform'));
+            cards.forEach(card => {
+                card.style.removeProperty('transform');
+                card.style.removeProperty('opacity');
+                card.style.removeProperty('visibility');
+                card.style.removeProperty('pointer-events');
+            });
         }
     }
 

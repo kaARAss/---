@@ -10693,8 +10693,11 @@ hr {
   }
 }
 @media only screen and (max-width: 760px) {
+  .banner {
+    padding-top: 38px !important;
+  }
   .banner_main {
-    padding: 24px 16px;
+    padding: 0 16px 16px 16px !important;
     flex-direction: column;
   }
   .banner_content {
@@ -10740,7 +10743,7 @@ hr {
   }
   .events .event-seasons {
     grid-template-columns: repeat(1, 1fr);
-    gap: 100px;
+    gap: 0 !important;
   }
   .events .event-seasons .event-item {
     aspect-ratio: 540/359;
@@ -10762,8 +10765,8 @@ hr {
   .events .event-seasons .event-item .background-image {
     max-width: 250px;
     max-height: 188px;
-    -o-object-position: 100%;
-    object-position: 100%;
+    -o-object-position: left center;
+    object-position: left center;
   }
   .events .event-seasons .event-item .content {
     max-width: 170px;
@@ -10778,8 +10781,8 @@ hr {
     right: 0;
   }
   .events .event-seasons .event-item:nth-child(even) .background-image {
-    -o-object-position: 250%;
-    object-position: 250%;
+    -o-object-position: left center;
+    object-position: left center;
     transform: translateX(0);
     max-width: 260px;
   }
@@ -11204,7 +11207,7 @@ hr {
     box-sizing: border-box !important;
   }
   .events .event-seasons {
-    gap: 30px;
+    gap: 0 !important;
   }
   .events .event-seasons .event-item {
     scale: 1;
@@ -11463,6 +11466,10 @@ header .buttons .black_button {
 @media only screen and (max-width: 760px) {
   #logo-wrapper {
     justify-content: flex-start !important;
+    min-height: unset !important;
+    flex: none !important;
+    height: auto !important;
+    margin: 0 !important;
   }
 }
 /* Replaced with unified mobile slider styles in index.html */

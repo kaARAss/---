@@ -6,8 +6,10 @@ const dropdownTrigger = document.querySelector('.has-dropdown > a');
 burger.addEventListener('click', () => {
   burger.classList.toggle('active');
   nav.classList.toggle('active');
-  buttons.classList.toggle('hide-desktop-buttons');
+  if (buttons) buttons.classList.toggle('hide-desktop-buttons');
   document.body.classList.toggle('no-scroll');
+  const hdr = document.querySelector('header#main-header') || document.querySelector('header');
+  if (hdr) hdr.classList.toggle('menu-open');
 });
 
 if (dropdownTrigger) dropdownTrigger.addEventListener('click', function (e) {
@@ -35,6 +37,8 @@ document.querySelectorAll('.nav-links a').forEach(link => {
         if (window.innerWidth <= 1024) {
             burger.classList.remove('active');
             nav.classList.remove('active');
+            const hdr = document.querySelector('header#main-header') || document.querySelector('header');
+            if (hdr) hdr.classList.remove('menu-open');
             if(buttons) buttons.classList.remove('hide-desktop-buttons');
             document.body.classList.remove('no-scroll');
         }

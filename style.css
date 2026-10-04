@@ -654,10 +654,12 @@ footer .footer_section {
 }
 
 
-.events .event-seasons {
-    width: 95% !important;
-    max-width: 1560px !important;
-    margin: 0 auto !important;
+@media (min-width: 961px) {
+    .events .event-seasons {
+        width: 95% !important;
+        max-width: 1560px !important;
+        margin: 0 auto !important;
+    }
 }
 
 .contacts {
@@ -768,16 +770,18 @@ html {
     box-sizing: border-box !important;
 }
 
-.events .event-seasons {
-    width: 95% !important;
-    max-width: 1560px !important;
-    margin: 0 auto !important;
-    padding: 30px 0 !important;
-    display: grid !important;
-    grid-template-columns: repeat(5, 1fr) !important;
-    gap: 16px !important;
-    box-sizing: border-box !important;
-    justify-content: center !important;
+@media (min-width: 961px) {
+    .events .event-seasons {
+        width: 95% !important;
+        max-width: 1560px !important;
+        margin: 0 auto !important;
+        padding: 30px 0 !important;
+        display: grid !important;
+        grid-template-columns: repeat(5, 1fr) !important;
+        gap: 16px !important;
+        box-sizing: border-box !important;
+        justify-content: center !important;
+    }
 }
 
 .events .event-seasons .event-item,
@@ -866,7 +870,7 @@ html {
     display: none !important;
 }
 
-@media (max-width: 1100px) and (min-width: 761px) {
+@media (max-width: 1100px) and (min-width: 961px) {
     .events .event-seasons {
         grid-template-columns: repeat(3, 1fr) !important;
         gap: 14px !important;
@@ -999,12 +1003,26 @@ footer .footer_section .footer_block .link_block svg {
 }
 
 body {
-    background-image: url('./img/main-bg.webp') !important;
-    background-size: cover !important;
-    background-position: center !important;
-    background-attachment: fixed !important;
-    background-repeat: no-repeat !important;
-    background-color: transparent !important;
+    background-color: #0b0b0d !important;
+}
+
+#fixed-bg-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('./img/main-bg.webp');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: -999;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
 }
 
 .banner .banner_image {
@@ -1159,115 +1177,7 @@ header .buttons .black_button {
 
 
 
-/* Modern Mobile Cards for Events v4 */
-@media only screen and (max-width: 760px) {
-    #events .event-seasons {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 20px !important;
-        padding: 0 15px !important;
-    }
-
-    #events .event-seasons .event-item {
-        display: flex !important;
-        flex-direction: column !important;
-        aspect-ratio: auto !important;
-        height: auto !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        border-radius: 16px !important;
-        overflow: hidden !important;
-        background-color: #111 !important;
-        border: 1px solid #333 !important;
-        margin-bottom: 0 !important;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
-        position: relative !important;
-        padding: 0 !important;
-        align-items: stretch !important;
-    }
-    
-    #events .event-seasons .event-item .background-image {
-        position: relative !important;
-        width: 100% !important;
-        height: 220px !important;
-        object-fit: cover !important;
-        object-position: right top !important; /* Keep the girls in view */
-        display: block !important;
-        border-radius: 0 !important;
-        max-width: none !important;
-    }
-    
-    #events .event-seasons .event-item .overlay-image {
-        display: none !important;
-    }
-    
-    #events .event-seasons .event-item .content {
-        position: relative !important;
-        width: 100% !important;
-        height: auto !important;
-        top: 0 !important;
-        left: 0 !important;
-        padding: 24px 20px !important;
-        box-sizing: border-box !important;
-        background: linear-gradient(to bottom, #1a1a1a, #0a0a0a) !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: flex-start !important; z-index: 10 !important; opacity: 1 !important; visibility: visible !important; min-height: 200px !important; display: flex !important; flex: 1 !important;
-        transform: none !important;
-        border-top: 2px solid #8b1014 !important; /* Elegant red accent line */
-    }
-    
-    #events .event-seasons .event-item .content h2 {
-        font-size: 26px !important;
-        margin: 0 0 12px 0 !important;
-        color: #f8e7bc !important;
-        line-height: 1.2 !important;
-        text-align: center !important;
-        width: 100% !important;
-        font-family: Rosemaria, serif !important;
-    }
-    
-    #events .event-seasons .event-item .content .card-divider {
-        display: none !important; /* Hide original divider, we use top border */
-    }
-    
-    #events .event-seasons .event-item .content .card-subtitle {
-        font-size: 15px !important;
-        margin: 0 0 24px 0 !important;
-        color: #ddd !important;
-        line-height: 1.5 !important;
-        text-align: center !important;
-        width: 100% !important;
-        font-family: Onest, sans-serif !important;
-    }
-    
-    #events .event-seasons .event-item .content .event-item_button {
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        font-size: 16px !important;
-        padding: 14px 28px !important;
-        margin: 0 !important;
-        white-space: nowrap !important;
-        width: 100% !important; /* Full width button on mobile */
-        max-width: 280px !important;
-        background-color: #8b1014 !important;
-        color: #fff !important;
-        border-radius: 8px !important;
-        text-decoration: none !important;
-        font-weight: 500 !important;
-        font-family: Onest, sans-serif !important;
-        border: none !important;
-        transition: background-color 0.3s !important;
-    }
-    
-    #events .event-seasons .event-item .content .event-item_button img {
-        margin-left: 10px !important;
-        width: 16px !important;
-        filter: brightness(0) invert(1) !important;
-    }
-}
+/* Old mobile styles removed in favor of unified responsive styles */
 
 
 /* SUPER OVERRIDE FOR EVENT CARDS TEXT */
@@ -1371,7 +1281,7 @@ html body .events .event-seasons .event-item:nth-child(even) .overlay-image {
     right: 0 !important;
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 961px) and (max-width: 1024px) {
     html body .events .event-seasons .event-item .content,
     html body .events .event-item .content,
     html body #events .event-seasons .event-item .content,
@@ -1527,61 +1437,17 @@ html body .events .event-seasons .event-item .content.custom-image-content .even
     height: 0 !important;
 }
 
-/* Card alignment and scale for preview cards */
-html body .events .event-seasons .event-item .background-image[src*="show4"],
-html body .events .event-item .background-image[src*="show4"],
-html body #events .event-seasons .event-item .background-image[src*="show4"] {
-    object-position: left center !important;
-    transform: translate(-0.5%, 0) scale(1.08) !important;
-    transform-origin: center !important;
-}
-
-html body .events .event-seasons .event-item .background-image[src*="show5"],
-html body .events .event-item .background-image[src*="show5"],
-html body #events .event-seasons .event-item .background-image[src*="show5"] {
-    object-position: center !important;
-    transform: translate(5%, 0) scale(1.09) !important;
-    transform-origin: center !important;
-}
-
-html body .events .event-seasons .event-item .background-image[src*="show6"],
-html body .events .event-item .background-image[src*="show6"],
-html body #events .event-seasons .event-item .background-image[src*="show6"] {
-    object-position: center !important;
-    transform: translate(3%, 0) scale(1.09) !important;
-    transform-origin: center !important;
-}
-
-html body .events .event-seasons .event-item .background-image[src*="show7"],
-html body .events .event-item .background-image[src*="show7"],
-html body #events .event-seasons .event-item .background-image[src*="show7"] {
-    object-position: center !important;
-    transform: translate(2%, 0) scale(1.09) !important;
-    transform-origin: center !important;
-}
-
-html body .events .event-seasons .event-item .background-image[src*="show8"],
-html body .events .event-item .background-image[src*="show8"],
-html body #events .event-seasons .event-item .background-image[src*="show8"] {
-    object-position: center !important;
-    transform: translate(4%, 0) scale(1.09) !important;
-    transform-origin: center !important;
-}
-
-html body .events .event-seasons .event-item .background-image[src*="show9"],
-html body .events .event-item .background-image[src*="show9"],
-html body #events .event-seasons .event-item .background-image[src*="show9"] {
-    object-position: center !important;
-    transform: translate(6%, 6.5%) scale(1.22) !important;
-    transform-origin: center !important;
-}
-
-html body .events .event-seasons .event-item .background-image[src*="show10"],
-html body .events .event-item .background-image[src*="show10"],
-html body #events .event-seasons .event-item .background-image[src*="show10"] {
-    object-position: center !important;
-    transform: translate(7%, 7.5%) scale(1.24) !important;
-    transform-origin: center !important;
+/* Card alignment and scale for preview cards - clean center positioning */
+html body .events .event-seasons .event-item .background-image,
+html body .events .event-item .background-image,
+html body #events .event-seasons .event-item .background-image {
+    object-position: center center !important;
+    transform: none !important;
+    transform-origin: center center !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
 }
 
 /* Modal video display: vertical rectangular framing without square black box */
@@ -1597,10 +1463,12 @@ html body #events .event-seasons .event-item .background-image[src*="show10"] {
 .modal-body-container video {
     background: transparent !important;
     background-color: transparent !important;
-    object-fit: contain !important;
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
     max-height: 100% !important;
     max-width: 100% !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(248, 231, 188, 0.25) !important;
     border-radius: 12px !important;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
 }
@@ -1608,10 +1476,12 @@ html body #events .event-seasons .event-item .background-image[src*="show10"] {
 .modal-body-container .modal-main-frame img {
     background: transparent !important;
     background-color: transparent !important;
-    object-fit: contain !important;
+    object-fit: cover !important;
+    width: 100% !important;
+    height: 100% !important;
     max-height: 100% !important;
     max-width: 100% !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(248, 231, 188, 0.25) !important;
     border-radius: 12px !important;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
 }
@@ -1698,12 +1568,83 @@ html body #events .event-seasons .event-item .background-image[src*="show10"] {
 }
 
 /* Prevent document height collapse when modals open so page doesn't scroll to top */
-html.no-scroll,
 body.no-scroll,
 .no-scroll {
     overflow: hidden !important;
     height: auto !important;
     min-height: 100vh !important;
+}
+
+/* Perfect Gold Frame & Image Alignment across all devices */
+.about_show .show_block .image-frame,
+.events-info .image-frame {
+    position: relative !important;
+    display: block !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    border-radius: 8px !important;
+    padding: 0 !important;
+}
+
+.about_show .show_block .image-frame img.cut-corners,
+.events-info .image-frame img.cut-corners {
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: cover !important;
+    display: block !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    mask: none !important;
+    -webkit-mask: none !important;
+    border-radius: 6px !important;
+}
+
+.about_show .show_block .image-frame picture,
+.events-info .image-frame picture {
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    pointer-events: none !important;
+    box-sizing: border-box !important;
+}
+
+.about_show .show_block .image-frame picture .gold-frame,
+.about_show .show_block .image-frame .gold-frame,
+.events-info .image-frame picture .gold-frame,
+.events-info .image-frame .gold-frame {
+    position: absolute !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    object-fit: fill !important;
+    pointer-events: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    display: block !important;
 }
 
 

@@ -7,8 +7,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Публичная оферта — Ta-is DANCE | таисшоу.рф</title>
     <meta name="description" content="Договор публичной оферты на оказание услуг по организации и проведению танцевальных шоу Ta-is DANCE.">
+    <meta name="yandex-verification" content="dd0011bc16b28a90" />
     <link rel="canonical" href="https://таисшоу.рф/offer.html">
-    <link rel="icon" type="image/png" href="img/icons/favicon.png">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="48x48" href="/img/icons/favicon-48x48.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/icons/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="preload" as="image" href="./img/main-bg.webp" type="image/webp" fetchpriority="high">
 
     <meta property="og:locale" content="ru_RU">
     <meta property="og:type" content="website">
@@ -99,17 +106,17 @@
         }
     </style>
 <body style="">
+<div id="fixed-bg-layer" aria-hidden="true"></div>
 
 <header style="">
     <div class="menu">
         <a href="#">
             <img src="./logo.png" alt="logo" style="height: 72px; width: auto; mix-blend-mode: screen; margin-top: 5px;">
         </a>
-        <nav class="main-nav">            <ul class="nav-links">                <li><a href="#events">Шоу</a></li>                <li><a href="#menu">Меню</a></li>                <li class="contacts_link"><a href="#contacts">Контакты</a></li>                <li class="mobile-only buttons-wrapper">                    <a class="black_button burger_button certs_buy" href="##">Сертификаты</a>                    <a class="red_button burger_button" href="#events">Заказать шоу</a>                </li>            </ul>        </nav>
+        <nav class="main-nav">            <ul class="nav-links">                <li><a href="#events">Шоу</a></li>                <li><a href="#menu">Меню</a></li>                <li class="contacts_link"><a href="#contacts">Контакты</a></li>                <li class="mobile-only buttons-wrapper">                    <a class="red_button burger_button" href="#events">Заказать шоу</a>                </li>            </ul>        </nav>
     </div>
 
     <div class="buttons desktop-only">
-        <a class="black_button certs_buy" href="##">Сертификаты</a>
         <a class="red_button" href="#events">Заказать шоу</a>
     </div>
 
@@ -186,7 +193,7 @@
             <div class="footer_block">
                 <a href="#about">О Шоу</a>
                 <a href="#menu">Меню</a>
-                <a href="##" class="order_event">Заказать мероприятие</a>
+                <a href="https://vk.me/danceshowtais" target="_blank" rel="noopener noreferrer">Заказать мероприятие</a>
                 <a href="#spravka/">Справка</a>
             </div>
             <div class="footer_block">
@@ -223,149 +230,6 @@
     </div>
 </footer>
 
-<div class="cert_overlay">
-<form id="order-certs-form" method="post" action="alfapay-cert.php">
-    <div class="cert_popup">
-        <div class="cert_title">
-            <h2>Оформление подарочного сертификата</h2>
-            <a class="close_cert_popup" href="##"><img src="./close_popup.svg" alt="close icon"></a>
-        </div>
-        <hr>
-        <div class="cert_info">
-            <p>Подарочный сертификат Ta-is DANCE — это идеальный способ подарить незабываемое шоу! Выберите любую сумму от 3000 рублей, и счастливый обладатель сертификата сможет использовать его как промокод для приобретения билетов на наши программы.
-
-Сертификат действует в течение года и позволяет полностью или частично оплатить билет. Оформите электронный сертификат — получите его на вашу электронную почту. Подарите яркие эмоции уже сегодня!</p>            <input class="amount-input" type="number" name="cert_amount" inputmode="numeric" id="cert_amount" placeholder="Сумма сертификата">
-            <div class="info_count">
-                <img src="./info_icon.svg" alt="info icon">
-                <p>Минимальная сумма сертификата - 3000 руб. Сертификат действует в течение 1 года с момента приобретения.</p>
-            </div>
-        </div>
-        <hr>
-        <div class="cert_buttons">
-            <a class="red_button" href="##" id="order-certs-next_step">Оформить</a>
-            <a class="black_button" href="##" id="order-certs_step">Проверить баланс сертификата</a>
-        </div>
-    </div>
-
-    <div class="cert_popup_checkout">
-        <div class="cert_title">
-            <h2>Оформление подарочного сертификата</h2>
-            <a class="close_cert_popup" href="##"><img src="./close_popup.svg" alt="close icon"></a>
-        </div>
-        <hr>
-        <div class="cert_checkout_info">
-            <div class="loader-order" id="loader-order-certs">
-                <div class="loader"></div>
-            </div>
-            <h2>Персональные данные</h2>
-
-            <input class="cert-ticket-info client-name_cert" type="text" id="client-name_cert" name="client-name_cert" placeholder="Имя">
-            <input class="cert-ticket-info client-surname_cert" type="text" id="client-surname_cert" name="client-surname_cert" placeholder="Фамилия">
-            <input class="cert-ticket-info" name="phone_cert" id="client-phone_cert" type="tel" placeholder="Номер телефона">
-            <input class="cert-ticket-info" name="email_cert" id="client-email_cert" type="email" placeholder="Электронная почта">
-
-            <div class="checkout_agree">
-                <input type="checkbox" class="chk" id="cert_checkout_agree">
-                <p>Я подтверждаю свое согласие с условиями Пользовательского соглашения, политикой об обработке персональных данных, договора оказания услуг по организации мероприятия и даю согласие на обработку персональных данных.</p>
-            </div>
-
-            <div class="checkout_total" id="cert_checkout_total">
-                <h2>Ваш заказ</h2>
-                <div class="checkout_total_text info-cert-amount">Подарочный сертификат <span class="dots"></span> 0 ₽</div>
-                <div class="checkout_total_text info-certs-total">Итого <span class="dots"></span> 0 ₽</div>
-            </div>
-
-            <div class="logo_cards">
-                <img src="./mastercard-logo.svg" alt="mastercard-logo">
-                <img src="./visa-logo.svg" alt="visa-logo">
-                <img src="./mir-logo.svg" alt="mir-logo">
-            </div>
-
-            <p class="checkout_subtitle">Для оплаты билетов, вы будете перенаправлены на страницу платежной системы, где вы можете выбрать удобный для вас способ оплаты.</p>
-            <hr>
-
-            <div class="cert_checkout_buttons">
-                <a class="black_button" href="##" id="order-certs-prev_step">Назад</a>
-                <input type="submit" name="submit-order-gift" id="submit-order-gift" class="red_button" value="Оформить" disabled="" style="opacity: 0.6; pointer-events: none; filter: grayscale(100%);">
-            </div>
-              <input type="hidden" id="order-number-cert" name="orderNumber_cert" value="">
-              <input type="hidden" name="total_cert" id="input-certs-total">
-        </div>
-    </div>
-</form>
-
-    <div class="cert_popup_success">
-        <div class="cert_title">
-            <a class="close_cert_popup" href="##"><img src="./close_popup.svg" alt="close icon"></a>
-        </div>
-        <div class="cert_info">
-            <h2>Оплата прошла успешно!</h2>
-            <p>Подарочный сертификат отправлен вам на почту qwerty@gmail.com.</p>
-        </div>
-    </div>
-
-    <div class="cert_popup_balance">
-        <div class="cert_title">
-            <h2>Проверка баланса сертификата</h2>
-            <a class="close_cert_popup" href="##"><img src="./close_popup.svg" alt="close icon"></a>
-        </div>
-        <hr>
-        <form id="check-form" method="post" action="#/">
-            <div class="cert_info">
-                <div class="bg-overflow-check"></div>
-                <div class="loader-container" id="loader-check" style="height: 100%;background: rgba(26, 26, 26, 0.5);">
-                    <div class="loader"></div>
-                </div>
-                    <input class="amount-input check-info" type="text" name="cert-code" placeholder="Код сертификата">
-                    <div id="check-form-messages" class="form-messages js-errorbox-all t-form__errorbox-wrapper" style="display:none;width:100%;font-family:Onest;color:red;"></div>
-                    <div class="cert_desc"></div>
-            </div>
-            <hr>
-            <div class="cert_buttons" style="width:100%;">
-                <input class="red_button" type="submit" name="submit-check1" id="submit-check1" value="Проверить баланс">
-            </div>
-        </form>
-    </div>
-</div>
-
-<div class="event_overlay">
-    <div class="event_popup">
-        <div class="event_title">
-            <h2>Заказать мероприятие</h2>
-            <a class="close_event_popup" href="##"><img src="./close_popup.svg" alt="close icon"></a>
-        </div>
-        <hr>
-        <form name="order_event_form" id="order_event_form" action="#/" method="post">
-            <div class="event_info">
-                <p>Расскажите нам о вашем мероприятии, и мы предложим идеальное решение, которое удивит ваших гостей и сделает вечер особенным. Заполните форму, и наш менеджер свяжется с вами в ближайшее время для обсуждения всех деталей.</p>
-                <input class="event-input" type="text" name="event_name" inputmode="text" id="event_name" placeholder="Ваше имя">
-                <input class="event-input" type="tel" name="event_phone" inputmode="text" id="event_phone" placeholder="Ваш телефон">
-                <textarea class="event-input" name="event_text" id="event_text" placeholder="Комментарий"></textarea>
-            </div>
-            <hr>
-            <div class="event_buttons">
-                <input class="red_button" type="submit" id="submitButton" value="Отправить">
-            </div>
-        </form>
-    </div>
-
-    <div class="event_success_popup">
-        <div class="event_title">
-            <h2>Спасибо за ваш запрос!</h2>
-        </div>
-        <hr>
-        <div class="event_info">
-            <p>Мы получили ваши данные и скоро свяжемся с вами для обсуждения деталей вашего мероприятия. Ваше событие станет незабываемым — мы позаботимся о каждой мелочи, чтобы создать уникальное шоу, которое удивит ваших гостей!
-            <br><br>
-            До скорой встречи! 😊✨</p>
-        </div>
-        <hr>
-        <div class="event_buttons">
-            <a class="black_button" href="##" id="close_event_popup_success">Закрыть</a>
-        </div>
-    </div>
-</div>
-
 <div id="scrollToTopBtn" class="">
   <img src="./Button_up.png" alt="scroll up">
 </div>
@@ -391,7 +255,6 @@
 <script src="./slider-about.js"></script>
 <script src="./gallery.js"></script>
 <script src="./local-storage.js"></script>
-<script src="./popup_cert.js"></script>
 <script src="./popup_events.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -439,126 +302,6 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script>
-jQuery(document).ready(function($) {
-    $('#check-form').on('submit', function(e) {
-        e.preventDefault();
-        $('#loader-check').css('display', 'flex');
-        $('#check-form-messages').hide().html('');
-        
-        var certCode = $('input[name="cert-code"]').val().trim();
-        var errors = [];
-        
-        if (!certCode) {
-            errors.push('Поле "Код сертификата" должно быть заполнено.');
-        }
-        
-        if (errors.length > 0) {
-            $('#loader-check').hide();
-            var errorList = '<ul class="t-form__errorbox-text t-text t-text_md">';
-            $.each(errors, function(index, error) {
-                errorList += '<li class="t-form__errorbox-item js-rule-error" style="display:block;">' + error + '</li>';
-            });
-            errorList += '</ul>';
-            $('#check-form-messages').html('<div class="error-message" style="margin-top:10px;text-align:center;">' + errorList + '</div>').fadeIn();
-            return;
-        }
-        
-        var formData = new FormData(this);
-        formData.append('action', 'check_balance');
-        
-        $.ajax({
-            url: '/api/handler',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) {
-                $('#loader-check').hide();
-                
-                if (response.success) {
-                    $('.cert_desc').css('display', 'block');
-                    $('.cert_desc').css('opacity', '1').html(
-                        '<h2>Баланс сертификата <span>' + response.data.balance + ' ₽</span></h2>' +
-                        '<h2>Срок действия сертификата <span>' + response.data.status + '</span></h2>'
-                    );
-                } else {
-                    $('.cert_desc').css('opacity', '0');
-                    $('#check-form-messages').html('<div class="error-message">Ошибка: ' + response.data + '</div>').fadeIn();
-                }
-            },
-            error: function() {
-                $('#loader-check').hide();
-                $('#check-form-messages').html('<div class="error-message">Ошибка при отправке формы</div>').fadeIn();
-            }
-        });
-    });
-});
-jQuery(document).ready(function($) {
-    $('#order_event_form').on('submit', function(e) {
-      e.preventDefault();
-    
-      const form = $(this);
-      const submitBtn = form.find('[type="submit"]');
-    
-      const name = form.find('input[name="event_name"]');
-      const phone = form.find('input[name="event_phone"]');
-      const comment = form.find('textarea[name="event_text"]');
-      const popupEvent = document.querySelector('.event_popup');
-      const popupEventSuccess = document.querySelector('.event_success_popup');
-    
-      let hasError = false;
-    
-      form.find('.event-input').removeClass('input-error');
-    
-      if ($.trim(name.val()) === '') {
-          name.addClass('input-error');
-          hasError = true;
-      }
-    
-      if ($.trim(phone.val()) === '') {
-          phone.addClass('input-error');
-          hasError = true;
-      }
-    
-      if (hasError) {
-          return;
-      }
-    
-      submitBtn.prop('disabled', true);
-    
-      $.ajax({
-          type: 'POST',
-          url: '/api/handler',
-          data: form.serialize() + '&action=process_contact_form',
-    
-          success: function(response) {
-    
-              if (response.success) {
-    
-                  form[0].reset();
-    
-                  popupEvent.classList.remove('active');
-                  popupEventSuccess.classList.add('active');
-    
-              } else {
-                  alert('Ошибка отправки, обновите страницу и попробуйте ещё раз.');
-              }
-          },
-    
-          error: function(xhr) {
-                if (xhr.status === 429) {
-                    window.location.reload();
-                    return;
-                }
-                alert('Ошибка соединения');
-          },
-    
-          complete: function() {
-              submitBtn.prop('disabled', false);
-          }
-      });
-    });
-});
 document.addEventListener('DOMContentLoaded', function () {
 
     const cookieOkBtn = document.querySelector('.cookie-notification .js-popup-ok');

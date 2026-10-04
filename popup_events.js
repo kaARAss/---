@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function unlockBody() {
-        const y = Math.abs(parseInt(document.body.style.top || '0')) || 0;
+        const topVal = document.body.style.top;
+        const y = topVal ? (Math.abs(parseInt(topVal, 10)) || scrollYTickets || 0) : (scrollYTickets || 0);
 
         const html = document.documentElement;
         const prevScrollBehavior = html.style.scrollBehavior;
@@ -34,12 +35,15 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.style.overflowY = '';
         document.body.style.width = '';
 
-        requestAnimationFrame(() => {
-            window.scrollTo(0, y);
-            setTimeout(() => {
-            html.style.scrollBehavior = prevScrollBehavior;
-            }, 0);
-        });
+        if (y > 0) {
+            requestAnimationFrame(() => {
+                window.scrollTo(0, y);
+                setTimeout(() => {
+                    html.style.scrollBehavior = prevScrollBehavior;
+                }, 0);
+            });
+        }
+        scrollYTickets = 0;
     }
 
     function ensureOpen(overlayEl) {
@@ -70,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function closeAllTickets(overlayEl) {
-        if (!overlayEl) return;
+        if (!overlayEl || !overlayEl.classList.contains('active')) return;
         overlayEl.classList.remove('active');
         overlayEl.querySelectorAll('.event_tickets, .management-tickets, .event_tickets_success, .management-tickets-checkout')
         .forEach(el => el.classList.remove('active'));

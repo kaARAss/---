@@ -42,48 +42,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (element) {
             lastClickedEventItem = element;
         }
-        if (savedScrollPosition === null) {
-            const currentScroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-            if (currentScroll > 0) {
-                savedScrollPosition = currentScroll;
-            } else if (lastClickedEventItem && typeof lastClickedEventItem.getBoundingClientRect === 'function') {
-                const rect = lastClickedEventItem.getBoundingClientRect();
-                savedScrollPosition = rect.top + (window.pageYOffset || document.documentElement.scrollTop || 0);
-            } else {
-                const eventsEl = document.getElementById('events') || document.querySelector('.event-seasons');
-                if (eventsEl) {
-                    savedScrollPosition = eventsEl.offsetTop;
-                }
-            }
+        const currentScroll = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+        if (currentScroll > 0) {
+            savedScrollPosition = currentScroll;
         }
     }
 
     function restoreScrollPosition() {
         const targetY = savedScrollPosition;
-        const targetItem = lastClickedEventItem;
         savedScrollPosition = null;
-        
-        const applyRestore = () => {
-            if (typeof targetY === 'number' && targetY > 0) {
-                window.scrollTo({
-                    top: targetY,
-                    left: 0,
-                    behavior: 'instant'
-                });
-            }
-            if (targetItem && typeof targetItem.getBoundingClientRect === 'function') {
-                const rect = targetItem.getBoundingClientRect();
-                if (rect.top < -50 || rect.bottom > (window.innerHeight + 50)) {
-                    targetItem.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'instant' });
-                }
-            }
-        };
-
-        applyRestore();
-        requestAnimationFrame(applyRestore);
-        setTimeout(applyRestore, 20);
-        setTimeout(applyRestore, 60);
-        setTimeout(applyRestore, 150);
+        if (typeof targetY === 'number' && targetY > 0) {
+            window.scrollTo({
+                top: targetY,
+                left: 0,
+                behavior: 'instant'
+            });
+        }
     }
 
     function closeCurrentModal() {
@@ -108,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
             disableModalZoomLock();
         }
         document.body.classList.remove('no-scroll');
-        document.body.classList.remove('hide-content-mode');
         restoreScrollPosition();
     }
 
@@ -137,14 +110,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const monthYear = `${monthNum}_${year}`;
 
         const eventItem = document.createElement('div');
-        eventItem.className = 'event-item';
+        eventItem.className = 'event-item swiper-slide';
 
         const imgBg = document.createElement('img');
         imgBg.src = image;
         imgBg.alt = 'afisha background';
         imgBg.className = 'background-image';
-        imgBg.loading = (index < 2 ? 'eager' : 'lazy');
+        imgBg.loading = (index < 4 ? 'eager' : 'lazy');
         imgBg.decoding = 'async';
+        if (index < 2) {
+            imgBg.fetchPriority = 'high';
+        }
 
         const imgOverlay = document.createElement('img');
         imgOverlay.src = './red_frame.png';
@@ -165,6 +141,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         eventItem.style.cursor = 'pointer';
         eventItem.addEventListener('click', function(e) {
+            if (window._isSwipingCards) return;
             e.preventDefault();
             saveScrollPosition(eventItem);
             const existingModal = document.querySelector(`#event_tickets_${monthYear}`);
@@ -193,49 +170,8 @@ document.addEventListener('DOMContentLoaded', function() {
             imgBg.style.width = '100%';
             imgBg.style.height = '100%';
             imgBg.style.objectFit = 'cover';
-            if (monthData.image.includes('show1')) {
-                imgBg.style.objectPosition = 'left center'; 
-                imgBg.style.transform = 'scale(1.05)'; 
-                imgBg.style.transformOrigin = 'left center';
-            } else if (monthData.image.includes('show2')) {
-                imgBg.style.objectPosition = 'left center';
-                imgBg.style.transform = 'scale(1.15)';
-                imgBg.style.transformOrigin = 'left center';
-            } else if (monthData.image.includes('show3')) {
-                imgBg.style.objectPosition = 'center 35%'; 
-                imgBg.style.transform = 'none';
-            } else if (monthData.image.includes('show4')) {
-                imgBg.style.setProperty('object-position', 'left center', 'important');
-                imgBg.style.setProperty('transform', 'translate(-0.5%, 0) scale(1.08)', 'important');
-                imgBg.style.setProperty('transform-origin', 'center', 'important');
-            } else if (monthData.image.includes('show5')) {
-                imgBg.style.setProperty('object-position', 'center', 'important');
-                imgBg.style.setProperty('transform', 'translate(5%, 0) scale(1.09)', 'important');
-                imgBg.style.setProperty('transform-origin', 'center', 'important');
-            } else if (monthData.image.includes('show6')) {
-                imgBg.style.setProperty('object-position', 'center', 'important');
-                imgBg.style.setProperty('transform', 'translate(3%, 0) scale(1.09)', 'important');
-                imgBg.style.setProperty('transform-origin', 'center', 'important');
-            } else if (monthData.image.includes('show7')) {
-                imgBg.style.setProperty('object-position', 'center', 'important');
-                imgBg.style.setProperty('transform', 'translate(2%, 0) scale(1.09)', 'important');
-                imgBg.style.setProperty('transform-origin', 'center', 'important');
-            } else if (monthData.image.includes('show8')) {
-                imgBg.style.setProperty('object-position', 'center', 'important');
-                imgBg.style.setProperty('transform', 'translate(4%, 0) scale(1.09)', 'important');
-                imgBg.style.setProperty('transform-origin', 'center', 'important');
-            } else if (monthData.image.includes('show9')) {
-                imgBg.style.setProperty('object-position', 'center', 'important');
-                imgBg.style.setProperty('transform', 'translate(6%, 6.5%) scale(1.22)', 'important');
-                imgBg.style.setProperty('transform-origin', 'center', 'important');
-            } else if (monthData.image.includes('show10')) {
-                imgBg.style.setProperty('object-position', 'center', 'important');
-                imgBg.style.setProperty('transform', 'translate(7%, 7.5%) scale(1.24)', 'important');
-                imgBg.style.setProperty('transform-origin', 'center', 'important');
-            } else {
-                imgBg.style.objectPosition = 'center';
-                imgBg.style.transform = 'none';
-            }
+            imgBg.style.objectPosition = 'center center';
+            imgBg.style.transform = 'none';
         }
         eventItem.appendChild(content);
 
@@ -418,13 +354,13 @@ function createEventTickets(monthData, index) {
         const t = document.createElement('div');
         t.style.width = '100%';
         t.style.height = '90px';
-        t.style.backgroundColor = 'rgba(0,0,0,0.8)';
+        t.style.backgroundColor = 'rgba(25, 20, 22, 0.7)';
         t.style.display = 'flex';
         t.style.alignItems = 'center';
         t.style.justifyContent = 'center';
         t.style.cursor = 'pointer';
         t.style.borderRadius = '8px';
-        t.style.border = '2px solid #444';
+        t.style.border = '2px solid rgba(248, 231, 188, 0.2)';
         t.style.color = '#fff';
         t.style.fontFamily = 'Onest, sans-serif';
         t.style.fontSize = '14px';
@@ -435,70 +371,58 @@ function createEventTickets(monthData, index) {
         
         t.onmouseenter = () => {
             t.style.borderColor = '#8b1014';
-            
         };
         t.onmouseleave = () => {
-            t.style.borderColor = t.style.borderWidth === '2px' ? (t.style.borderColor === 'rgb(139, 16, 20)' || t.style.borderColor === '#8b1014' ? '#444' : t.style.borderColor) : '#444';
-            
+            t.style.borderColor = t.style.borderWidth === '2px' ? (t.style.borderColor === 'rgb(139, 16, 20)' || t.style.borderColor === '#8b1014' ? 'rgba(248, 231, 188, 0.2)' : t.style.borderColor) : 'rgba(248, 231, 188, 0.2)';
         };
         
-        if (bgUrl && bgUrl !== '') {
-            if (isVideo) {
-                const effectivePoster = posterUrl || bgUrl.replace(/\.mp4$/i, '_thumb.jpg').replace(/video(\d+)/i, 'v$1');
-                if (effectivePoster) {
-                    const thumbImg = document.createElement('img');
-                    thumbImg.src = effectivePoster;
-                    thumbImg.loading = 'lazy';
-                    thumbImg.decoding = 'async';
-                    thumbImg.style.position = 'absolute';
-                    thumbImg.style.top = '0';
-                    thumbImg.style.left = '0';
-                    thumbImg.style.width = '100%';
-                    thumbImg.style.height = '100%';
-                    thumbImg.style.objectFit = 'cover';
-                    t.appendChild(thumbImg);
-                }
-                const playBadge = document.createElement('span');
-                playBadge.style.position = 'relative';
-                playBadge.style.zIndex = '2';
-                playBadge.style.fontSize = '24px';
-                playBadge.style.textShadow = '0 2px 8px rgba(0,0,0,0.9)';
-                playBadge.textContent = '▶';
-                t.appendChild(playBadge);
-            } else {
-                const thumbImg = document.createElement('img');
-                thumbImg.src = bgUrl;
-                thumbImg.loading = 'lazy';
-                thumbImg.decoding = 'async';
-                thumbImg.style.position = 'absolute';
-                thumbImg.style.top = '0';
-                thumbImg.style.left = '0';
-                thumbImg.style.width = '100%';
-                thumbImg.style.height = '100%';
-                thumbImg.style.objectFit = 'cover';
-                thumbImg.onerror = () => {
+        const effectiveImgUrl = isVideo 
+            ? (posterUrl || (bgUrl ? bgUrl.replace(/\.mp4$/i, '_thumb.jpg').replace(/video(\d+)/i, 'v$1') : '') || (monthData && monthData.image ? monthData.image : ''))
+            : (bgUrl || (monthData && monthData.image ? monthData.image : ''));
+            
+        if (effectiveImgUrl && effectiveImgUrl !== '') {
+            const thumbImg = document.createElement('img');
+            thumbImg.src = effectiveImgUrl;
+            thumbImg.loading = 'lazy';
+            thumbImg.decoding = 'async';
+            thumbImg.alt = text || (isVideo ? 'Видео' : 'Фото');
+            thumbImg.style.position = 'absolute';
+            thumbImg.style.top = '0';
+            thumbImg.style.left = '0';
+            thumbImg.style.width = '100%';
+            thumbImg.style.height = '100%';
+            thumbImg.style.objectFit = 'cover';
+            thumbImg.onerror = () => {
+                thumbImg.onerror = null;
+                if (monthData && monthData.image && thumbImg.src !== monthData.image) {
+                    thumbImg.src = monthData.image;
+                } else {
                     thumbImg.style.display = 'none';
-                    t.textContent = text || 'Фото';
-                };
-                t.appendChild(thumbImg);
-            }
-        } else {
-            t.textContent = text;
-            if (isVideo) {
-                t.innerHTML = `<span style="font-size: 24px;">▶</span>`;
-            }
+                    if (!isVideo) t.textContent = text || 'Фото';
+                }
+            };
+            t.appendChild(thumbImg);
+        }
+        
+        if (isVideo) {
+            const playBadge = document.createElement('span');
+            playBadge.style.position = 'relative';
+            playBadge.style.zIndex = '2';
+            playBadge.style.fontSize = '22px';
+            playBadge.style.color = '#f8e7bc';
+            playBadge.style.textShadow = '0 2px 8px rgba(0,0,0,0.9)';
+            playBadge.textContent = '▶';
+            t.appendChild(playBadge);
+        } else if (!effectiveImgUrl) {
+            t.textContent = text || 'Фото';
         }
         
         return t;
     };
 
     
-    const mediaItems = monthData.media || [
-        { type: 'video', label: 'Видео', url: '' },
-        { type: 'image', label: 'Фото 1', url: '' },
-        { type: 'image', label: 'Фото 2', url: '' },
-        { type: 'image', label: 'Фото 3', url: '' },
-        { type: 'image', label: 'Фото 4', url: '' }
+    const mediaItems = (monthData.media && monthData.media.length > 0) ? monthData.media : [
+        { type: 'image', label: 'Фото 1', url: monthData.image || '' }
     ];
 
     const thumbsElements = [];
@@ -527,6 +451,7 @@ function createEventTickets(monthData, index) {
     mainDisplay.style.display = 'flex';
     mainDisplay.style.alignItems = 'center';
     mainDisplay.style.justifyContent = 'center';
+    mainDisplay.style.position = 'relative';
     mainDisplay.style.color = '#777';
     mainDisplay.style.fontFamily = 'Onest, sans-serif';
     mainDisplay.style.fontSize = '18px';
@@ -547,29 +472,37 @@ function createEventTickets(monthData, index) {
             videoWrap.style.display = 'flex';
             videoWrap.style.alignItems = 'center';
             videoWrap.style.justifyContent = 'center';
+            videoWrap.style.borderRadius = '12px';
+            videoWrap.style.overflow = 'hidden';
+            videoWrap.style.backgroundColor = 'transparent';
 
-            const video = document.createElement('video');
-            video.src = item.url;
-            video.preload = 'none';
-            
-            const effectivePoster = item.poster || (item.url ? item.url.replace(/\.mp4$/i, '_thumb.jpg').replace(/video(\d+)/i, 'v$1') : '');
-            if (effectivePoster) {
-                video.poster = effectivePoster;
-            }
+            const effectivePoster = item.poster || (item.url ? item.url.replace(/\.mp4$/i, '_thumb.jpg').replace(/video(\d+)/i, 'v$1') : '') || (monthData && monthData.image ? monthData.image : '');
 
-            video.controls = true;
-            video.playsInline = true;
-            video.style.maxWidth = '100%';
-            video.style.maxHeight = '100%';
-            video.style.width = 'auto';
-            video.style.height = '100%';
-            video.style.aspectRatio = 'auto';
-            video.style.objectFit = 'contain';
-            video.style.borderRadius = '12px';
-            video.style.border = '1px solid rgba(255,255,255,0.2)';
-            video.style.backgroundColor = '#000';
-            video.onerror = () => { videoWrap.textContent = 'Здесь будет большое видео'; };
+            // 1. High-resolution preview poster image covering the frame before playback (NO BLACK BACKGROUND!)
+            const posterImg = document.createElement('img');
+            posterImg.src = effectivePoster;
+            posterImg.alt = item.label || 'Видео превью';
+            posterImg.loading = 'eager';
+            posterImg.decoding = 'async';
+            posterImg.style.width = '100%';
+            posterImg.style.height = '100%';
+            posterImg.style.objectFit = 'cover';
+            posterImg.style.borderRadius = '12px';
+            posterImg.style.border = '1px solid rgba(248, 231, 188, 0.25)';
+            posterImg.style.position = 'absolute';
+            posterImg.style.top = '0';
+            posterImg.style.left = '0';
+            posterImg.style.zIndex = '2';
+            posterImg.style.cursor = 'pointer';
+            posterImg.style.display = 'block';
+            posterImg.onerror = () => {
+                posterImg.onerror = null;
+                if (monthData && monthData.image) {
+                    posterImg.src = monthData.image;
+                }
+            };
 
+            // 2. Play button centered on preview
             const bigPlay = document.createElement('button');
             bigPlay.setAttribute('type', 'button');
             bigPlay.setAttribute('aria-label', 'Воспроизвести видео');
@@ -577,7 +510,7 @@ function createEventTickets(monthData, index) {
             bigPlay.style.width = '64px';
             bigPlay.style.height = '64px';
             bigPlay.style.borderRadius = '50%';
-            bigPlay.style.backgroundColor = 'rgba(139, 16, 20, 0.85)';
+            bigPlay.style.backgroundColor = 'rgba(139, 16, 20, 0.9)';
             bigPlay.style.border = '2px solid #f8e7bc';
             bigPlay.style.color = '#fff';
             bigPlay.style.fontSize = '26px';
@@ -586,18 +519,36 @@ function createEventTickets(monthData, index) {
             bigPlay.style.justifyContent = 'center';
             bigPlay.style.cursor = 'pointer';
             bigPlay.style.boxShadow = '0 0 25px rgba(0,0,0,0.8), 0 0 15px rgba(139, 16, 20, 0.6)';
-            bigPlay.style.transition = 'transform 0.2s';
+            bigPlay.style.transition = 'transform 0.2s, background-color 0.2s';
             bigPlay.style.zIndex = '5';
             bigPlay.innerHTML = '<span style="margin-left: 4px;">▶</span>';
-            bigPlay.onmouseenter = () => { bigPlay.style.transform = 'scale(1.1)'; };
-            bigPlay.onmouseleave = () => { bigPlay.style.transform = 'scale(1)'; };
+            bigPlay.onmouseenter = () => { bigPlay.style.transform = 'scale(1.1)'; bigPlay.style.backgroundColor = 'rgba(180, 20, 25, 0.95)'; };
+            bigPlay.onmouseleave = () => { bigPlay.style.transform = 'scale(1)'; bigPlay.style.backgroundColor = 'rgba(139, 16, 20, 0.9)'; };
+
+            // 3. Video element (hidden until user starts playback)
+            const video = document.createElement('video');
+            video.src = item.url;
+            video.controls = true;
+            video.playsInline = true;
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.objectFit = 'cover';
+            video.style.borderRadius = '12px';
+            video.style.border = '1px solid rgba(248, 231, 188, 0.25)';
+            video.style.position = 'absolute';
+            video.style.top = '0';
+            video.style.left = '0';
+            video.style.zIndex = '1';
+            video.style.display = 'none';
+            video.style.backgroundColor = '#000';
 
             const startPlaying = () => {
+                posterImg.style.display = 'none';
+                bigPlay.style.display = 'none';
+                video.style.display = 'block';
                 video.preload = 'auto';
-                video.play().then(() => {
-                    bigPlay.style.display = 'none';
-                }).catch(() => {
-                    bigPlay.style.display = 'none';
+                video.play().catch(err => {
+                    console.warn('Video play error:', err);
                 });
             };
 
@@ -606,29 +557,43 @@ function createEventTickets(monthData, index) {
                 startPlaying();
             });
 
-            video.onplay = () => {
-                bigPlay.style.display = 'none';
-            };
-            video.onpause = () => {
-                if (video.currentTime === 0) bigPlay.style.display = 'flex';
+            posterImg.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startPlaying();
+            });
+
+            video.onended = () => {
+                video.style.display = 'none';
+                posterImg.style.display = 'block';
+                bigPlay.style.display = 'flex';
             };
 
-            videoWrap.appendChild(video);
+            videoWrap.appendChild(posterImg);
             videoWrap.appendChild(bigPlay);
+            videoWrap.appendChild(video);
             mainDisplay.appendChild(videoWrap);
         } else {
             const img = document.createElement('img');
             img.src = item.url;
             img.loading = 'eager';
             img.decoding = 'async';
-            img.onerror = () => { img.style.display = 'none'; mainDisplay.textContent = 'Здесь будет большое фото'; };
-            img.style.objectFit = 'contain';
+            img.alt = item.label || 'Фото';
+            img.onerror = () => {
+                img.onerror = null;
+                if (monthData && monthData.image) {
+                    img.src = monthData.image;
+                } else {
+                    img.style.display = 'none';
+                    mainDisplay.textContent = 'Здесь будет большое фото';
+                }
+            };
+            img.style.objectFit = 'cover';
             img.style.maxWidth = '100%';
             img.style.maxHeight = '100%';
-            img.style.width = 'auto';
+            img.style.width = '100%';
             img.style.height = '100%';
             img.style.borderRadius = '12px';
-            img.style.border = '1px solid rgba(255,255,255,0.2)';
+            img.style.border = '1px solid rgba(248, 231, 188, 0.25)';
             img.style.backgroundColor = 'transparent';
             mainDisplay.appendChild(img);
         }
@@ -735,7 +700,6 @@ function openEventTickets(monthYear) {
     eventTickets.style.display = 'flex';
     
     document.body.classList.add('no-scroll');
-    document.body.classList.add('hide-content-mode');
 }
 
 function loadEventsList(eventTickets, monthNum, year) {
@@ -791,7 +755,6 @@ function loadEventsList(eventTickets, monthNum, year) {
                             orderForm.style.display = 'flex';
                             bgOverflow && (bgOverflow.classList = 'active');
                             document.body.classList.add('no-scroll');
-    document.body.classList.add('hide-content-mode');
                             enableModalZoomLock();
                         });
                     }
@@ -809,6 +772,85 @@ function loadEventsList(eventTickets, monthNum, year) {
             eventSeasonsContainer.appendChild(eventItem);
         }
     });
+
+    // Mobile Swiper Slider for show cards (1 card per view with arrows & swipe)
+    let eventsSwiperInstance = null;
+    window._isSwipingCards = false;
+
+    function setupEventsSlider() {
+        const isMobile = window.innerWidth <= 960;
+        const container = document.querySelector('.events-slider-container');
+        const seasons = document.querySelector('.event-seasons');
+        const prevBtn = document.querySelector('.events-nav-btn.prev');
+        const nextBtn = document.querySelector('.events-nav-btn.next');
+        const currentEl = document.querySelector('.events-current-num');
+        const totalEl = document.querySelector('.events-total-num');
+
+        if (!container || !seasons) return;
+
+        const cards = seasons.querySelectorAll('.event-item');
+        const total = cards.length || 10;
+        if (totalEl) totalEl.textContent = total;
+
+        if (isMobile) {
+            if (typeof Swiper !== 'undefined') {
+                if (!eventsSwiperInstance) {
+                    eventsSwiperInstance = new Swiper('.events-slider-container', {
+                        slidesPerView: 1,
+                        slidesPerGroup: 1,
+                        spaceBetween: 0,
+                        centeredSlides: true,
+                        speed: 350,
+                        grabCursor: true,
+                        touchRatio: 1,
+                        threshold: 6,
+                        touchAngle: 45,
+                        watchOverflow: true,
+                        navigation: {
+                            prevEl: prevBtn,
+                            nextEl: nextBtn,
+                            disabledClass: 'swiper-button-disabled'
+                        },
+                        on: {
+                            init: function(sw) {
+                                if (currentEl) currentEl.textContent = sw.realIndex + 1;
+                                if (totalEl) totalEl.textContent = sw.slides ? sw.slides.length : total;
+                            },
+                            slideChange: function(sw) {
+                                if (currentEl) currentEl.textContent = sw.realIndex + 1;
+                            },
+                            touchStart: function() {
+                                window._isSwipingCards = false;
+                            },
+                            touchMove: function() {
+                                window._isSwipingCards = true;
+                            },
+                            touchEnd: function() {
+                                setTimeout(() => { window._isSwipingCards = false; }, 80);
+                            }
+                        }
+                    });
+                } else {
+                    eventsSwiperInstance.update();
+                }
+            }
+        } else {
+            if (eventsSwiperInstance) {
+                eventsSwiperInstance.destroy(true, true);
+                eventsSwiperInstance = null;
+            }
+            seasons.style.removeProperty('transform');
+            seasons.style.removeProperty('transition');
+            cards.forEach(card => card.style.removeProperty('transform'));
+        }
+    }
+
+    setupEventsSlider();
+    setTimeout(setupEventsSlider, 150);
+    window.addEventListener('load', setupEventsSlider);
+    window.addEventListener('resize', () => {
+        setupEventsSlider();
+    }, { passive: true });
 
 
     const seats = document.querySelectorAll('.seat');
@@ -1426,7 +1468,6 @@ function loadEventsList(eventTickets, monthNum, year) {
         button.addEventListener('click', function(e) {
             saveScrollPosition(button.closest('.event-item'));
             document.body.classList.add('no-scroll');
-            document.body.classList.add('hide-content-mode');
         });
     });
 
@@ -1807,13 +1848,7 @@ function loadEventsList(eventTickets, monthNum, year) {
 
 
 
-const modalStyle = document.createElement('style');
-modalStyle.textContent = `
-body.hide-content-mode > *:not(.event_tickets):not(script):not(style):not(link) {
-    visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; transition: opacity 0.3s ease;
-}
-`;
-document.head.appendChild(modalStyle);
+
 
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
@@ -1825,7 +1860,6 @@ document.addEventListener('keydown', (e) => {
             } else if (openModal) {
                 openModal.style.display = 'none';
                 document.body.classList.remove('no-scroll');
-                document.body.classList.remove('hide-content-mode');
             }
         }
     }

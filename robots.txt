@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 Sitemap: https://таисшоу.рф/sitemap.xml
-Host: https://таисшоу.рф
+Host: таисшоу.рф

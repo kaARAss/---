@@ -334,6 +334,26 @@ body {
 .banner {
   transition: all 0.3s ease-in-out;
 }
+@media (min-width: 961px) {
+  .banner {
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    margin-bottom: 120px !important;
+    box-sizing: border-box !important;
+  }
+  .banner_main {
+    min-height: 100vh !important;
+    min-height: 100dvh !important;
+    padding: 100px 5% 40px 5% !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+  }
+}
 .banner .mobile_only {
   display: none;
 }
@@ -346,10 +366,9 @@ body {
 .banner .banner_image {
   width: 100%;
   aspect-ratio: 1600/770;
-  background-image: url(./img/index/banner.webp?v=1789400010);
+  background-image: url(./img/index/banner.webp?v=1789600000);
   background-size: contain;
   background-repeat: no-repeat;
-  transition: background-image 0.3s ease;
 }
 .banner .banner_content {
   font-family: Onest;
@@ -10567,10 +10586,9 @@ hr {
     max-height: 480px;
     height: 100%;
     max-width: 976px;
-    background-image: url(./img/index/Banner_tablet.png) !important;
+    background-image: url(./img/index/banner.webp?v=1789600000) !important;
     background-size: contain;
     background-repeat: no-repeat;
-    transition: background-image 0.3s ease;
   }
   .events .event-seasons .event-item {
     max-width: 46.192vw;
@@ -11472,6 +11490,10 @@ header .buttons .black_button {
     margin: 0 !important;
   }
 }
+#animated-logo {
+  transform: none !important;
+  filter: none !important;
+}
 /* Replaced with unified mobile slider styles in index.html */
 
 
@@ -11610,3 +11632,105 @@ html body .events .event-item .overlay-image {
     display: block !important;
 }
 
+/* --- Секция "Что вас ждет на шоу": Исходный шахматный порядок --- */
+.about_show {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 20px 20px 60px 20px !important;
+    box-sizing: border-box !important;
+}
+.about_show .show_slider {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 40px !important;
+    width: 100% !important;
+    overflow: visible !important;
+}
+.about_show .show_block {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: clamp(24px, 3.5vw, 50px) !important;
+    width: 100% !important;
+    max-width: 1100px !important;
+    margin: 0 auto !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+}
+.about_show .show_block .image-frame {
+    flex: 0 0 46% !important;
+    width: 46% !important;
+    max-width: 500px !important;
+    min-width: 260px !important;
+    aspect-ratio: 540 / 320 !important;
+    height: auto !important;
+    margin: 0 !important;
+}
+.about_show .show_block .block_info {
+    flex: 1 1 50% !important;
+    max-width: 540px !important;
+    width: auto !important;
+    padding: clamp(12px, 2vw, 32px) !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    text-align: left !important;
+}
+.about_show .show_block .block_info h3 {
+    font-size: clamp(20px, 2.2vw, 26px) !important;
+    font-weight: 700 !important;
+    margin-top: 0 !important;
+    margin-bottom: 14px !important;
+    line-height: 1.3 !important;
+}
+.about_show .show_block .block_info p {
+    font-size: clamp(14px, 1.4vw, 16px) !important;
+    line-height: 1.6 !important;
+    margin-top: 0 !important;
+    margin-bottom: 24px !important;
+}
+.about_show .show_block .block_info .black_button {
+    margin-top: 0 !important;
+    width: fit-content !important;
+}
+@media only screen and (max-width: 580px) {
+    .about_show .show_block {
+        flex-direction: column !important;
+        gap: 16px !important;
+        margin-bottom: 40px !important;
+    }
+    .about_show .show_block .image-frame {
+        flex: none !important;
+        width: 100% !important;
+        max-width: 360px !important;
+        min-width: unset !important;
+        order: 1 !important;
+    }
+    .about_show .show_block .block_info {
+        flex: none !important;
+        width: 100% !important;
+        max-width: 360px !important;
+        order: 2 !important;
+        text-align: center !important;
+        padding: 0 !important;
+    }
+    .about_show .show_block .block_info .black_button {
+        margin: 0 auto !important;
+    }
+}
+
+
+.about_show .show_block{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:clamp(14px,3vw,40px)!important;width:100%!important;max-width:1100px!important;margin:0 auto 36px auto!important;box-sizing:border-box!important}
+.about_show .show_block:nth-child(odd) .image-frame{order:1!important}
+.about_show .show_block:nth-child(odd) .block_info{order:2!important;text-align:left!important}
+.about_show .show_block:nth-child(even) .block_info{order:1!important;text-align:left!important}
+.about_show .show_block:nth-child(even) .image-frame{order:2!important}
+.about_show .show_block .image-frame{flex:0 0 46%!important;width:46%!important;max-width:500px!important;min-width:160px!important;aspect-ratio:540/320!important;height:auto!important;margin:0!important;position:relative!important;overflow:hidden!important;box-sizing:border-box!important;border-radius:8px!important}
+.about_show .show_block .block_info{flex:1 1 50%!important;max-width:540px!important;width:auto!important;padding:clamp(8px,2vw,28px)!important;box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:center!important;text-align:left!important}
+.about_show .show_block .block_info p:last-child{margin-bottom:0!important}
+#animated-logo{filter:none!important;-webkit-filter:none!important;box-shadow:none!important;text-shadow:none!important}
+#logo-wrapper{filter:none!important;-webkit-filter:none!important;box-shadow:none!important;background:transparent!important}
+header#main-header,header{box-shadow:none!important}

@@ -656,8 +656,8 @@ footer .footer_section {
 
 @media (min-width: 961px) {
     .events .event-seasons {
-        width: 95% !important;
-        max-width: 1560px !important;
+        width: 96% !important;
+        max-width: 1720px !important;
         margin: 0 auto !important;
     }
 }
@@ -772,8 +772,8 @@ html {
 
 @media (min-width: 961px) {
     .events .event-seasons {
-        width: 95% !important;
-        max-width: 1560px !important;
+        width: 96% !important;
+        max-width: 1720px !important;
         margin: 0 auto !important;
         padding: 30px 0 !important;
         display: grid !important;
@@ -799,10 +799,12 @@ html {
     transition: transform 0.25s ease, box-shadow 0.25s ease !important;
 }
 
-.events .event-seasons .event-item:hover,
-.events .event-item:hover {
-    transform: translateY(-4px) scale(1.02) !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7) !important;
+@media (hover: hover) and (pointer: fine) {
+    .events .event-seasons .event-item:hover,
+    .events .event-item:hover {
+        transform: translateY(-4px) scale(1.02) !important;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7) !important;
+    }
 }
 
 .events .event-seasons .event-item .background-image,
@@ -1008,45 +1010,82 @@ footer .footer_section .footer_block .link_block svg {
     align-items: center;
 }
 
-body {
-    background-color: #0b0b0d !important;
+@media (min-width: 961px) {
+    .banner {
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        margin-bottom: 120px !important;
+        box-sizing: border-box !important;
+    }
+    .banner_main {
+        min-height: 100vh !important;
+        min-height: 100dvh !important;
+        padding: 100px 5% 40px 5% !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        box-sizing: border-box !important;
+    }
 }
 
-#fixed-bg-layer {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: 100vh;
-    background-image: url('./img/main-bg.webp');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    pointer-events: none;
-    z-index: -999;
-    will-change: transform;
-    transform: translate3d(0, 0, 0);
-    -webkit-transform: translate3d(0, 0, 0);
+@media (min-width: 961px) {
+    body {
+        background-color: transparent !important;
+        background-image: url('./img/main-bg.webp') !important;
+        background-size: cover !important;
+        background-position: center top !important;
+        background-repeat: no-repeat !important;
+        background-attachment: fixed !important;
+    }
+
+    #fixed-bg-layer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width: 100vw;
+        height: 100vh;
+        background-image: url('./img/main-bg.webp');
+        background-size: cover;
+        background-position: center top;
+        background-repeat: no-repeat;
+        pointer-events: none;
+        z-index: -1;
+        will-change: transform;
+        transform: translate3d(0, 0, 0);
+        -webkit-transform: translate3d(0, 0, 0);
+    }
+}
+
+@media only screen and (max-width: 960px) {
+    html,
+    body,
+    html body {
+        background: #000000 !important;
+        background-color: #000000 !important;
+        background-image: none !important;
+    }
+
+    #fixed-bg-layer {
+        display: none !important;
+        background: #000000 !important;
+        background-image: none !important;
+    }
 }
 
 .banner .banner_image {
-    background-image: url('img/index/banner.webp?v=1789350000') !important;
+    background-image: url('img/index/banner.webp?v=1789600000') !important;
     background-size: contain !important;
     background-repeat: no-repeat !important;
 }
 
-@media only screen and (min-width: 1025px) {
-    .banner .banner_image:hover {
-        background-image: url('img/index/banner_hover.webp?v=1789350000') !important;
-        transition: background-image 0.3s ease-in-out !important;
-    }
-}
-
 @media only screen and (max-width: 1024px) and (min-width: 761px) {
     .banner .banner_image {
-        background-image: url('img/index/Banner_tablet.webp?v=1789350000') !important;
+        background-image: url('img/index/banner.webp?v=1789600000') !important;
     }
 }
 
@@ -1054,16 +1093,16 @@ body {
 
 
 .about .about_us .section_title {
-    text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6);
+    text-shadow: none !important;
 }
 
 .about .about_show h2 {
-    text-shadow: 0 0 10px rgba(0,0,0,0.8), 0 0 20px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6);
+    text-shadow: none !important;
 }
 
 .about .about_us .section_title,
 .about .about_show h2 {
-    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 0.8), 0px 0px 50px rgba(0, 0, 0, 0.8) !important;
+    text-shadow: none !important;
 }
 
 .footer_section .footer_block {
@@ -1181,6 +1220,26 @@ header .buttons .black_button {
         height: auto !important;
         margin: 0 !important;
     }
+}
+
+#animated-logo {
+    transform: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+}
+
+#logo-wrapper {
+    box-shadow: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+    background: transparent !important;
+}
+
+header#main-header,
+header {
+    box-shadow: none !important;
 }
 
 
@@ -1413,13 +1472,6 @@ html body .events .event-seasons .event-item .content.custom-image-content .even
 }
 
 
-@media only screen and (min-width: 1025px) {
-    .banner .banner_image:hover {
-        background-image: url('img/index/banner_hover.webp?v=1789350000') !important;
-    }
-}
-
-
 /* Hide scrollbar for thumbs column */
 .thumbs-col::-webkit-scrollbar {
     display: none !important;
@@ -1447,25 +1499,92 @@ html body .events .event-seasons .event-item .content.custom-image-content .even
     height: 0 !important;
 }
 
-/* Card alignment and scale for preview cards - clean center positioning */
+/* Card alignment and scale for preview cards - full frame fill without letterboxing */
 html body .events .event-seasons .event-item .background-image,
 html body .events .event-item .background-image,
 html body #events .event-seasons .event-item .background-image {
-    object-position: center center !important;
-    transform: none !important;
-    transform-origin: center center !important;
+    object-position: left center !important;
+    transform: scale(1.05) !important;
+    transform-origin: left center !important;
     width: 100% !important;
     height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    object-fit: cover !important;
+}
+
+/* Individual card positioning for shows with text at bottom or specific focal point */
+html body .events .event-seasons .event-item:nth-child(3) .background-image,
+html body .events .event-item:nth-child(3) .background-image {
+    object-position: left 55% !important;
+    transform-origin: left 55% !important;
+    transform: none !important;
+}
+
+html body .events .event-seasons .event-item:nth-child(4) .background-image,
+html body .events .event-item:nth-child(4) .background-image {
+    object-position: 65% center !important;
+    transform-origin: 65% center !important;
+}
+
+html body .events .event-seasons .event-item:nth-child(6) .background-image,
+html body .events .event-item:nth-child(6) .background-image,
+html body .events .event-seasons .event-item:nth-child(7) .background-image,
+html body .events .event-item:nth-child(7) .background-image,
+html body .events .event-seasons .event-item:nth-child(9) .background-image,
+html body .events .event-item:nth-child(9) .background-image,
+html body .events .event-seasons .event-item:nth-child(10) .background-image,
+html body .events .event-item:nth-child(10) .background-image {
+    object-position: left bottom !important;
+    transform-origin: left bottom !important;
 }
 
 @media only screen and (max-width: 960px) {
+    .event-item,
+    .event-item.swiper-slide,
+    .events .event-item {
+        -webkit-tap-highlight-color: transparent !important;
+        touch-action: pan-y !important;
+        cursor: pointer !important;
+    }
+
     html body .events .event-seasons .event-item .background-image,
     html body .events .event-item .background-image,
     html body #events .event-seasons .event-item .background-image {
         -o-object-position: left center !important;
         object-position: left center !important;
+        transform: scale(1.05) !important;
+        transform-origin: left center !important;
+    }
+
+    html body .events .event-seasons .event-item:nth-child(3) .background-image,
+    html body .events .event-item:nth-child(3) .background-image {
+        -o-object-position: left 55% !important;
+        object-position: left 55% !important;
+        transform-origin: left 55% !important;
+        transform: none !important;
+    }
+
+    html body .events .event-seasons .event-item:nth-child(4) .background-image,
+    html body .events .event-item:nth-child(4) .background-image {
+        -o-object-position: 65% center !important;
+        object-position: 65% center !important;
+        transform-origin: 65% center !important;
+    }
+
+    html body .events .event-seasons .event-item:nth-child(6) .background-image,
+    html body .events .event-item:nth-child(6) .background-image,
+    html body .events .event-seasons .event-item:nth-child(7) .background-image,
+    html body .events .event-item:nth-child(7) .background-image,
+    html body .events .event-seasons .event-item:nth-child(9) .background-image,
+    html body .events .event-item:nth-child(9) .background-image,
+    html body .events .event-seasons .event-item:nth-child(10) .background-image,
+    html body .events .event-item:nth-child(10) .background-image {
+        -o-object-position: left bottom !important;
+        object-position: left bottom !important;
+        transform-origin: left bottom !important;
     }
 }
 
@@ -1524,7 +1643,7 @@ html body #events .event-seasons .event-item .background-image {
     box-shadow: none !important;
 }
 
-/* Titles: same shadow style as "ТАНЦЕВАЛЬНОЕ ШОУ НА МЕРОПРИЯТИЯ" and "Что вас ждет на шоу" */
+/* Titles: clean without shadows */
 .section_title,
 .about .section_title,
 .about_show h2,
@@ -1532,7 +1651,7 @@ html body #events .event-seasons .event-item .background-image {
 .events-info .events_block .section_title,
 .about_show .show_block .block_info h3 {
     color: #f8e7bc !important;
-    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 0.8), 0px 0px 50px rgba(0, 0, 0, 0.8) !important;
+    text-shadow: none !important;
 }
 
 /* Paragraph text: clear text-shadow without dark background */
@@ -1541,10 +1660,10 @@ html body #events .event-seasons .event-item .background-image {
 .events-info .events_block .section_p,
 .about_show .show_block .block_info p {
     color: #ffffff !important;
-    text-shadow: 0px 3px 12px rgba(0, 0, 0, 1), 0px 0px 24px rgba(0, 0, 0, 0.9), 0px 0px 40px rgba(0, 0, 0, 0.85) !important;
+    text-shadow: none !important;
 }
 
-/* Contacts section: clear text-shadow without dark background boxes */
+/* Contacts section: clean without shadows under text and icons */
 .contacts,
 .contacts_info {
     background: transparent !important;
@@ -1557,7 +1676,7 @@ html body #events .event-seasons .event-item .background-image {
     color: #f8e7bc !important;
     line-height: 1.25 !important;
     margin-bottom: 28px !important;
-    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 0.8), 0px 0px 50px rgba(0, 0, 0, 0.8) !important;
+    text-shadow: none !important;
 }
 
 .contacts_info .question {
@@ -1565,25 +1684,27 @@ html body #events .event-seasons .event-item .background-image {
     color: #f8e7bc !important;
     font-weight: 700 !important;
     margin-bottom: 24px !important;
-    text-shadow: 0px 4px 15px rgba(0, 0, 0, 1), 0px 0px 30px rgba(0, 0, 0, 0.8) !important;
+    text-shadow: none !important;
 }
 
 .contacts_info a {
     font-size: clamp(22px, 2.2vw, 28px) !important;
     color: #ffffff !important;
-    text-shadow: 0px 3px 12px rgba(0, 0, 0, 1), 0px 0px 24px rgba(0, 0, 0, 0.95) !important;
+    text-shadow: none !important;
 }
 
 .contacts_info .social_btn {
     font-size: clamp(20px, 2.1vw, 26px) !important;
     color: #ffffff !important;
-    text-shadow: 0px 3px 12px rgba(0, 0, 0, 1), 0px 0px 24px rgba(0, 0, 0, 0.95) !important;
+    text-shadow: none !important;
 }
 
 .contacts_info img,
 .contacts_info svg,
 .contacts_info span {
-    filter: drop-shadow(0px 3px 10px rgba(0, 0, 0, 0.95)) drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.85)) !important;
+    filter: none !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
 }
 
 /* Prevent document height collapse when modals open so page doesn't scroll to top */
@@ -1622,9 +1743,22 @@ body.no-scroll,
     box-sizing: border-box !important;
     margin: 0 !important;
     padding: 0 !important;
-    mask: none !important;
-    -webkit-mask: none !important;
-    border-radius: 6px !important;
+    --cut-corner: clamp(14px, 4.2vw, 24px);
+    -webkit-mask:
+        radial-gradient(circle at 0 0, transparent calc(var(--cut-corner) - 1px), #000 var(--cut-corner)) top left,
+        radial-gradient(circle at 100% 0, transparent calc(var(--cut-corner) - 1px), #000 var(--cut-corner)) top right,
+        radial-gradient(circle at 100% 100%, transparent calc(var(--cut-corner) - 1px), #000 var(--cut-corner)) bottom right,
+        radial-gradient(circle at 0 100%, transparent calc(var(--cut-corner) - 1px), #000 var(--cut-corner)) bottom left !important;
+    -webkit-mask-size: 51% 51% !important;
+    -webkit-mask-repeat: no-repeat !important;
+    mask:
+        radial-gradient(circle at 0 0, transparent calc(var(--cut-corner) - 1px), #000 var(--cut-corner)) top left,
+        radial-gradient(circle at 100% 0, transparent calc(var(--cut-corner) - 1px), #000 var(--cut-corner)) top right,
+        radial-gradient(circle at 100% 100%, transparent calc(var(--cut-corner) - 1px), #000 var(--cut-corner)) bottom right,
+        radial-gradient(circle at 0 100%, transparent calc(var(--cut-corner) - 1px), #000 var(--cut-corner)) bottom left !important;
+    mask-size: 51% 51% !important;
+    mask-repeat: no-repeat !important;
+    border-radius: 0 !important;
 }
 
 .about_show .show_block .image-frame picture,
@@ -1664,6 +1798,128 @@ body.no-scroll,
     margin: 0 !important;
     box-sizing: border-box !important;
     display: block !important;
+}
+
+/* --- Секция "Что вас ждет на шоу": Исходный шахматный порядок --- */
+/* Блок 1: фотка слева, текст справа
+   Блок 2: текст слева, фотка справа
+   Блок 3: фотка слева, текст справа
+   Блок 4: текст слева, фотка справа */
+.about_show {
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    padding: 20px 20px 60px 20px !important;
+    box-sizing: border-box !important;
+}
+
+.about_show .show_slider {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 40px !important;
+    width: 100% !important;
+    overflow: visible !important;
+}
+
+.about_show .show_block {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: clamp(14px, 3vw, 40px) !important;
+    width: 100% !important;
+    max-width: 1100px !important;
+    margin: 0 auto 36px auto !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+}
+
+/* Нечетные блоки (1, 3): фотка слева, текст справа */
+.about_show .show_block:nth-child(odd) .image-frame {
+    order: 1 !important;
+}
+.about_show .show_block:nth-child(odd) .block_info {
+    order: 2 !important;
+    text-align: left !important;
+}
+
+/* Четные блоки (2, 4): текст слева, фотка справа */
+.about_show .show_block:nth-child(even) .block_info {
+    order: 1 !important;
+    text-align: left !important;
+}
+.about_show .show_block:nth-child(even) .image-frame {
+    order: 2 !important;
+}
+
+.about_show .show_block .image-frame {
+    flex: 0 0 46% !important;
+    width: 46% !important;
+    max-width: 500px !important;
+    min-width: 160px !important;
+    aspect-ratio: 540 / 320 !important;
+    height: auto !important;
+    margin: 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
+    box-sizing: border-box !important;
+    border-radius: 8px !important;
+}
+
+.about_show .show_block .block_info {
+    flex: 1 1 50% !important;
+    max-width: 540px !important;
+    width: auto !important;
+    padding: clamp(8px, 2vw, 28px) !important;
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    text-align: left !important;
+}
+
+.about_show .show_block .block_info h3 {
+    font-size: clamp(17px, 2.2vw, 24px) !important;
+    font-weight: 700 !important;
+    margin-top: 0 !important;
+    margin-bottom: 12px !important;
+    line-height: 1.3 !important;
+}
+
+.about_show .show_block .block_info p {
+    font-size: clamp(12px, 1.5vw, 15px) !important;
+    line-height: 1.55 !important;
+    margin-top: 0 !important;
+    margin-bottom: 18px !important;
+}
+
+.about_show .show_block .block_info p:last-child {
+    margin-bottom: 0 !important;
+}
+
+.about_show .show_block .block_info .black_button {
+    margin-top: 0 !important;
+    width: fit-content !important;
+    font-size: clamp(11px, 1.6vw, 14px) !important;
+    padding: 8px 16px !important;
+}
+
+/* Ensure no shadows under any text, logo, or contact icons */
+#animated-logo,
+#logo-wrapper,
+#logo-wrapper img,
+.first_footer_block img,
+.contacts h3,
+.contacts .question,
+.contacts a,
+.contacts_info *,
+.section_title,
+.about_show h2,
+.about_us h2 {
+    text-shadow: none !important;
+    box-shadow: none !important;
+    filter: none !important;
+    -webkit-filter: none !important;
 }
 
 

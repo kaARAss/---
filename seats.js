@@ -105,6 +105,67 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
     }
 
+    function openShowModal(data, index, eventItem) {
+        if (!data) return;
+        const monthYear = `${data.monthNum}_${data.year}`;
+        if (eventItem) saveScrollPosition(eventItem);
+        const existingModal = document.querySelector(`#event_tickets_${monthYear}`);
+        if (existingModal) {
+            openEventTickets(monthYear);
+            return;
+        }
+        const eventTickets = createEventTickets(data, index);
+        document.body.appendChild(eventTickets);
+        openEventTickets(monthYear);
+    }
+
+    function bindCardOpenEvents(eventItem, data, index) {
+        eventItem.style.cursor = 'pointer';
+        let startX = 0;
+        let startY = 0;
+        let startTime = 0;
+        let moved = false;
+        let lastTriggerTime = 0;
+
+        function triggerOpen(e) {
+            const now = Date.now();
+            if (now - lastTriggerTime < 500) return;
+            lastTriggerTime = now;
+            if (e && e.cancelable && e.type !== 'click') e.preventDefault();
+            openShowModal(data, index, eventItem);
+        }
+
+        eventItem.addEventListener('touchstart', function(e) {
+            if (e.touches && e.touches.length === 1) {
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                startTime = Date.now();
+                moved = false;
+            }
+        }, { passive: true });
+
+        eventItem.addEventListener('touchmove', function(e) {
+            if (e.touches && e.touches.length === 1) {
+                const dx = Math.abs(e.touches[0].clientX - startX);
+                const dy = Math.abs(e.touches[0].clientY - startY);
+                if (dx > 8 || dy > 8) {
+                    moved = true;
+                }
+            }
+        }, { passive: true });
+
+        eventItem.addEventListener('touchend', function(e) {
+            const duration = Date.now() - startTime;
+            if (!moved && duration < 600) {
+                triggerOpen(e);
+            }
+        }, { passive: false });
+
+        eventItem.addEventListener('click', function(e) {
+            triggerOpen(e);
+        });
+    }
+
     function createEventItem(monthData, index) {
         const { monthText, year, image, monthNum } = monthData;
         const monthYear = `${monthNum}_${year}`;
@@ -139,20 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
         subtitle.textContent = monthData.description || 'ОПИСАНИЕ ШОУ'; // Keeping month as subtitle so it matches original data loosely
 
         
-        eventItem.style.cursor = 'pointer';
-        eventItem.addEventListener('click', function(e) {
-            if (window._isSwipingCards) return;
-            e.preventDefault();
-            saveScrollPosition(eventItem);
-            const existingModal = document.querySelector(`#event_tickets_${monthYear}`);
-            if (existingModal) {
-                openEventTickets(monthYear);
-                return;
-            }
-            const eventTickets = createEventTickets(monthData, index);
-            document.body.appendChild(eventTickets);
-            openEventTickets(monthYear);
-        });
+        bindCardOpenEvents(eventItem, monthData, index);
         
         if (!monthData.is_custom_image) {
             content.appendChild(title);
@@ -170,7 +218,20 @@ document.addEventListener('DOMContentLoaded', function() {
             imgBg.style.width = '100%';
             imgBg.style.height = '100%';
             imgBg.style.objectFit = 'cover';
-            imgBg.style.objectPosition = 'center center';
+            // Show cards 3 (55% vertical), 6, 7, 9, 10 have text aligned towards bottom, 4 shifted to show girl on right, 1, 2, 5, 8 towards left/center
+            const showPosMap = {
+                1: 'left center',
+                2: 'left center',
+                3: 'left 55%',
+                4: '65% center',
+                5: 'left center',
+                6: 'left bottom',
+                7: 'left bottom',
+                8: 'left center',
+                9: 'left bottom',
+                10: 'left bottom'
+            };
+            imgBg.style.objectPosition = showPosMap[index + 1] || 'left center';
             imgBg.style.transform = 'none';
         }
         eventItem.appendChild(content);
@@ -627,8 +688,9 @@ function createEventTickets(monthData, index) {
 
     const orderBtn = document.createElement('a');
     orderBtn.className = 'red_button';
-    orderBtn.href = 'https://vk.me/danceshowtais'; // link to VK
+    orderBtn.href = 'https://t.me/anzhelika_foris'; // link to Telegram
     orderBtn.target = '_blank';
+    orderBtn.rel = 'noopener noreferrer';
     orderBtn.textContent = 'Заказать мероприятие';
     orderBtn.style.textAlign = 'center';
     orderBtn.style.width = '100%';
@@ -766,12 +828,21 @@ function loadEventsList(eventTickets, monthNum, year) {
             .catch(err => console.error('Ошибка при загрузке событий:', err));
     }
 
-    monthsData.forEach((data, i) => {
-        const eventItem = createEventItem(data, i);
-        if (eventSeasonsContainer) {
-            eventSeasonsContainer.appendChild(eventItem);
+    if (eventSeasonsContainer) {
+        const existingCards = eventSeasonsContainer.querySelectorAll('.event-item');
+        if (existingCards.length > 0) {
+            existingCards.forEach((eventItem, i) => {
+                const data = monthsData[i];
+                if (!data) return;
+                bindCardOpenEvents(eventItem, data, i);
+            });
+        } else {
+            monthsData.forEach((data, i) => {
+                const eventItem = createEventItem(data, i);
+                eventSeasonsContainer.appendChild(eventItem);
+            });
         }
-    });
+    }
 
     // Mobile Swiper Slider for show cards (1 card per view with arrows & swipe)
     let eventsSwiperInstance = null;
@@ -831,13 +902,16 @@ function loadEventsList(eventTickets, monthNum, year) {
                         speed: 350,
                         grabCursor: true,
                         touchRatio: 1,
-                        threshold: 6,
+                        threshold: 8,
                         touchAngle: 45,
                         watchOverflow: true,
                         resistance: true,
                         resistanceRatio: 0.85,
                         slidesOffsetBefore: 0,
                         slidesOffsetAfter: 0,
+                        preventClicks: false,
+                        preventClicksPropagation: false,
+                        touchStartPreventDefault: false,
                         navigation: {
                             prevEl: prevBtn,
                             nextEl: nextBtn,
@@ -858,18 +932,14 @@ function loadEventsList(eventTickets, monthNum, year) {
                             slideChangeTransitionEnd: function(sw) {
                                 updateSlideVisibility(sw);
                             },
-                            touchStart: function(sw) {
-                                window._isSwipingCards = false;
-                                showAdjacentForTransition(sw);
-                            },
-                            touchMove: function() {
-                                window._isSwipingCards = true;
-                            },
-                            touchEnd: function(sw) {
-                                setTimeout(() => {
-                                    window._isSwipingCards = false;
-                                    updateSlideVisibility(sw);
-                                }, 360);
+                            tap: function(sw, e) {
+                                const activeSlide = (sw.slides && sw.slides[sw.activeIndex]) || sw.clickedSlide;
+                                if (activeSlide) {
+                                    const idx = parseInt(activeSlide.getAttribute('data-index') || sw.activeIndex, 10);
+                                    if (!isNaN(idx) && monthsData[idx]) {
+                                        openShowModal(monthsData[idx], idx, activeSlide);
+                                    }
+                                }
                             }
                         }
                     });

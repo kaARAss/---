@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720">
+  <defs>
+    <mask id="cutMask">
+      <rect width="1280" height="720" fill="white" />
+      <circle cx="0" cy="0" r="52" fill="black" />
+      <circle cx="1280" cy="0" r="52" fill="black" />
+      <circle cx="1280" cy="720" r="52" fill="black" />
+      <circle cx="0" cy="720" r="52" fill="black" />
+    </mask>
+  </defs>
+  <rect width="1280" height="720" fill="white" mask="url(#cutMask)" />
+</svg>

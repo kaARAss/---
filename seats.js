@@ -64,12 +64,14 @@ document.addEventListener('DOMContentLoaded', function() {
         const openModals = document.querySelectorAll('.event_tickets');
         openModals.forEach(m => {
             m.style.display = 'none';
+            m.style.setProperty('display', 'none', 'important');
             m.querySelectorAll('video').forEach(v => {
                 try {
                     v.pause();
                     v.currentTime = 0;
                 } catch(e) {}
             });
+            try { m.remove(); } catch(e) {}
         });
         if (orderForm) {
             orderForm.style.display = 'none';
@@ -81,9 +83,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeof disableModalZoomLock === 'function') {
             disableModalZoomLock();
         }
+        if (typeof window.closeOrderMessengerModal === 'function') {
+            window.closeOrderMessengerModal();
+        }
         document.body.classList.remove('no-scroll');
         restoreScrollPosition();
     }
+    window.closeCurrentModal = closeCurrentModal;
 
     function enableModalZoomLock() {
       document.documentElement.classList.add('modal-open');
@@ -131,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const now = Date.now();
             if (now - lastTriggerTime < 500) return;
             lastTriggerTime = now;
+            window._lastModalOpenTime = now;
             if (e && e.cancelable && e.type !== 'click') e.preventDefault();
             openShowModal(data, index, eventItem);
         }
@@ -148,7 +155,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.touches && e.touches.length === 1) {
                 const dx = Math.abs(e.touches[0].clientX - startX);
                 const dy = Math.abs(e.touches[0].clientY - startY);
-                if (dx > 8 || dy > 8) {
+                if (dx > 10 || dy > 10) {
                     moved = true;
                 }
             }
@@ -172,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const eventItem = document.createElement('div');
         eventItem.className = 'event-item swiper-slide';
+        eventItem.setAttribute('data-index', index);
 
         const imgBg = document.createElement('img');
         imgBg.src = image;
@@ -265,18 +273,10 @@ function createEventTickets(monthData, index) {
     eventTickets.style.boxSizing = 'border-box';
     eventTickets.style.boxShadow = '0 10px 40px rgba(0,0,0,0.8)';
     
-    // Background - same as card or dark translucent
-    if (image) {
-        eventTickets.style.backgroundColor = 'rgba(10, 10, 10, 0.7)';
-        eventTickets.style.backdropFilter = 'blur(10px)';
-        eventTickets.style.webkitBackdropFilter = 'blur(10px)';
-        
-        
-    } else {
-        eventTickets.style.backgroundColor = 'rgba(10, 10, 10, 0.7)';
-        eventTickets.style.backdropFilter = 'blur(10px)';
-        eventTickets.style.webkitBackdropFilter = 'blur(10px)';
-    }
+    // Background - solid dark luxury tone for maximum readability
+    eventTickets.style.backgroundColor = '#131316';
+    eventTickets.style.backdropFilter = 'none';
+    eventTickets.style.webkitBackdropFilter = 'none';
 
     const eventTitle = document.createElement('div');
     eventTitle.className = 'event_title';
@@ -340,22 +340,29 @@ function createEventTickets(monthData, index) {
     closeBtn.style.display = 'inline-flex';
     closeBtn.style.alignItems = 'center';
     closeBtn.style.justifyContent = 'center';
-    closeBtn.style.width = '36px';
-    closeBtn.style.height = '36px';
+    closeBtn.style.width = '40px';
+    closeBtn.style.height = '40px';
     closeBtn.style.cursor = 'pointer';
     closeBtn.style.position = 'absolute';
     closeBtn.style.right = '0';
     closeBtn.style.top = '50%';
     closeBtn.style.transform = 'translateY(-50%)';
     closeBtn.style.transition = 'opacity 0.2s';
-    closeBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f8e7bc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+    closeBtn.style.zIndex = '1000';
+    closeBtn.style.pointerEvents = 'auto';
+    closeBtn.style.touchAction = 'manipulation';
+    closeBtn.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#f8e7bc" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display:block; pointer-events: none;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
     closeBtn.onmouseenter = () => { closeBtn.style.opacity = '0.7'; };
     closeBtn.onmouseleave = () => { closeBtn.style.opacity = '1'; };
-    closeBtn.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    function handleModalClose(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
         closeCurrentModal();
-    });
+    }
+    closeBtn.addEventListener('click', handleModalClose);
+    closeBtn.addEventListener('touchend', handleModalClose);
 
     eventTitle.appendChild(prev);
     eventTitle.appendChild(heading);
@@ -507,12 +514,17 @@ function createEventTickets(monthData, index) {
     mainFrame.style.position = 'relative';
 
     const mainDisplay = document.createElement('div');
+    mainDisplay.className = 'modal-main-display';
     mainDisplay.style.width = '100%';
     mainDisplay.style.height = '100%';
+    mainDisplay.style.maxWidth = '100%';
+    mainDisplay.style.maxHeight = '100%';
     mainDisplay.style.display = 'flex';
     mainDisplay.style.alignItems = 'center';
     mainDisplay.style.justifyContent = 'center';
     mainDisplay.style.position = 'relative';
+    mainDisplay.style.overflow = 'hidden';
+    mainDisplay.style.borderRadius = '12px';
     mainDisplay.style.color = '#777';
     mainDisplay.style.fontFamily = 'Onest, sans-serif';
     mainDisplay.style.fontSize = '18px';
@@ -648,14 +660,17 @@ function createEventTickets(monthData, index) {
                     mainDisplay.textContent = 'Здесь будет большое фото';
                 }
             };
-            img.style.objectFit = 'cover';
+            img.style.objectFit = 'contain';
             img.style.maxWidth = '100%';
             img.style.maxHeight = '100%';
             img.style.width = '100%';
             img.style.height = '100%';
             img.style.borderRadius = '12px';
             img.style.border = '1px solid rgba(248, 231, 188, 0.25)';
-            img.style.backgroundColor = 'transparent';
+            img.style.backgroundColor = '#0d0d10';
+            img.style.display = 'block';
+            img.style.margin = 'auto';
+            img.style.boxSizing = 'border-box';
             mainDisplay.appendChild(img);
         }
     }
@@ -667,15 +682,20 @@ function createEventTickets(monthData, index) {
 
     // Right Column: Details
     const detailsCol = document.createElement('div');
+    detailsCol.className = 'modal-details-col';
     detailsCol.style.width = '320px';
+    detailsCol.style.maxWidth = '100%';
+    detailsCol.style.boxSizing = 'border-box';
     detailsCol.style.display = 'flex';
     detailsCol.style.flexDirection = 'column';
     detailsCol.style.gap = '20px';
     detailsCol.style.padding = '10px 0';
 
     const desc = document.createElement('div');
+    desc.className = 'modal-desc-content';
     desc.style.flex = '1';
-    desc.style.color = '#ccc';
+    desc.style.color = '#ffffff';
+    desc.style.textShadow = '0 1px 2px rgba(0, 0, 0, 0.9)';
     desc.style.fontFamily = 'Onest, sans-serif';
     desc.style.lineHeight = '1.6';
     desc.style.overflowY = 'auto';
@@ -687,16 +707,29 @@ function createEventTickets(monthData, index) {
     `;
 
     const orderBtn = document.createElement('a');
-    orderBtn.className = 'red_button';
-    orderBtn.href = 'https://t.me/anzhelika_foris'; // link to Telegram
-    orderBtn.target = '_blank';
-    orderBtn.rel = 'noopener noreferrer';
-    orderBtn.textContent = 'Заказать мероприятие';
+    orderBtn.className = 'red_button btn-order-show-trigger';
+    orderBtn.href = 'javascript:void(0);';
+    orderBtn.textContent = 'Заказать шоу';
     orderBtn.style.textAlign = 'center';
     orderBtn.style.width = '100%';
     orderBtn.style.boxSizing = 'border-box';
     orderBtn.style.padding = '15px';
     orderBtn.style.fontSize = '16px';
+    orderBtn.style.cursor = 'pointer';
+    orderBtn.style.touchAction = 'manipulation';
+    function handleOrderClick(e) {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        if (typeof window.openOrderMessengerModal === 'function') {
+            window.openOrderMessengerModal();
+        } else {
+            window.open('https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784', '_blank');
+        }
+    }
+    orderBtn.addEventListener('click', handleOrderClick);
+    orderBtn.addEventListener('touchend', handleOrderClick);
 
     detailsCol.appendChild(desc);
     detailsCol.appendChild(orderBtn);
@@ -814,8 +847,8 @@ function loadEventsList(eventTickets, monthNum, year) {
 
                             // eventTickets.remove();
                             eventTickets.style.display = 'none';
-                            orderForm.style.display = 'flex';
-                            bgOverflow && (bgOverflow.classList = 'active');
+                            if (orderForm) orderForm.style.display = 'flex';
+                            if (bgOverflow && bgOverflow[0]) bgOverflow[0].classList.add('active');
                             document.body.classList.add('no-scroll');
                             enableModalZoomLock();
                         });
@@ -933,10 +966,11 @@ function loadEventsList(eventTickets, monthNum, year) {
                                 updateSlideVisibility(sw);
                             },
                             tap: function(sw, e) {
-                                const activeSlide = (sw.slides && sw.slides[sw.activeIndex]) || sw.clickedSlide;
+                                const activeSlide = sw.clickedSlide || (sw.slides && sw.slides[sw.activeIndex]);
                                 if (activeSlide) {
                                     const idx = parseInt(activeSlide.getAttribute('data-index') || sw.activeIndex, 10);
                                     if (!isNaN(idx) && monthsData[idx]) {
+                                        window._lastModalOpenTime = Date.now();
                                         openShowModal(monthsData[idx], idx, activeSlide);
                                     }
                                 }
@@ -989,7 +1023,7 @@ function loadEventsList(eventTickets, monthNum, year) {
             const noButton = document.getElementById('purchase-no');
             const purchaseButtons = document.getElementById('purchase-buttons');
             let dismissedTables = {};
-            orderNextStepButton.classList.remove('active');
+            if (orderNextStepButton) orderNextStepButton.classList.remove('active');
 
             function getTicketWord(num) {
                 num = Math.abs(num) % 100;
@@ -1465,31 +1499,34 @@ function loadEventsList(eventTickets, monthNum, year) {
                 return true;
             }
 
-            orderNextStepButton.addEventListener('click', function(event) {
+            if (orderNextStepButton) {
+                orderNextStepButton.addEventListener('click', function(event) {
+                    if (clickInProgress) {
+                        event.preventDefault();
+                        return;
+                    }
 
-                if (clickInProgress) {
-                    event.preventDefault();
-                    return;
-                }
+                    if (!areSeatsValid()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        return; 
+                    }
 
-                if (!areSeatsValid()) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    return; 
-                }
-
-                // seatsInfoDiv.style.display = 'none';
-                // seatsLayout.style.display = 'none';
-                // infoInputsDiv.style.display = 'block';
-                // paymentSystemDiv.style.display = 'flex';
-            });
-            orderPrevStepButton.addEventListener('click', function() {
-                // seatsInfoDiv.style.display = 'block';
-                // seatsLayout.style.display = 'block';
-                // infoInputsDiv.style.display = 'none';
-                // paymentSystemDiv.style.display = 'none';
-                updateSeatTotal()
-            });
+                    // seatsInfoDiv.style.display = 'none';
+                    // seatsLayout.style.display = 'none';
+                    // infoInputsDiv.style.display = 'block';
+                    // paymentSystemDiv.style.display = 'flex';
+                });
+            }
+            if (orderPrevStepButton) {
+                orderPrevStepButton.addEventListener('click', function() {
+                    // seatsInfoDiv.style.display = 'block';
+                    // seatsLayout.style.display = 'block';
+                    // infoInputsDiv.style.display = 'none';
+                    // paymentSystemDiv.style.display = 'none';
+                    updateSeatTotal();
+                });
+            }
 
             let clickInProgress = false;
 
@@ -1590,12 +1627,14 @@ function loadEventsList(eventTickets, monthNum, year) {
         });
     });
 
-    orderTickets.addEventListener('click', function() {
-        let eventTickets = document.querySelector('#event_tickets_' + modalName);
-        if (eventTickets) eventTickets.style.display = 'block';
-        orderForm.style.display = 'none';
-        resetOrderData();
-    });
+    if (orderTickets) {
+        orderTickets.addEventListener('click', function() {
+            let eventTickets = document.querySelector('#event_tickets_' + modalName);
+            if (eventTickets) eventTickets.style.display = 'block';
+            if (orderForm) orderForm.style.display = 'none';
+            resetOrderData();
+        });
+    }
 
     closeButton.forEach(function(button) {
         button.addEventListener('click', function(e) {
@@ -1667,13 +1706,13 @@ function loadEventsList(eventTickets, monthNum, year) {
             orderNextStepButton.classList.remove('active');
         }
 
-        orderForm.style.display = 'none';
+        if (orderForm) orderForm.style.display = 'none';
         disableModalZoomLock();
         document.body.classList.remove('no-scroll');
-        tablePurchaseDiv.style.display = 'none';
-        purchaseButtons.style.display = 'none';
-        yesButton.style.display = 'none';
-        noButton.style.display = 'none';
+        if (tablePurchaseDiv) tablePurchaseDiv.style.display = 'none';
+        if (purchaseButtons) purchaseButtons.style.display = 'none';
+        if (yesButton) yesButton.style.display = 'none';
+        if (noButton) noButton.style.display = 'none';
         // infoInputsDiv.style.display = 'none';
         // paymentSystemDiv.style.display = 'none';
         // seatsLayout.style.display = 'block';
@@ -1692,7 +1731,7 @@ function loadEventsList(eventTickets, monthNum, year) {
             item.addEventListener('click', function(event) {
                 event.preventDefault();
                 const eventId = this.dataset.id;
-                eventIdInput.value = eventId;
+                if (eventIdInput) eventIdInput.value = eventId;
                 $('#loader').css('display', 'flex');
 
                 fetch(`/api/handler?action=get_event_details&event_id=${eventId}`)
@@ -1970,22 +2009,27 @@ function loadEventsList(eventTickets, monthNum, year) {
 
 
 document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        const openModal = document.querySelector('.event_tickets[style*="display: flex"]');
+    if (e.key === 'Escape' || e.keyCode === 27) {
+        if (typeof window.closeOrderMessengerModal === 'function') {
+            window.closeOrderMessengerModal();
+        }
+        const openModal = document.querySelector('.event_tickets');
         const orderForm = document.getElementById('order-event-form');
         if (openModal || (orderForm && orderForm.style.display === 'flex')) {
             if (typeof closeCurrentModal === 'function') {
                 closeCurrentModal();
             } else if (openModal) {
-                openModal.style.display = 'none';
+                openModal.style.setProperty('display', 'none', 'important');
+                try { openModal.remove(); } catch(err) {}
                 document.body.classList.remove('no-scroll');
             }
         }
     }
 });
 
-document.addEventListener('click', (e) => {
-    const openModal = document.querySelector('.event_tickets[style*="display: flex"]');
+function handleOutsideModalClick(e) {
+    if (Date.now() - (window._lastModalOpenTime || 0) < 400) return;
+    const openModal = document.querySelector('.event_tickets');
     if (!openModal) return;
     if (e.target.closest('.event-item')) return;
     if (e.target.closest('.event-item_button')) return;
@@ -1995,4 +2039,6 @@ document.addEventListener('click', (e) => {
     if (typeof closeCurrentModal === 'function') {
         closeCurrentModal();
     }
-});
+}
+document.addEventListener('click', handleOutsideModalClick);
+document.addEventListener('touchend', handleOutsideModalClick);

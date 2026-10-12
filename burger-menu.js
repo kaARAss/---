@@ -34,7 +34,9 @@ document.addEventListener('click', function (e) {
 });
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', (e) => {
-        const isTelegramOrder = link.classList.contains('burger_button') || (link.getAttribute('href') && link.getAttribute('href').includes('t.me'));
+        const isOrderBtn = link.classList.contains('burger_button') || 
+                           link.classList.contains('btn-order-show-trigger') || 
+                           (link.textContent && link.textContent.trim().toLowerCase().includes('заказать'));
         if (window.innerWidth <= 1024) {
             burger.classList.remove('active');
             nav.classList.remove('active');
@@ -43,9 +45,13 @@ document.querySelectorAll('.nav-links a').forEach(link => {
             if(buttons) buttons.classList.remove('hide-desktop-buttons');
             document.body.classList.remove('no-scroll');
         }
-        if (isTelegramOrder) {
+        if (isOrderBtn) {
             e.preventDefault();
-            window.open('https://t.me/anzhelika_foris', '_blank');
+            if (typeof window.openOrderMessengerModal === 'function') {
+                window.openOrderMessengerModal();
+            } else if (link.getAttribute('href') && link.getAttribute('href') !== 'javascript:void(0);') {
+                window.open(link.getAttribute('href'), '_blank');
+            }
         }
     });
 });

@@ -118,14 +118,12 @@ app.use('/img/block', (req, res, next) => {
 
 app.use(express.static(path.join(__dirname, '.'), {
   setHeaders: (res, pathStr) => {
-    if (pathStr.endsWith('.html') || pathStr === path.join(__dirname, '.')) {
+    if (pathStr.endsWith('.html') || pathStr === path.join(__dirname, '.') || pathStr.match(/\.(css|js)$/i)) {
       res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       res.setHeader('Pragma', 'no-cache');
       res.setHeader('Expires', '0');
     } else if (pathStr.match(/\.(webp|jpg|jpeg|png|gif|svg|woff2|woff|ttf|mp4)$/i)) {
       res.setHeader('Cache-Control', 'public, max-age=604800, stale-while-revalidate=86400');
-    } else if (pathStr.match(/\.(css|js)$/i)) {
-      res.setHeader('Cache-Control', 'public, max-age=86400');
     }
   }
 }));

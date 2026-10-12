@@ -1,15 +1,15 @@
 {
-  "name": "ta-is-dance",
+  "name": "imported-static-site",
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "dev": "node server.js",
     "start": "node server.js",
-    "build": "echo 'Build successful'",
-    "dev": "node server.js"
+    "build": "echo 'No build step required'"
   },
   "dependencies": {
-    "compression": "^1.7.4",
-    "express": "^4.19.2",
-    "multer": "^1.4.5-lts.1"
+    "compression": "^1.8.2",
+    "express": "^4.18.2",
+    "multer": "^2.4.0"
   }
 }

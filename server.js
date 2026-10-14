@@ -16,6 +16,16 @@ app.use(compression({
   threshold: 1024
 }));
 
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+const adminApi = require('./admin-api');
+app.use('/api/admin', adminApi);
+
+app.get(['/admin', '/admin/'], (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
 const blockDir = path.join(__dirname, 'img/block');
 if (!fs.existsSync(blockDir)) {
   fs.mkdirSync(blockDir, { recursive: true });

@@ -11,8 +11,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 return; 
             }
             
-            // Do not intercept modal triggers or empty links
-            if (this.classList.contains('certs_buy') || this.classList.contains('certs_check') || 
+            // Do not intercept external links, target=_blank, or messenger/social buttons
+            if (this.target === '_blank' || 
+                this.getAttribute('target') === '_blank' || 
+                (href && (href.startsWith('http://') || href.startsWith('https://'))) ||
+                this.classList.contains('order-messenger-btn') ||
+                this.classList.contains('social_btn') ||
+                this.classList.contains('certs_buy') || this.classList.contains('certs_check') || 
                 this.classList.contains('order_event') || this.classList.contains('close_management-tickets') ||
                 this.classList.contains('close_cert_popup') || this.classList.contains('close_event_popup') ||
                 this.id.includes('step')) {
@@ -21,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (href && !href.startsWith('javascript:') && !href.startsWith('mailto:') && !href.startsWith('tel:')) {
                 
-                // STOP actual navigation to keep AI Studio preview from breaking!
+                // Only intercept internal transitions
                 e.preventDefault();
                 
                 if (href === '#' || href === '/') return;

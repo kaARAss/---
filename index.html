@@ -158,23 +158,35 @@
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: center !important;
-                margin-bottom: 120px !important;
+                margin-bottom: 80px !important;
                 box-sizing: border-box !important;
+                width: 100% !important;
             }
             .banner_main {
-                min-height: 100vh !important;
-                min-height: 100dvh !important;
-                padding: 100px 5% 40px 5% !important;
+                min-height: auto !important;
+                padding: 100px 3% 40px 3% !important;
                 display: flex !important;
                 justify-content: center !important;
                 align-items: center !important;
                 width: 100% !important;
+                max-width: 1720px !important;
+                margin: 0 auto !important;
                 box-sizing: border-box !important;
             }
             .banner .banner_image {
+                width: 100% !important;
+                max-width: 100% !important;
+                aspect-ratio: 1808 / 870 !important;
                 background-image: url('./img/index/banner.png?v=1791580001') !important;
-                background-size: contain !important;
+                background-size: cover !important;
+                background-position: center center !important;
                 background-repeat: no-repeat !important;
+                border-radius: 16px !important;
+                border: 1px solid rgba(248, 231, 188, 0.25) !important;
+                box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8) !important;
+                display: block !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
             }
         }
     </style>
@@ -2168,7 +2180,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="order-messenger-modal-buttons">
             <!-- MAX button -->
-            <a href="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-max" onclick="window.handleMessengerLinkClick();">
+            <a href="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-max" onclick="window.handleMessengerLinkClick(event, 'https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784');">
                 <div class="order-messenger-btn-icon-wrap max-icon-wrap">
                     <img src="./max_logo.svg" alt="MAX logo" width="30" height="30">
                 </div>
@@ -2180,7 +2192,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </a>
 
             <!-- Telegram button -->
-            <a href="https://t.me/anzhelika_foris" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-tg" onclick="window.handleMessengerLinkClick();">
+            <a href="https://t.me/anzhelika_foris" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-tg" onclick="window.handleMessengerLinkClick(event, 'https://t.me/anzhelika_foris');">
                 <div class="order-messenger-btn-icon-wrap tg-icon-wrap">
                     <img src="./telegram_logo.svg" alt="Telegram logo" width="28" height="28">
                 </div>
@@ -2195,10 +2207,18 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <script>
-window.handleMessengerLinkClick = function() {
+window.handleMessengerLinkClick = function(e, url) {
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (url) {
+        try {
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } catch (err) {
+            window.location.href = url;
+        }
+    }
     setTimeout(function() {
         window.closeOrderMessengerModal();
-    }, 250);
+    }, 200);
 };
 
 window.openOrderMessengerModal = function(e) {

@@ -1,0 +1,1720 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель управления — ТА-ИС ШОУ</title>
+    <link rel="icon" type="image/png" href="./favicon-48x48.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0c;
+            --bg-card: #141418;
+            --bg-card-hover: #1c1c22;
+            --bg-input: #1f1f26;
+            --gold: #f8e7bc;
+            --gold-dim: rgba(248, 231, 188, 0.4);
+            --gold-glow: rgba(248, 231, 188, 0.15);
+            --red: #8B1014;
+            --red-hover: #a51318;
+            --text-main: #f0f0f4;
+            --text-muted: #9595a4;
+            --border: rgba(248, 231, 188, 0.2);
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --info: #3498db;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Onest', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ambient luxury background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 15% 15%, rgba(139, 16, 20, 0.15) 0%, transparent 45%),
+                        radial-gradient(circle at 85% 85%, rgba(248, 231, 188, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Notification toast */
+        #toast {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            padding: 14px 22px;
+            border-radius: 12px;
+            background: #1b1b22;
+            color: #fff;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        #toast.visible {
+            display: flex;
+            transform: translateY(0);
+            opacity: 1;
+        }
+        #toast.toast-success { border-color: var(--success); }
+        #toast.toast-error { border-color: var(--danger); }
+        #toast.toast-info { border-color: var(--info); }
+
+        /* Login Screen */
+        #login-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 440px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 40px 32px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px var(--gold-glow);
+            text-align: center;
+            backdrop-filter: blur(12px);
+        }
+
+        .login-logo {
+            height: 70px;
+            margin-bottom: 20px;
+            object-fit: contain;
+        }
+
+        .login-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 26px;
+            color: var(--gold);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .login-subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 13px 16px;
+            background: var(--bg-input);
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 15px;
+            transition: all 0.25s ease;
+            outline: none;
+        }
+
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px var(--gold-glow);
+            background: #24242e;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 13px 24px;
+            border-radius: 12px;
+            font-family: 'Onest', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--red) 0%, #aa141a 100%);
+            color: #fff;
+            border: 1px solid rgba(248, 231, 188, 0.4);
+            box-shadow: 0 6px 20px rgba(139, 16, 20, 0.4);
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--red-hover) 0%, #c4181f 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 16, 20, 0.6);
+            border-color: var(--gold);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #f8e7bc 0%, #dfcb9a 100%);
+            color: #111;
+            font-weight: 700;
+            box-shadow: 0 6px 20px rgba(248, 231, 188, 0.3);
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(248, 231, 188, 0.5);
+            background: #fff;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            border: 1px solid var(--border-subtle);
+        }
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: var(--border);
+        }
+
+        .btn-danger {
+            background: rgba(231, 76, 60, 0.15);
+            color: #ff6b6b;
+            border: 1px solid rgba(231, 76, 60, 0.3);
+        }
+        .btn-danger:hover {
+            background: rgba(231, 76, 60, 0.3);
+            border-color: #ff6b6b;
+        }
+
+        .btn-block { width: 100%; }
+
+        /* Dashboard Top Bar */
+        #dashboard-screen {
+            display: none;
+            flex-direction: column;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .topbar {
+            background: rgba(18, 18, 22, 0.95);
+            border-bottom: 1px solid var(--border-subtle);
+            backdrop-filter: blur(14px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .topbar-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+            gap: 16px;
+        }
+
+        .topbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .topbar-logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .topbar-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 19px;
+            color: var(--gold);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .topbar-badge {
+            background: rgba(46, 204, 113, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(46, 204, 113, 0.3);
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .topbar-badge::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--success);
+            box-shadow: 0 0 8px var(--success);
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs-wrapper {
+            background: #111116;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-tabs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 10px 0;
+            scrollbar-width: none;
+        }
+        .nav-tabs::-webkit-scrollbar { display: none; }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid transparent;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .tab-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .tab-btn.active {
+            color: var(--gold);
+            background: var(--bg-card);
+            border-color: var(--border);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        /* Content Sections */
+        .content-area {
+            padding: 32px 0 60px 0;
+            flex: 1;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.25s ease-out;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .panel-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .panel-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .panel-desc {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* Shows selector pill row */
+        .shows-pill-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .show-pill {
+            background: #1a1a22;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        .show-pill:hover {
+            border-color: var(--gold-dim);
+            transform: translateY(-2px);
+        }
+        .show-pill.active {
+            background: #252530;
+            border-color: var(--gold);
+            box-shadow: 0 4px 18px rgba(248, 231, 188, 0.2);
+        }
+
+        .show-pill-img {
+            width: 100%;
+            aspect-ratio: 540 / 359;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            display: block;
+            background: #000;
+        }
+
+        .show-pill-num {
+            font-size: 11px;
+            color: var(--gold);
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .show-pill-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Real Dimension Card Preview */
+        .card-preview-box {
+            background: #09090c;
+            border: 2px dashed rgba(248, 231, 188, 0.3);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .real-card-frame {
+            width: 100%;
+            max-width: 500px;
+            aspect-ratio: 540 / 359;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.8);
+            border: 1px solid rgba(248, 231, 188, 0.4);
+            background: #000;
+        }
+
+        .real-card-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: object-position 0.15s ease;
+        }
+
+        .real-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+            color: #fff;
+            pointer-events: none;
+        }
+
+        /* 2D Position Grid Controller */
+        .position-matrix {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-width: 240px;
+            margin-top: 12px;
+        }
+
+        .pos-btn {
+            background: #20202a;
+            border: 1px solid var(--border-subtle);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .pos-btn:hover {
+            background: #2c2c3a;
+            border-color: var(--gold-dim);
+        }
+        .pos-btn.active {
+            background: var(--gold);
+            color: #111;
+            border-color: #fff;
+            font-weight: 700;
+        }
+
+        /* Media Items Grid */
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            margin-top: 16px;
+        }
+
+        .media-card {
+            background: #1b1b22;
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+        }
+
+        .media-thumb-wrap {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: #000;
+        }
+
+        .media-thumb {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .media-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.75);
+            color: var(--gold);
+            border: 1px solid var(--border);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .media-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* Banner preview */
+        .banner-preview-frame {
+            width: 100%;
+            max-width: 900px;
+            aspect-ratio: 1808 / 870;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            border: 1px solid var(--border);
+            background: #000;
+            margin: 0 auto 20px auto;
+        }
+        .banner-preview-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Step-by-step Guide Styling */
+        .guide-step {
+            background: #181820;
+            border: 1px solid var(--border-subtle);
+            border-radius: 14px;
+            padding: 24px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .step-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gold);
+            color: #111;
+            font-weight: 700;
+            margin-right: 12px;
+        }
+        .guide-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gold);
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .code-box {
+            background: #0e0e12;
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-family: monospace;
+            font-size: 13px;
+            color: #e0e0e0;
+            margin: 10px 0;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        /* Hidden file input */
+        .file-input-hidden {
+            display: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .topbar-title { display: none; }
+            .panel-card { padding: 18px; }
+            .shows-pill-row { grid-template-columns: repeat(5, 1fr); gap: 8px; }
+            .show-pill { padding: 6px; }
+            .show-pill-title { font-size: 11px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Toast notification -->
+    <div id="toast">
+        <span id="toast-icon">✓</span>
+        <span id="toast-msg">Готово</span>
+    </div>
+
+    <!-- 1. LOGIN SCREEN -->
+    <section id="login-screen">
+        <div class="login-card">
+            <img src="./logo.png" alt="ТА-ИС ШОУ" class="login-logo">
+            <h1 class="login-title">Панель управления</h1>
+            <p class="login-subtitle">Редактирование сайта таисшоу.рф</p>
+
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label" for="username">Логин</label>
+                    <input type="text" id="username" class="form-input" placeholder="admin" value="admin" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="password">Пароль</label>
+                    <input type="password" id="password" class="form-input" placeholder="Введите пароль" required autocomplete="current-password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-block" id="btn-login-submit">
+                    Войти в систему →
+                </button>
+            </form>
+            <p style="font-size: 12px; color: var(--text-muted); margin-top: 20px;">
+                Стандартный пароль: <strong style="color: var(--gold);">TaisShow2026!</strong>
+            </p>
+        </div>
+    </section>
+
+    <!-- 2. DASHBOARD SCREEN -->
+    <div id="dashboard-screen">
+        <!-- Top Sticky Header -->
+        <header class="topbar">
+            <div class="container topbar-inner">
+                <div class="topbar-brand">
+                    <img src="./logo.png" alt="ТА-ИС" class="topbar-logo">
+                    <span class="topbar-title">ТА-ИС ШОУ • Админ панель</span>
+                    <span class="topbar-badge" id="sync-status">Онлайн</span>
+                </div>
+                <div class="topbar-actions">
+                    <a href="/" target="_blank" class="btn btn-secondary" style="padding: 9px 14px; font-size: 13px;">
+                        Открыть сайт ↗
+                    </a>
+                    <button type="button" class="btn btn-gold" id="btn-save-all" style="padding: 9px 16px; font-size: 13px;">
+                        💾 Сохранить
+                    </button>
+                    <button type="button" class="btn btn-primary" id="btn-publish-all" style="padding: 9px 18px; font-size: 13px;">
+                        🚀 Опубликовать на GitHub
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btn-logout" style="padding: 9px 12px; font-size: 13px;">
+                        Выйти
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation Tabs -->
+        <nav class="nav-tabs-wrapper">
+            <div class="container">
+                <div class="nav-tabs">
+                    <button class="tab-btn active" data-tab="tab-shows">🎭 10 Шоу и Фото/Видео</button>
+                    <button class="tab-btn" data-tab="tab-banner">🖼️ Главный Баннер</button>
+                    <button class="tab-btn" data-tab="tab-contacts">🔗 Кнопки и Контакты</button>
+                    <button class="tab-btn" data-tab="tab-github">🚀 GitHub и Публикация</button>
+                    <button class="tab-btn" data-tab="tab-guide">📖 Пошаговая инструкция (Yandex Cloud)</button>
+                    <button class="tab-btn" data-tab="tab-security">⚙️ Настройки и Пароль</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+            <div class="container">
+
+                <!-- ============================================== -->
+                <!-- TAB 1: 10 SHOWS & MEDIA                       -->
+                <!-- ============================================== -->
+                <div id="tab-shows" class="tab-content active">
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <div>
+                                <h2 class="panel-title">Редактирование 10 Шоу</h2>
+                                <p class="panel-desc">Выберите шоу для настройки текстов, главного фото афиши и галереи видео/фото</p>
+                            </div>
+                        </div>
+
+                        <!-- 10 Show Pills -->
+                        <div class="shows-pill-row" id="shows-selector"></div>
+
+                        <!-- Current Show Details Form -->
+                        <div id="show-editor" style="display: none;">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+                                <!-- Left Column: Texts & Basic Info -->
+                                <div>
+                                    <div class="form-group">
+                                        <label class="form-label">Название шоу</label>
+                                        <input type="text" id="show-title-input" class="form-input">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Дата выступления (event_date)</label>
+                                        <input type="text" id="show-date-input" class="form-input" placeholder="2027-01-15 19:00:00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Краткое описание (для карточки)</label>
+                                        <textarea id="show-desc-input" class="form-textarea" rows="3"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Подробное описание (в модальном окне)</label>
+                                        <textarea id="show-details-input" class="form-textarea" rows="6"></textarea>
+                                    </div>
+                                </div>
+
+                                <!-- Right Column: Real-dimension Card & Position Controls -->
+                                <div>
+                                    <label class="form-label">Главное фото карточки в сетке сайта</label>
+                                    <div class="card-preview-box">
+                                        <div class="real-card-frame">
+                                            <img id="preview-card-img" class="real-card-img" src="" alt="preview">
+                                            <div class="real-card-overlay">
+                                                <div id="preview-card-title" style="font-weight: 700; font-size: 16px;">Название шоу</div>
+                                                <div style="font-size: 11px; opacity: 0.8;">Реальный размер карточки на сайте</div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Upload replacement cover button -->
+                                        <div style="margin-top: 16px; display: flex; gap: 10px; width: 100%; max-width: 500px;">
+                                            <button type="button" class="btn btn-secondary btn-block" id="btn-upload-card-img">
+                                                📁 Заменить главное фото
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- 2D Position Selector -->
+                                    <div class="form-group">
+                                        <label class="form-label">Положение фото в рамке (Object Position)</label>
+                                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
+                                            Выберите фокус, чтобы лица и костюмы артистов идеально помещались в рамку без пустот:
+                                        </p>
+                                        <div class="position-matrix" id="pos-matrix">
+                                            <button type="button" class="pos-btn" data-pos="left top">Вверх-Слева</button>
+                                            <button type="button" class="pos-btn" data-pos="center top">Вверх-Центр</button>
+                                            <button type="button" class="pos-btn" data-pos="right top">Вверх-Справа</button>
+                                            <button type="button" class="pos-btn" data-pos="left center">Слева</button>
+                                            <button type="button" class="pos-btn" data-pos="center center">Центр</button>
+                                            <button type="button" class="pos-btn" data-pos="right center">Справа</button>
+                                            <button type="button" class="pos-btn" data-pos="left bottom">Вниз-Слева</button>
+                                            <button type="button" class="pos-btn" data-pos="center bottom">Вниз-Центр</button>
+                                            <button type="button" class="pos-btn" data-pos="left 55%">Слева 55%</button>
+                                        </div>
+                                        <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+                                            <input type="text" id="pos-custom-input" class="form-input" style="max-width: 180px; padding: 6px 10px; font-size: 13px;" placeholder="custom e.g. 65% center">
+                                            <button type="button" class="btn btn-secondary" id="btn-apply-custom-pos" style="padding: 6px 12px; font-size: 13px;">Применить</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Media Items List -->
+                            <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border-subtle);">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+                                    <div>
+                                        <h3 style="font-size: 18px; color: var(--gold);">Медиафайлы шоу (Видео и Фото в модальном окне)</h3>
+                                        <p style="font-size: 13px; color: var(--text-muted);">Любое видео или фото можно заменить на новое</p>
+                                    </div>
+                                    <div style="display: flex; gap: 10px;">
+                                        <button type="button" class="btn btn-secondary" id="btn-add-photo">
+                                            + Добавить Фото
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" id="btn-add-video">
+                                            + Добавить Видео (.mp4)
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="media-grid" id="current-show-media-grid"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- TAB 2: MAIN BANNER                             -->
+                <!-- ============================================== -->
+                <div id="tab-banner" class="tab-content">
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <div>
+                                <h2 class="panel-title">Главный Баннер сайта</h2>
+                                <p class="panel-desc">Реальные размеры и внешний вид баннера на ПК и мобильных</p>
+                            </div>
+                        </div>
+
+                        <label class="form-label">Предпросмотр баннера на ПК (Пропорции 1808 × 870)</label>
+                        <div class="banner-preview-frame">
+                            <img src="./img/index/banner.png?v=preview" id="banner-preview-img" alt="banner" class="banner-preview-img">
+                        </div>
+
+                        <div style="display: flex; gap: 16px; margin-top: 20px; flex-wrap: wrap;">
+                            <button type="button" class="btn btn-primary" id="btn-upload-desktop-banner">
+                                📤 Загрузить новый баннер для ПК (banner.png)
+                            </button>
+                            <button type="button" class="btn btn-secondary" id="btn-upload-mobile-banner">
+                                📱 Загрузить мобильный баннер (Banner_mobile.png)
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- TAB 3: CONTACTS & SOCIAL LINKS                -->
+                <!-- ============================================== -->
+                <div id="tab-contacts" class="tab-content">
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <div>
+                                <h2 class="panel-title">Ссылки кнопок, мессенджеры и контакты</h2>
+                                <p class="panel-desc">Изменяйте ссылки для MAX, Telegram, VK, Instagram и номера телефонов</p>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label class="form-label">Ссылка на MAX (Мессенджер)</label>
+                                <input type="url" id="link-max" class="form-input" placeholder="https://max.ru/u/...">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Ссылка на Telegram</label>
+                                <input type="url" id="link-telegram" class="form-input" placeholder="https://t.me/...">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Ссылка ВКонтакте (Личная страница)</label>
+                                <input type="url" id="link-vk-personal" class="form-input" placeholder="https://vk.ru/...">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Ссылка ВКонтакте (Группа ТА-ИС)</label>
+                                <input type="url" id="link-vk-group" class="form-input" placeholder="https://vk.ru/...">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Ссылка на Instagram</label>
+                                <input type="url" id="link-instagram" class="form-input" placeholder="https://instagram.com/...">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Контактный телефон</label>
+                                <input type="text" id="contact-phone" class="form-input" placeholder="+7 (960) 831-21-66">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Электронная почта</label>
+                                <input type="email" id="contact-email" class="form-input" placeholder="asm.samara@yandex.ru">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Адрес шоу</label>
+                                <input type="text" id="contact-address" class="form-input" placeholder="Самара, улица Водников, 49">
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 24px;">
+                            <button type="button" class="btn btn-primary" id="btn-save-contacts">
+                                💾 Сохранить контакты и ссылки
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- TAB 4: GITHUB & PUBLICATION                   -->
+                <!-- ============================================== -->
+                <div id="tab-github" class="tab-content">
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <div>
+                                <h2 class="panel-title">Интеграция с GitHub</h2>
+                                <p class="panel-desc">Автоматическая фиксация изменений и отправка коммитов в репозиторий</p>
+                            </div>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="form-group">
+                                <label class="form-label">GitHub Personal Access Token (Токен доступа)</label>
+                                <input type="password" id="gh-token-input" class="form-input" placeholder="ghp_************************************">
+                                <span style="font-size: 12px; color: var(--text-muted); display: block; margin-top: 4px;">
+                                    Требуются права <code>repo</code> (Full control of private repositories)
+                                </span>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Ветка (Branch)</label>
+                                <input type="text" id="gh-branch-input" class="form-input" value="main" placeholder="main">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Владелец репозитория (Owner / Никнейм)</label>
+                                <input type="text" id="gh-owner-input" class="form-input" placeholder="например: anzhelika-foris или tais-dance">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Имя репозитория (Repository)</label>
+                                <input type="text" id="gh-repo-input" class="form-input" placeholder="например: tais-show">
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 14px; margin-top: 20px; align-items: center; flex-wrap: wrap;">
+                            <button type="button" class="btn btn-secondary" id="btn-test-gh">
+                                🔍 Проверить подключение к GitHub
+                            </button>
+                            <button type="button" class="btn btn-primary" id="btn-save-gh-settings">
+                                💾 Сохранить настройки GitHub
+                            </button>
+                        </div>
+
+                        <div id="gh-test-result" style="margin-top: 18px; font-size: 14px; display: none;"></div>
+
+                        <!-- Publication Status Box -->
+                        <div style="margin-top: 32px; background: #191922; border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
+                            <h3 style="font-size: 16px; color: var(--gold); margin-bottom: 8px;">Статус последней публикации:</h3>
+                            <div style="font-size: 14px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px;">
+                                <div>Хэш коммита: <strong id="gh-last-commit" style="color: #fff;">—</strong></div>
+                                <div>Дата публикации: <strong id="gh-last-date" style="color: #fff;">—</strong></div>
+                            </div>
+                            <div style="margin-top: 16px;">
+                                <button type="button" class="btn btn-gold" id="btn-publish-direct">
+                                    🚀 Опубликовать текущие изменения в репозиторий
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- TAB 5: STEP-BY-STEP GUIDE (YANDEX CLOUD)      -->
+                <!-- ============================================== -->
+                <div id="tab-guide" class="tab-content">
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <div>
+                                <h2 class="panel-title">Пошаговая инструкция: Подключение GitHub и Yandex Cloud</h2>
+                                <p class="panel-desc">Пройдите эти простые шаги, чтобы сайт обновлялся мгновенно при каждом нажатии "Опубликовать"</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 1 -->
+                        <div class="guide-step">
+                            <div class="guide-title"><span class="step-num">1</span> Создание токена на GitHub (2 минуты)</div>
+                            <p style="color: var(--text-muted); margin-bottom: 12px;">
+                                Токен позволяет админ-панели безопасно сохранять файлы в ваш репозиторий без ввода логина и пароля:
+                            </p>
+                            <ol style="margin-left: 20px; line-height: 1.8; color: #ddd; font-size: 14px;">
+                                <li>Войдите в свой аккаунт на <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--gold);">github.com/settings/tokens</a>.</li>
+                                <li>Нажмите <strong>Generate new token (classic)</strong>.</li>
+                                <li>В поле <em>Note</em> напишите: <code>Tais-Show Admin Panel</code>.</li>
+                                <li>В блоке <em>Select scopes</em> поставьте галочку напротив <strong>repo</strong> (Full control of private repositories).</li>
+                                <li>Нажмите зелёную кнопку <strong>Generate token</strong> внизу страницы.</li>
+                                <li>Скопируйте полученный ключ (начинается с <code>ghp_...</code>) и вставьте его во вкладку <strong>"GitHub и Публикация"</strong> в этой админ-панели!</li>
+                            </ol>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="guide-step">
+                            <div class="guide-title"><span class="step-num">2</span> Подключение Yandex Cloud (Вариант на выбор)</div>
+                            <p style="color: var(--text-muted); margin-bottom: 12px;">
+                                Ваш сайт на домене <code>таисшоу.рф</code> может работать в Yandex Cloud двумя удобными способами:
+                            </p>
+                            
+                            <div style="background: #111116; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px; margin-bottom: 14px;">
+                                <h4 style="color: var(--gold); margin-bottom: 6px;">Способ А: Виртуальная машина Yandex Compute Cloud (Node.js + Nginx)</h4>
+                                <p style="font-size: 13px; color: #bbb; line-height: 1.6;">
+                                    Сервер Express работает прямо на виртуальной машине. Когда вы нажимаете кнопку «Сохранить», файлы обновляются моментально на сервере, а кнопка «Опубликовать» делает коммит в GitHub.
+                                </p>
+                            </div>
+
+                            <div style="background: #111116; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px;">
+                                <h4 style="color: var(--gold); margin-bottom: 6px;">Способ Б: Yandex Serverless Containers / Object Storage</h4>
+                                <p style="font-size: 13px; color: #bbb; line-height: 1.6;">
+                                    При каждом коммите в GitHub срабатывает GitHub Action, который за 30 секунд автоматически выгружает свежую версию сайта в Yandex Cloud.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="guide-step">
+                            <div class="guide-title"><span class="step-num">3</span> Какие данные скинуть мне, если нужна настройка под ключ:</div>
+                            <ul style="margin-left: 20px; line-height: 1.8; color: #ddd; font-size: 14px;">
+                                <li><strong>Ссылку на ваш репозиторий GitHub</strong> (например: <code>https://github.com/ваш-аккаунт/taisshow</code>).</li>
+                                <li><strong>Токен GitHub (PAT)</strong>, созданный по шагу 1 (или введите его сами во вкладке "GitHub и Публикация").</li>
+                                <li><strong>IP-адрес или доступ к виртуальной машине Yandex Cloud</strong> (если сайт размещен на ВМ).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ============================================== -->
+                <!-- TAB 6: SETTINGS & PASSWORD                    -->
+                <!-- ============================================== -->
+                <div id="tab-security" class="tab-content">
+                    <div class="panel-card">
+                        <div class="panel-header">
+                            <div>
+                                <h2 class="panel-title">Смена пароля администратора</h2>
+                                <p class="panel-desc">Установите новый надёжный пароль для доступа к админ-панели</p>
+                            </div>
+                        </div>
+
+                        <form id="change-pass-form" style="max-width: 400px;">
+                            <div class="form-group">
+                                <label class="form-label">Текущий пароль</label>
+                                <input type="password" id="curr-pass" class="form-input" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Новый пароль</label>
+                                <input type="password" id="new-pass" class="form-input" required minlength="6">
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                Обновить пароль
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Hidden file inputs for uploads -->
+    <input type="file" id="upload-card-file" class="file-input-hidden" accept="image/*">
+    <input type="file" id="upload-banner-desktop-file" class="file-input-hidden" accept="image/*">
+    <input type="file" id="upload-banner-mobile-file" class="file-input-hidden" accept="image/*">
+    <input type="file" id="upload-media-item-file" class="file-input-hidden" accept="image/*,video/mp4">
+
+    <script>
+        // Global state
+        let appState = {
+            authenticated: false,
+            data: null,
+            github: null,
+            activeShowIndex: 0,
+            pendingMediaUploadIndex: null,
+            pendingMediaUploadType: null
+        };
+
+        // UI Notification Toast
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            const toastIcon = document.getElementById('toast-icon');
+
+            toastMsg.textContent = msg;
+            toast.className = `visible toast-${type}`;
+            toastIcon.textContent = type === 'success' ? '✓' : (type === 'error' ? '✕' : 'ℹ');
+
+            clearTimeout(window._toastTimer);
+            window._toastTimer = setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 3500);
+        }
+
+        // Check authentication on page load
+        async function checkAuth() {
+            try {
+                const res = await fetch('/api/admin/check-auth');
+                const data = await res.json();
+                if (data.success) {
+                    setAuthenticated(true);
+                    loadData();
+                } else {
+                    setAuthenticated(false);
+                }
+            } catch (err) {
+                setAuthenticated(false);
+            }
+        }
+
+        function setAuthenticated(isAuth) {
+            appState.authenticated = isAuth;
+            document.getElementById('login-screen').style.display = isAuth ? 'none' : 'flex';
+            document.getElementById('dashboard-screen').style.display = isAuth ? 'flex' : 'none';
+        }
+
+        // Login Handler
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const btn = document.getElementById('btn-login-submit');
+
+            btn.disabled = true;
+            btn.textContent = 'Вход...';
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    showToast('Успешный вход в систему!');
+                    setAuthenticated(true);
+                    loadData();
+                } else {
+                    showToast(data.error || 'Ошибка входа', 'error');
+                }
+            } catch (err) {
+                showToast('Ошибка связи с сервером', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Войти в систему →';
+            }
+        });
+
+        // Logout
+        document.getElementById('btn-logout').addEventListener('click', async () => {
+            await fetch('/api/admin/logout', { method: 'POST' });
+            setAuthenticated(false);
+            showToast('Вы вышли из системы');
+        });
+
+        // Tab Switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+                btn.classList.add('active');
+                const tabId = btn.getAttribute('data-tab');
+                const target = document.getElementById(tabId);
+                if (target) target.classList.add('active');
+            });
+        });
+
+        // Load all data from server
+        async function loadData() {
+            try {
+                const res = await fetch('/api/admin/data');
+                const result = await res.json();
+                if (result.success) {
+                    appState.data = result.data;
+                    appState.github = result.github;
+                    renderShowsSelector();
+                    renderSelectedShow(appState.activeShowIndex);
+                    renderContacts();
+                    renderGitHubTab();
+                } else {
+                    showToast(result.error || 'Не удалось загрузить данные', 'error');
+                }
+            } catch (err) {
+                showToast('Ошибка загрузки данных', 'error');
+            }
+        }
+
+        // Render Shows Selector Pills
+        function renderShowsSelector() {
+            const container = document.getElementById('shows-selector');
+            container.innerHTML = '';
+            const shows = appState.data.monthsData || [];
+
+            shows.forEach((show, idx) => {
+                const pill = document.createElement('div');
+                pill.className = `show-pill ${idx === appState.activeShowIndex ? 'active' : ''}`;
+                pill.setAttribute('data-index', idx);
+
+                const cleanImg = (show.image || `./show${idx + 1}.png`).split('?')[0];
+                pill.innerHTML = `
+                    <img src="${cleanImg}" alt="${show.title}" class="show-pill-img">
+                    <div class="show-pill-num">ШОУ ${idx + 1}</div>
+                    <div class="show-pill-title" title="${show.title}">${show.title || 'Шоу'}</div>
+                `;
+
+                pill.addEventListener('click', () => {
+                    saveCurrentShowFormToState();
+                    appState.activeShowIndex = idx;
+                    document.querySelectorAll('.show-pill').forEach(p => p.classList.remove('active'));
+                    pill.classList.add('active');
+                    renderSelectedShow(idx);
+                });
+
+                container.appendChild(pill);
+            });
+
+            document.getElementById('show-editor').style.display = shows.length > 0 ? 'block' : 'none';
+        }
+
+        // Save current form inputs to in-memory state before switching shows
+        function saveCurrentShowFormToState() {
+            const shows = appState.data?.monthsData;
+            if (!shows || !shows[appState.activeShowIndex]) return;
+
+            const curr = shows[appState.activeShowIndex];
+            curr.title = document.getElementById('show-title-input').value;
+            curr.event_date = document.getElementById('show-date-input').value;
+            curr.description = document.getElementById('show-desc-input').value;
+            curr.detailsText = document.getElementById('show-details-input').value;
+        }
+
+        // Render Show Editor Form
+        function renderSelectedShow(index) {
+            const shows = appState.data?.monthsData || [];
+            const show = shows[index];
+            if (!show) return;
+
+            document.getElementById('show-title-input').value = show.title || '';
+            document.getElementById('show-date-input').value = show.event_date || '';
+            document.getElementById('show-desc-input').value = show.description || '';
+            document.getElementById('show-details-input').value = show.detailsText || '';
+
+            // Card preview
+            const previewImg = document.getElementById('preview-card-img');
+            const cleanUrl = (show.image || `./show${index + 1}.png`).split('?')[0];
+            previewImg.src = cleanUrl;
+            document.getElementById('preview-card-title').textContent = show.title || `Шоу ${index + 1}`;
+
+            // Position mapping
+            const currentPos = (appState.data.showPosMap && appState.data.showPosMap[index + 1]) || 'left center';
+            previewImg.style.objectPosition = currentPos;
+            document.getElementById('pos-custom-input').value = currentPos;
+
+            // Highlight pos button if matching
+            document.querySelectorAll('#pos-matrix .pos-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.getAttribute('data-pos') === currentPos);
+            });
+
+            // Render media items
+            renderShowMediaGrid(show);
+        }
+
+        // Render Media Items Grid for selected show
+        function renderShowMediaGrid(show) {
+            const grid = document.getElementById('current-show-media-grid');
+            grid.innerHTML = '';
+            const items = show.media || [];
+
+            if (items.length === 0) {
+                grid.innerHTML = '<div style="color: var(--text-muted); font-size: 14px;">Медиафайлы ещё не добавлены</div>';
+                return;
+            }
+
+            items.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = 'media-card';
+
+                const isVideo = item.type === 'video';
+                const thumbSrc = item.poster || item.url;
+
+                card.innerHTML = `
+                    <div class="media-thumb-wrap">
+                        <img src="${thumbSrc}" alt="${item.label}" class="media-thumb">
+                        <span class="media-badge">${isVideo ? '▶ Видео' : '📷 Фото'}</span>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="text" class="form-input media-label-input" value="${item.label || ''}" style="padding: 6px 10px; font-size: 13px;" placeholder="Подпись">
+                    </div>
+                    <div class="media-actions">
+                        <button type="button" class="btn btn-secondary btn-block btn-replace-media" data-index="${idx}" style="padding: 7px 10px; font-size: 12px;">
+                            🔄 Заменить файл
+                        </button>
+                        <button type="button" class="btn btn-danger btn-delete-media" data-index="${idx}" style="padding: 7px 10px; font-size: 12px;">
+                            ✕
+                        </button>
+                    </div>
+                `;
+
+                // Update label on change
+                const labelInput = card.querySelector('.media-label-input');
+                labelInput.addEventListener('change', (e) => {
+                    item.label = e.target.value;
+                });
+
+                // Replace file
+                card.querySelector('.btn-replace-media').addEventListener('click', () => {
+                    appState.pendingMediaUploadIndex = idx;
+                    appState.pendingMediaUploadType = item.type;
+                    document.getElementById('upload-media-item-file').click();
+                });
+
+                // Delete media
+                card.querySelector('.btn-delete-media').addEventListener('click', () => {
+                    if (confirm(`Удалить ${item.label || 'элемент'}?`)) {
+                        items.splice(idx, 1);
+                        renderShowMediaGrid(show);
+                    }
+                });
+
+                grid.appendChild(card);
+            });
+        }
+
+        // Position matrix buttons
+        document.querySelectorAll('#pos-matrix .pos-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#pos-matrix .pos-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const pos = btn.getAttribute('data-pos');
+                applyCardPosition(pos);
+            });
+        });
+
+        document.getElementById('btn-apply-custom-pos').addEventListener('click', () => {
+            const val = document.getElementById('pos-custom-input').value.trim();
+            if (val) applyCardPosition(val);
+        });
+
+        function applyCardPosition(pos) {
+            const idx = appState.activeShowIndex;
+            if (!appState.data.showPosMap) appState.data.showPosMap = {};
+            appState.data.showPosMap[idx + 1] = pos;
+
+            const previewImg = document.getElementById('preview-card-img');
+            previewImg.style.objectPosition = pos;
+            document.getElementById('pos-custom-input').value = pos;
+            showToast(`Положение фото: ${pos}`);
+        }
+
+        // Upload new Card Image for active show
+        document.getElementById('btn-upload-card-img').addEventListener('click', () => {
+            document.getElementById('upload-card-file').click();
+        });
+
+        document.getElementById('upload-card-file').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('mediaFile', file);
+
+            showToast('Загрузка фото...', 'info');
+
+            try {
+                const res = await fetch('/api/admin/upload-media', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success) {
+                    const idx = appState.activeShowIndex;
+                    const shows = appState.data.monthsData;
+                    shows[idx].image = data.file.url;
+                    document.getElementById('preview-card-img').src = data.file.url;
+                    renderShowsSelector();
+                    showToast('Главное фото обновлено!');
+                } else {
+                    showToast(data.error || 'Ошибка загрузки', 'error');
+                }
+            } catch (err) {
+                showToast('Ошибка при загрузке файла', 'error');
+            }
+            e.target.value = '';
+        });
+
+        // Add Photo or Video to media gallery
+        document.getElementById('btn-add-photo').addEventListener('click', () => {
+            appState.pendingMediaUploadIndex = -1; // add new
+            appState.pendingMediaUploadType = 'image';
+            document.getElementById('upload-media-item-file').click();
+        });
+
+        document.getElementById('btn-add-video').addEventListener('click', () => {
+            appState.pendingMediaUploadIndex = -1; // add new
+            appState.pendingMediaUploadType = 'video';
+            document.getElementById('upload-media-item-file').click();
+        });
+
+        document.getElementById('upload-media-item-file').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('mediaFile', file);
+
+            showToast('Загрузка медиафайла...', 'info');
+
+            try {
+                const res = await fetch('/api/admin/upload-media', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    const show = appState.data.monthsData[appState.activeShowIndex];
+                    if (!show.media) show.media = [];
+
+                    if (appState.pendingMediaUploadIndex === -1) {
+                        // Add new
+                        const isVid = data.file.isVideo;
+                        show.media.push({
+                            type: isVid ? 'video' : 'image',
+                            label: isVid ? `Видео ${show.media.filter(m => m.type === 'video').length + 1}` : `Фото ${show.media.filter(m => m.type === 'image').length + 1}`,
+                            url: data.file.url,
+                            poster: data.file.poster
+                        });
+                        showToast('Новый медиафайл добавлен!');
+                    } else {
+                        // Replace existing
+                        const idx = appState.pendingMediaUploadIndex;
+                        show.media[idx].url = data.file.url;
+                        if (data.file.poster) show.media[idx].poster = data.file.poster;
+                        showToast('Медиафайл успешно заменён!');
+                    }
+                    renderShowMediaGrid(show);
+                } else {
+                    showToast(data.error || 'Ошибка загрузки', 'error');
+                }
+            } catch (err) {
+                showToast('Ошибка загрузки медиа', 'error');
+            }
+            e.target.value = '';
+        });
+
+        // Banner Uploads
+        document.getElementById('btn-upload-desktop-banner').addEventListener('click', () => {
+            document.getElementById('upload-banner-desktop-file').click();
+        });
+
+        document.getElementById('upload-banner-desktop-file').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const formData = new FormData();
+            formData.append('files', file);
+
+            showToast('Загрузка нового баннера...', 'info');
+            try {
+                const res = await fetch('/api/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('banner-preview-img').src = `./img/index/banner.png?v=${Date.now()}`;
+                    showToast('Баннер успешно обновлен!');
+                }
+            } catch (err) {
+                showToast('Ошибка обновления баннера', 'error');
+            }
+            e.target.value = '';
+        });
+
+        // Contacts & Links tab
+        function renderContacts() {
+            const links = appState.data.links || {};
+            document.getElementById('link-max').value = links.max || '';
+            document.getElementById('link-telegram').value = links.telegram || '';
+            document.getElementById('link-vk-personal').value = links.vkPersonal || '';
+            document.getElementById('link-vk-group').value = links.vkGroup || '';
+            document.getElementById('link-instagram').value = links.instagram || '';
+            document.getElementById('contact-phone').value = links.phone || '';
+            document.getElementById('contact-email').value = links.email || '';
+            document.getElementById('contact-address').value = links.address || '';
+        }
+
+        document.getElementById('btn-save-contacts').addEventListener('click', async () => {
+            saveContactsFromForm();
+            await saveAllData();
+        });
+
+        function saveContactsFromForm() {
+            if (!appState.data.links) appState.data.links = {};
+            appState.data.links.max = document.getElementById('link-max').value.trim();
+            appState.data.links.telegram = document.getElementById('link-telegram').value.trim();
+            appState.data.links.vkPersonal = document.getElementById('link-vk-personal').value.trim();
+            appState.data.links.vkGroup = document.getElementById('link-vk-group').value.trim();
+            appState.data.links.instagram = document.getElementById('link-instagram').value.trim();
+            appState.data.links.phone = document.getElementById('contact-phone').value.trim();
+            appState.data.links.email = document.getElementById('contact-email').value.trim();
+            appState.data.links.address = document.getElementById('contact-address').value.trim();
+        }
+
+        // GitHub Tab render
+        function renderGitHubTab() {
+            const gh = appState.github || {};
+            document.getElementById('gh-owner-input').value = gh.owner || '';
+            document.getElementById('gh-repo-input').value = gh.repo || '';
+            document.getElementById('gh-branch-input').value = gh.branch || 'main';
+            if (gh.hasToken) {
+                document.getElementById('gh-token-input').placeholder = gh.tokenPreview || 'Токен сохранён';
+            }
+            document.getElementById('gh-last-commit').textContent = gh.lastCommitSha ? `[${gh.lastCommitSha}]` : 'Ещё не публиковалось';
+            document.getElementById('gh-last-date').textContent = gh.lastPublishedAt ? new Date(gh.lastPublishedAt).toLocaleString('ru-RU') : '—';
+        }
+
+        // Test GitHub Connection
+        document.getElementById('btn-test-gh').addEventListener('click', async () => {
+            const token = document.getElementById('gh-token-input').value;
+            const owner = document.getElementById('gh-owner-input').value;
+            const repo = document.getElementById('gh-repo-input').value;
+            const resultDiv = document.getElementById('gh-test-result');
+
+            resultDiv.style.display = 'block';
+            resultDiv.style.color = '#bbb';
+            resultDiv.textContent = 'Проверка доступа к репозиторию...';
+
+            try {
+                const res = await fetch('/api/admin/github/test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, owner, repo })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    resultDiv.style.color = 'var(--success)';
+                    resultDiv.textContent = `✓ ${data.message}`;
+                    showToast('Подключение к GitHub успешно!');
+                } else {
+                    resultDiv.style.color = 'var(--danger)';
+                    resultDiv.textContent = `✕ ${data.error}`;
+                    showToast('Ошибка подключения к GitHub', 'error');
+                }
+            } catch (err) {
+                resultDiv.style.color = 'var(--danger)';
+                resultDiv.textContent = '✕ Ошибка связи с сервером';
+            }
+        });
+
+        // Save GitHub Settings
+        document.getElementById('btn-save-gh-settings').addEventListener('click', async () => {
+            const token = document.getElementById('gh-token-input').value;
+            const owner = document.getElementById('gh-owner-input').value;
+            const repo = document.getElementById('gh-repo-input').value;
+            const branch = document.getElementById('gh-branch-input').value;
+
+            try {
+                const res = await fetch('/api/admin/github/settings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token, owner, repo, branch })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('Настройки GitHub сохранены!');
+                    loadData();
+                } else {
+                    showToast(data.error || 'Ошибка сохранения', 'error');
+                }
+            } catch (err) {
+                showToast('Ошибка при сохранении настроек', 'error');
+            }
+        });
+
+        // Save All Changes to local files
+        async function saveAllData() {
+            saveCurrentShowFormToState();
+            saveContactsFromForm();
+
+            showToast('Сохранение на сайт...', 'info');
+
+            try {
+                const res = await fetch('/api/admin/save-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        monthsData: appState.data.monthsData,
+                        showPosMap: appState.data.showPosMap,
+                        links: appState.data.links
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('Все изменения успешно сохранены!');
+                    return true;
+                } else {
+                    showToast(data.error || 'Ошибка при сохранении', 'error');
+                    return false;
+                }
+            } catch (err) {
+                showToast('Ошибка связи с сервером', 'error');
+                return false;
+            }
+        }
+
+        document.getElementById('btn-save-all').addEventListener('click', saveAllData);
+
+        // Publish All to GitHub
+        async function publishAllToGitHub() {
+            const saved = await saveAllData();
+            if (!saved) return;
+
+            const btn = document.getElementById('btn-publish-all');
+            const btnDirect = document.getElementById('btn-publish-direct');
+            btn.disabled = true;
+            btnDirect.disabled = true;
+            btn.textContent = '⏳ Публикация...';
+
+            showToast('Отправка коммита на GitHub...', 'info');
+
+            try {
+                const res = await fetch('/api/admin/publish', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    if (data.localOnly) {
+                        showToast(data.message, 'info');
+                    } else {
+                        showToast(`Успешно опубликовано! Коммит [${data.commitSha}]`);
+                        loadData();
+                    }
+                } else {
+                    showToast(data.error || 'Ошибка публикации на GitHub', 'error');
+                }
+            } catch (err) {
+                showToast('Ошибка при публикации', 'error');
+            } finally {
+                btn.disabled = false;
+                btnDirect.disabled = false;
+                btn.textContent = '🚀 Опубликовать на GitHub';
+            }
+        }
+
+        document.getElementById('btn-publish-all').addEventListener('click', publishAllToGitHub);
+        document.getElementById('btn-publish-direct').addEventListener('click', publishAllToGitHub);
+
+        // Change Password form
+        document.getElementById('change-pass-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentPassword = document.getElementById('curr-pass').value;
+            const newPassword = document.getElementById('new-pass').value;
+
+            try {
+                const res = await fetch('/api/admin/change-password', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ currentPassword, newPassword })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showToast('Пароль успешно изменён!');
+                    document.getElementById('curr-pass').value = '';
+                    document.getElementById('new-pass').value = '';
+                } else {
+                    showToast(data.error || 'Ошибка смены пароля', 'error');
+                }
+            } catch (err) {
+                showToast('Ошибка связи с сервером', 'error');
+            }
+        });
+
+        // Initialize
+        checkAuth();
+    </script>
+</body>
+</html>

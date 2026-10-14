@@ -461,13 +461,22 @@ function createEventTickets(monthData, index) {
             thumbImg.style.height = '100%';
             thumbImg.style.objectFit = 'cover';
             thumbImg.onerror = () => {
-                thumbImg.onerror = null;
-                if (monthData && monthData.image && thumbImg.src !== monthData.image) {
-                    thumbImg.src = monthData.image;
-                } else {
-                    thumbImg.style.display = 'none';
-                    if (!isVideo) t.textContent = text || 'Фото';
+                if (!thumbImg._retriedAlt) {
+                    thumbImg._retriedAlt = true;
+                    if (thumbImg.src.includes('.webp')) {
+                        thumbImg.src = thumbImg.src.replace('.webp', '.png');
+                        return;
+                    } else if (thumbImg.src.includes('.png')) {
+                        thumbImg.src = thumbImg.src.replace('.png', '.webp');
+                        return;
+                    } else if (thumbImg.src.includes('.PNG')) {
+                        thumbImg.src = thumbImg.src.replace('.PNG', '.webp');
+                        return;
+                    }
                 }
+                thumbImg.onerror = null;
+                thumbImg.style.display = 'none';
+                if (!isVideo) t.textContent = text || 'Фото';
             };
             t.appendChild(thumbImg);
         }
@@ -505,6 +514,8 @@ function createEventTickets(monthData, index) {
     const mainFrame = document.createElement('div');
     mainFrame.className = 'modal-main-frame';
     mainFrame.style.flex = '1';
+    mainFrame.style.width = '100%';
+    mainFrame.style.height = '100%';
     mainFrame.style.backgroundColor = 'transparent';
     mainFrame.style.border = 'none';
     mainFrame.style.display = 'flex';
@@ -652,15 +663,29 @@ function createEventTickets(monthData, index) {
             img.decoding = 'async';
             img.alt = item.label || 'Фото';
             img.onerror = () => {
+                if (!img._retriedAlt) {
+                    img._retriedAlt = true;
+                    if (img.src.includes('.webp')) {
+                        img.src = img.src.replace('.webp', '.png');
+                        return;
+                    } else if (img.src.includes('.png')) {
+                        img.src = img.src.replace('.png', '.webp');
+                        return;
+                    } else if (img.src.includes('.PNG')) {
+                        img.src = img.src.replace('.PNG', '.webp');
+                        return;
+                    }
+                }
                 img.onerror = null;
-                if (monthData && monthData.image) {
+                if (monthData && monthData.image && img.src !== monthData.image) {
                     img.src = monthData.image;
                 } else {
                     img.style.display = 'none';
                     mainDisplay.textContent = 'Здесь будет большое фото';
                 }
             };
-            img.style.objectFit = 'contain';
+            img.style.objectFit = 'cover';
+            img.style.objectPosition = 'center';
             img.style.maxWidth = '100%';
             img.style.maxHeight = '100%';
             img.style.width = '100%';

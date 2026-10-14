@@ -1078,14 +1078,14 @@ footer .footer_section .footer_block .link_block svg {
 }
 
 .banner .banner_image {
-    background-image: url('img/index/banner.png?v=1791570001') !important;
+    background-image: url('img/index/banner.png?v=1791580001') !important;
     background-size: contain !important;
     background-repeat: no-repeat !important;
 }
 
 @media only screen and (max-width: 1024px) and (min-width: 761px) {
     .banner .banner_image {
-        background-image: url('img/index/banner.png?v=1791570001') !important;
+        background-image: url('img/index/banner.png?v=1791580001') !important;
     }
 }
 
@@ -1117,9 +1117,9 @@ footer,
 
 footer .footer_section {
     width: 100% !important;
-    max-width: 1200px !important;
-    margin: 0 auto !important;
-    padding: 36px 5% 20px 5% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 36px clamp(16px, 4vw, 60px) 24px clamp(16px, 4vw, 60px) !important;
     box-sizing: border-box !important;
 }
 
@@ -1130,9 +1130,11 @@ footer .footer_section .section_up {
     justify-content: space-between !important;
     align-items: flex-start !important;
     flex-wrap: nowrap !important;
-    gap: 32px !important;
+    gap: clamp(24px, 3.5vw, 60px) !important;
     width: 100% !important;
-    margin-bottom: 20px !important;
+    max-width: 100% !important;
+    margin-bottom: 24px !important;
+    box-sizing: border-box !important;
 }
 
 footer .footer_section .section_up .footer_block {
@@ -1309,7 +1311,7 @@ footer .footer_section .copyright {
 
     footer .footer_section .section_up .footer_block {
         width: 100% !important;
-        max-width: 320px !important;
+        max-width: 100% !important;
         margin: 0 auto !important;
         align-items: center !important;
         justify-content: center !important;
@@ -1470,13 +1472,16 @@ footer .footer_section .copyright {
     }
     .new_modal_layout .modal-main-frame img,
     .new_modal_layout .modal-main-frame video,
+    .new_modal_layout .modal-main-display img,
+    .new_modal_layout .modal-main-display video,
     .new_modal_layout .modal-body-container > div:nth-child(2) img,
     .new_modal_layout .modal-body-container > div:nth-child(2) video {
         width: 100% !important;
         height: 100% !important;
         max-width: 100% !important;
         max-height: 100% !important;
-        object-fit: contain !important;
+        object-fit: cover !important;
+        object-position: center !important;
         border-radius: 12px !important;
         border: none !important;
         background: #0d0d10 !important;
@@ -1968,13 +1973,18 @@ html body .events .event-item:nth-child(10) .background-image {
 }
 
 /* Modal video display: vertical rectangular framing without square black box */
-.modal-body-container .modal-main-frame {
+.modal-body-container .modal-main-frame,
+.modal-body-container .modal-main-display {
     background: transparent !important;
     background-color: transparent !important;
     border: none !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    flex: 1 !important;
+    overflow: hidden !important;
 }
 
 .modal-body-container video {
@@ -1990,10 +2000,12 @@ html body .events .event-item:nth-child(10) .background-image {
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6) !important;
 }
 
-.modal-body-container .modal-main-frame img {
+.modal-body-container .modal-main-frame img,
+.modal-body-container .modal-main-display img {
     background: #0d0d10 !important;
     background-color: #0d0d10 !important;
-    object-fit: contain !important;
+    object-fit: cover !important;
+    object-position: center !important;
     width: 100% !important;
     height: 100% !important;
     max-height: 100% !important;
@@ -2132,23 +2144,25 @@ body.no-scroll,
 .about_show .show_block .image-frame img.cut-corners,
 .events-info .image-frame img.cut-corners {
     position: absolute !important;
-    top: 2px !important;
-    left: 2px !important;
-    right: 2px !important;
-    bottom: 2px !important;
-    width: calc(100% - 4px) !important;
-    height: calc(100% - 4px) !important;
-    max-width: calc(100% - 4px) !important;
-    max-height: calc(100% - 4px) !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
     object-fit: cover !important;
+    object-position: center !important;
     display: block !important;
     box-sizing: border-box !important;
     margin: 0 !important;
     padding: 0 !important;
-    border-radius: 4px !important;
+    border-radius: 6px !important;
     z-index: 1 !important;
-    clip-path: polygon(5.2% 0%, 94.8% 0%, 100% 7.8%, 100% 92.2%, 94.8% 100%, 5.2% 100%, 0% 92.2%, 0% 7.8%) !important;
-    -webkit-clip-path: polygon(5.2% 0%, 94.8% 0%, 100% 7.8%, 100% 92.2%, 94.8% 100%, 5.2% 100%, 0% 92.2%, 0% 7.8%) !important;
+    clip-path: none !important;
+    -webkit-clip-path: none !important;
 }
 
 .about_show .show_block .image-frame picture,
@@ -2248,7 +2262,7 @@ body.no-scroll,
         width: 46% !important;
         max-width: 500px !important;
         min-width: 160px !important;
-        aspect-ratio: 540 / 320 !important;
+        aspect-ratio: 2080 / 1200 !important;
         height: auto !important;
         margin: 0 !important;
         position: relative !important;

@@ -25,10 +25,10 @@
 
     <!-- Preload Critical Background & Show Previews for Instant 0ms Load -->
     <link rel="preload" as="image" href="./img/main-bg.webp" type="image/webp" media="(min-width: 961px)" fetchpriority="high">
-    <link rel="preload" as="image" href="./img/index/banner.png?v=1791570002" type="image/png" media="(min-width: 961px)" fetchpriority="high">
-    <link rel="preload" as="image" href="./img/index/banner.png?v=1791570002" type="image/png" media="(max-width: 960px)" fetchpriority="high">
-    <link rel="preload" as="image" href="./show1.webp?v=1791549509217" type="image/webp" fetchpriority="high">
-    <link rel="preload" as="image" href="./show2.webp?v=1789900001" type="image/webp" fetchpriority="high">
+    <link rel="preload" as="image" href="./img/index/banner.png?v=1791580001" type="image/png" media="(min-width: 961px)" fetchpriority="high">
+    <link rel="preload" as="image" href="./img/index/banner.png?v=1791580001" type="image/png" media="(max-width: 960px)" fetchpriority="high">
+    <link rel="preload" as="image" href="./show1.png?v=1791580001" type="image/png" fetchpriority="high">
+    <link rel="preload" as="image" href="./show2.png?v=1791580001" type="image/png" fetchpriority="high">
     <link rel="preload" as="image" href="./show3.webp?v=1791553550000" type="image/webp">
     <link rel="preload" as="image" href="./show4.webp?v=1791549706470" type="image/webp">
 
@@ -172,7 +172,7 @@
                 box-sizing: border-box !important;
             }
             .banner .banner_image {
-                background-image: url('./img/index/banner.png?v=1791570001') !important;
+                background-image: url('./img/index/banner.png?v=1791580001') !important;
                 background-size: contain !important;
                 background-repeat: no-repeat !important;
             }
@@ -408,7 +408,7 @@
         min-height: unset !important;
         max-height: none !important;
         padding: 0 !important;
-        background-image: url('./img/index/banner.png?v=1791570002') !important;
+        background-image: url('./img/index/banner.png?v=1791580001') !important;
         background-size: cover !important;
         background-repeat: no-repeat !important;
         background-position: center center !important;
@@ -690,23 +690,25 @@
     .about_show .show_block .image-frame img.cut-corners,
     html body .about_show .show_block .image-frame .cut-corners {
         position: absolute !important;
-        top: 2px !important;
-        left: 2px !important;
-        right: 2px !important;
-        bottom: 2px !important;
-        width: calc(100% - 4px) !important;
-        height: calc(100% - 4px) !important;
-        max-width: calc(100% - 4px) !important;
-        max-height: calc(100% - 4px) !important;
+        inset: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        width: 100% !important;
+        height: 100% !important;
+        max-width: 100% !important;
+        max-height: 100% !important;
         object-fit: cover !important;
+        object-position: center !important;
         display: block !important;
         box-sizing: border-box !important;
         margin: 0 !important;
         padding: 0 !important;
-        border-radius: 4px !important;
+        border-radius: 6px !important;
         z-index: 1 !important;
-        clip-path: polygon(5.2% 0%, 94.8% 0%, 100% 7.8%, 100% 92.2%, 94.8% 100%, 5.2% 100%, 0% 92.2%, 0% 7.8%) !important;
-        -webkit-clip-path: polygon(5.2% 0%, 94.8% 0%, 100% 7.8%, 100% 92.2%, 94.8% 100%, 5.2% 100%, 0% 92.2%, 0% 7.8%) !important;
+        clip-path: none !important;
+        -webkit-clip-path: none !important;
     }
 
     .about_show .show_block .image-frame picture,
@@ -974,7 +976,8 @@
         height: 100% !important;
         max-width: 100% !important;
         max-height: 100% !important;
-        object-fit: contain !important;
+        object-fit: cover !important;
+        object-position: center !important;
         border-radius: 12px !important;
         border: none !important;
         background: #0d0d10 !important;
@@ -1263,11 +1266,11 @@
     <div class="events-slider-container swiper">
         <div class="event-seasons swiper-wrapper">
             <div class="event-item swiper-slide" data-month-year="1_2027" data-index="0" style="cursor: pointer;">
-                <img class="background-image" src="./show1.webp?v=1791549509217" alt="Ночные птицы" loading="eager" decoding="async" fetchpriority="high" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: left center; transform: none;">
+                <img class="background-image" src="./show1.png?v=1791580001" alt="Ночные птицы" loading="eager" decoding="async" fetchpriority="high" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: left center; transform: none;">
                 <div class="content custom-image-content"></div>
             </div>
             <div class="event-item swiper-slide" data-month-year="2_2027" data-index="1" style="cursor: pointer;">
-                <img class="background-image" src="./show2.webp?v=1789900001" alt="Бразильяно" loading="eager" decoding="async" fetchpriority="high" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: left center; transform: none;">
+                <img class="background-image" src="./show2.png?v=1791580001" alt="Бразильяно" loading="eager" decoding="async" fetchpriority="high" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: left center; transform: none;">
                 <div class="content custom-image-content"></div>
             </div>
             <div class="event-item swiper-slide" data-month-year="3_2027" data-index="2" style="cursor: pointer;">
@@ -1283,7 +1286,7 @@
                 <div class="content custom-image-content"></div>
             </div>
             <div class="event-item swiper-slide" data-month-year="6_2027" data-index="5" style="cursor: pointer;">
-                <img class="background-image" src="./show6.webp?v=1789900001" alt="Гэтсби стайл" loading="lazy" decoding="async" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: left bottom; transform: none;">
+                <img class="background-image" src="./show6.png?v=1791580001" alt="Гэтсби стайл" loading="lazy" decoding="async" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: left bottom; transform: none;">
                 <div class="content custom-image-content"></div>
             </div>
             <div class="event-item swiper-slide" data-month-year="7_2027" data-index="6" style="cursor: pointer;">
@@ -1669,8 +1672,8 @@
 </script>
 <script>
 window.monthsData = [
-  {"month": "01", "year": "2027", "image": "./show1.webp?v=1791549509217", "event_date": "2027-01-15 19:00:00", "title": "Ночные птицы", "description": "Магия световых эффектов костюма в сочетании с чистотой и красотой образа лебедей наполнит праздник атмосферой погружения в сказочный мир ночного неба. Уникальное сочетание бурлеска и световых эффектов, погружающее в гипнотическую атмосферу ночи.", "is_custom_image": true, "media": [{"type": "video", "label": "Видео", "url": "./img/block/show1_video.MP4", "poster": "./img/block/show1_v1_thumb.jpg"}, {"type": "image", "label": "Фото 1", "url": "./img/block/show1_photo1.webp"}, {"type": "image", "label": "Фото 2", "url": "./img/block/show1_photo2.webp"}, {"type": "image", "label": "Фото 3", "url": "./img/block/show1_photo3.webp"}], "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">Магия световых эффектов костюма в сочетании с чистотой и красотой образа лебедей наполнит праздник атмосферой погружения в сказочный мир ночного неба.</p>\n        <p style=\"margin-bottom: 15px;\">✨ Завораживающее шоу светящихся крыльев, которое погружает в атмосферу магии, свободы и ночного неба. Это не просто танец — это настоящая феерия света, где реальность отступает перед волшебством.</p>\n        <p style=\"margin-bottom: 15px;\">🌌 В полной темноте зала вспыхивают яркие огни. Они складываются в причудливые узоры, а затем — в образы таинственных птиц. Артисты, облаченные в светящиеся костюмы, движутся с невероятной грацией. Кажется, будто они парят в воздухе, а их крылья сотканы из тысяч мерцающих звезд. Зрители замирают, наблюдая за этим гипнотическим действом, которое дарит ощущение чуда и абсолютной свободы.</p>\n        <p style=\"margin-bottom: 15px;\">💫 Каждое выступление — это история, рассказанная языком света и пластики. Она уносит прочь от повседневности, заставляя поверить в сказку. Это идеальный финал для любого вечера, который запомнится надолго.</p>\n    "},
-  {"month": "02", "year": "2027", "image": "./show2.webp?v=1789900001", "event_date": "2027-02-14 19:00:00", "is_custom_image": true, "title": "Бразильяно", "description": "Карнавал у вас на празднике: яркие костюмы, зажигательная самба и атмосфера Рио.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">🔥 <strong>Шоу «Бразильяно» — карнавал у вас на празднике</strong></p>\n        <p style=\"margin-bottom: 15px;\">Яркие костюмы, зажигательная самба и атмосфера Рио. Мы выезжаем на мероприятия любого масштаба: свадьбы, корпоративы, дни рождения, городские праздники. 🎭</p>\n        <p style=\"margin-bottom: 15px;\">«Бразильяно» — это не просто танцевальный номер. Это настоящий карнавал, который врывается в ваш вечер и не отпускает до последнего аккорда. Страсть, ритм и грация — всё это сливается в одно незабываемое действо, где гости перестают быть зрителями и становятся частью шоу.</p>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">💃 Что в программе:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Зажигательные латиноамериканские танцы: самба, сальса, пассо</li>\n            <li>Яркие костюмы с перьями и стразами, созданные вручную</li>\n            <li>Вовлечение гостей в шоу — танцуют все!</li>\n            <li>Море эмоций, ритма и настоящей бразильской энергии</li>\n            <li>Гибкий формат: от короткого выступления до полноценной программы на весь вечер</li>\n        </ul>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">✨ Почему выбирают «Бразильяно»:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Мы адаптируем программу под ваш формат и площадку</li>\n            <li>Артисты с опытом выступлений на свадьбах, корпоративах и городских сценах</li>\n            <li>Работаем с любым количеством гостей — от 10 до 1000+</li>\n            <li>Выезжаем в любую точку</li>\n        </ul>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">🎯 Идеально для тех, кто хочет:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Удивить гостей и сделать праздник незабываемым</li>\n            <li>Добавить в вечер ярких красок и эмоций</li>\n            <li>Создать атмосферу, которую будут вспоминать ещё долго</li>\n        </ul>\n    ", "media": [{"type": "video", "label": "Видео", "url": "./img/block/show2_video1.mp4", "poster": "./img/block/show2_v1_thumb.jpg"}, {"type": "image", "label": "Фото 1", "url": "./img/block/show2_photo1.png?v=1791570002"}, {"type": "image", "label": "Фото 2", "url": "./img/block/show2_photo2.webp"}, {"type": "image", "label": "Фото 3", "url": "./img/block/show2_photo3.webp"}]},
+  {"month": "01", "year": "2027", "image": "./show1.png?v=1791580001", "event_date": "2027-01-15 19:00:00", "title": "Ночные птицы", "description": "Магия световых эффектов костюма в сочетании с чистотой и красотой образа лебедей наполнит праздник атмосферой погружения в сказочный мир ночного неба. Уникальное сочетание бурлеска и световых эффектов, погружающее в гипнотическую атмосферу ночи.", "is_custom_image": true, "media": [{"type": "video", "label": "Видео", "url": "./img/block/show1_video.MP4", "poster": "./img/block/show1_v1_thumb.jpg"}, {"type": "image", "label": "Фото 1", "url": "./img/block/show1_photo1.webp"}, {"type": "image", "label": "Фото 2", "url": "./img/block/show1_photo2.webp"}, {"type": "image", "label": "Фото 3", "url": "./img/block/show1_photo3.webp"}], "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">Магия световых эффектов костюма в сочетании с чистотой и красотой образа лебедей наполнит праздник атмосферой погружения в сказочный мир ночного неба.</p>\n        <p style=\"margin-bottom: 15px;\">✨ Завораживающее шоу светящихся крыльев, которое погружает в атмосферу магии, свободы и ночного неба. Это не просто танец — это настоящая феерия света, где реальность отступает перед волшебством.</p>\n        <p style=\"margin-bottom: 15px;\">🌌 В полной темноте зала вспыхивают яркие огни. Они складываются в причудливые узоры, а затем — в образы таинственных птиц. Артисты, облаченные в светящиеся костюмы, движутся с невероятной грацией. Кажется, будто они парят в воздухе, а их крылья сотканы из тысяч мерцающих звезд. Зрители замирают, наблюдая за этим гипнотическим действом, которое дарит ощущение чуда и абсолютной свободы.</p>\n        <p style=\"margin-bottom: 15px;\">💫 Каждое выступление — это история, рассказанная языком света и пластики. Она уносит прочь от повседневности, заставляя поверить в сказку. Это идеальный финал для любого вечера, который запомнится надолго.</p>\n    "},
+  {"month": "02", "year": "2027", "image": "./show2.png?v=1791580001", "event_date": "2027-02-14 19:00:00", "is_custom_image": true, "title": "Бразильяно", "description": "Карнавал у вас на празднике: яркие костюмы, зажигательная самба и атмосфера Рио.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">🔥 <strong>Шоу «Бразильяно» — карнавал у вас на празднике</strong></p>\n        <p style=\"margin-bottom: 15px;\">Яркие костюмы, зажигательная самба и атмосфера Рио. Мы выезжаем на мероприятия любого масштаба: свадьбы, корпоративы, дни рождения, городские праздники. 🎭</p>\n        <p style=\"margin-bottom: 15px;\">«Бразильяно» — это не просто танцевальный номер. Это настоящий карнавал, который врывается в ваш вечер и не отпускает до последнего аккорда. Страсть, ритм и грация — всё это сливается в одно незабываемое действо, где гости перестают быть зрителями и становятся частью шоу.</p>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">💃 Что в программе:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Зажигательные латиноамериканские танцы: самба, сальса, пассо</li>\n            <li>Яркие костюмы с перьями и стразами, созданные вручную</li>\n            <li>Вовлечение гостей в шоу — танцуют все!</li>\n            <li>Море эмоций, ритма и настоящей бразильской энергии</li>\n            <li>Гибкий формат: от короткого выступления до полноценной программы на весь вечер</li>\n        </ul>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">✨ Почему выбирают «Бразильяно»:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Мы адаптируем программу под ваш формат и площадку</li>\n            <li>Артисты с опытом выступлений на свадьбах, корпоративах и городских сценах</li>\n            <li>Работаем с любым количеством гостей — от 10 до 1000+</li>\n            <li>Выезжаем в любую точку</li>\n        </ul>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">🎯 Идеально для тех, кто хочет:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Удивить гостей и сделать праздник незабываемым</li>\n            <li>Добавить в вечер ярких красок и эмоций</li>\n            <li>Создать атмосферу, которую будут вспоминать ещё долго</li>\n        </ul>\n    ", "media": [{"type": "video", "label": "Видео", "url": "./img/block/show2_video1.mp4", "poster": "./img/block/show2_v1_thumb.jpg"}, {"type": "image", "label": "Фото 1", "url": "./img/block/show2_photo1.png?v=1791570002"}, {"type": "image", "label": "Фото 2", "url": "./img/block/show2_photo2.webp"}, {"type": "image", "label": "Фото 3", "url": "./img/block/show2_photo3.webp"}]},
   {"month": "03", "year": "2027", "image": "./show3.webp?v=1791553550000", "event_date": "2027-03-08 19:00:00", "is_custom_image": true, "title": "Грёзы Тадж Махала", "description": "Невероятно эффектный номер, с завораживающим ритмом и роскошными костюмами в дополнении со световыми элементами костюма не оставят равнодушным ни одного любителя экзотики и потрясающих воображение зрелищ. Невероятно эффектное представление: роскошные костюмы, грация и атмосфера восточной сказки.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">Невероятно эффектный номер, с завораживающим ритмом и роскошными костюмами в дополнении со световыми элементами костюма не оставят равнодушным ни одного любителя экзотики и потрясающих воображение зрелищ.</p>\n        <p style=\"margin-bottom: 15px;\">✨ <strong>Грёзы Тадж Махала — невероятно эффектное представление!</strong></p>\n        <p style=\"margin-bottom: 15px;\">👑 Шоу завораживает роскошными, сказочными костюмами и необыкновенно красивым танцем. Потрясающее фантастическое выступление не оставит равнодушным ни одного любителя экзотики! Танцевальные возможности шоу «Та-Ис» безграничны — коллектив поможет сделать ваше мероприятие самым ярким и запоминающимся!</p>\n        <p style=\"margin-bottom: 15px;\">💎 Погрузитесь в атмосферу древних дворцов и восточных сказок. «Грёзы Тадж Махала» — это не просто танец, это ожившая легенда о любви, роскоши и красоте. Каждое движение артистов наполнено грацией и величием, а костюмы, расшитые золотом и драгоценными камнями, переносят зрителей в эпоху великих махараджей.</p>\n        <p style=\"margin-bottom: 15px;\">🕊️ Шоу идеально подходит для тех, кто хочет добавить в свой праздник нотку изысканности и восточной магии. Свадьба, корпоратив, день рождения или светский прием — «Грёзы Тадж Махала» станут жемчужиной вашего вечера.</p>\n    ", "media": [{"type": "image", "label": "Фото 1", "url": "./img/block/show3_photo1.webp"}, {"type": "image", "label": "Фото 2", "url": "./img/block/show3_photo2.webp"}, {"type": "image", "label": "Фото 3", "url": "./img/block/show3_photo3.webp"}]},
   {"month": "04", "year": "2027", "image": "./show4.webp?v=1791549706470", "event_date": "2027-04-12 19:00:00", "title": "Rose's", "description": "Номер лауреат 1 степени на международном хореографическом конкурсе. Стильный, зрелищный номер с лазерными эффектами подчеркнет статус и красоту Вашего мероприятия. Шоу, где страсть расцветает на сцене: элегантность, дерзость современных ритмов и чувственность.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">Номер лауреат 1 степени на международном хореографическом конкурсе. Стильный, зрелищный номер с лазерными эффектами подчеркнет статус и красоту Вашего мероприятия.</p>\n        <p style=\"margin-bottom: 15px;\">🌹 <strong>Rose's — шоу, где страсть расцветает на сцене!</strong></p>\n        <p style=\"margin-bottom: 15px;\">✨ «Rose's» — это завораживающее представление, пропитанное ароматом роскоши и женственности. Грациозные движения, изысканные костюмы и невероятная энергия артистов создают образ, который невозможно забыть. Каждый выход на сцену — это история о красоте, силе и нежности, рассказанная языком танца.</p>\n        <p style=\"margin-bottom: 15px;\">💃 Шоу сочетает в себе элегантность классической хореографии и дерзость современных ритмов. Алые, как лепестки роз, костюмы и завораживающая музыка погружают зрителей в атмосферу чувственности и волшебства. Это идеальный выбор для тех, кто хочет добавить в свой праздник нотку изысканности и шарма.</p>\n        <p style=\"margin-bottom: 15px;\">🥀 «Rose's» — это больше, чем танец. Это символ красоты, которая расцветает в самый нужный момент. Свадьба, корпоратив, день рождения или светский вечер — это шоу станет украшением любого мероприятия и подарит гостям незабываемые эмоции.</p>\n    ", "media": [
     {"type": "video", "label": "Видео 1", "url": "./img/block/show4_video1.mp4", "poster": "./img/block/show4_v1_thumb.jpg"},
@@ -1687,32 +1690,31 @@ window.monthsData = [
     {"type": "image", "label": "Фото 1", "url": "./img/block/show5_photo1.webp"},
     {"type": "image", "label": "Фото 2", "url": "./img/block/show5_photo2.webp"}
   ], "is_custom_image": true},
-  {"month": "06", "year": "2027", "image": "./show6.webp?v=1789900001", "event_date": "2027-06-12 19:00:00", "title": "Гэтсби стайл", "description": "Яркий и элегантный танец в стиле 1920-х годов, эпоха свободы и расцвета джаза, блеска страз и игривости ретро гламура - бурлеска. Роскошь, джаз и атмосфера великих вечеринок: чарльстон, шик и ожившая эпоха 1920-х.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">Яркий и элегантный танец в стиле 1920-х годов, эпоха свободы и расцвета джаза, блеска страз и игривости ретро гламура - бурлеска.</p>\n        <p style=\"margin-bottom: 15px;\">🥂 <strong>Гэтсби стайл — роскошь, джаз и атмосфера великих вечеринок!</strong></p>\n        <p style=\"margin-bottom: 15px;\">✨ «Гэтсби стайл» — это шоу, которое переносит вас в эпоху джаза, блеска и безудержного веселья. Роскошные костюмы, расшитые бисером и стразами, элегантные платья с бахромой, сверкающие украшения — каждая деталь воссоздаёт атмосферу легендарных вечеринок Великого Гэтсби. Это не просто танец, это ожившая эпоха 1920-х.</p>\n        <p style=\"margin-bottom: 15px;\">💃 Зажигательный чарльстон, чувственное танго, элегантный фокстрот и джазовые ритмы — артисты вовлекают гостей в атмосферу бала, где каждый чувствует себя частью высшего света. Шоу наполнено шиком, драйвом и той самой атмосферой, которую так любили герои Фицджеральда.</p>\n        <p style=\"margin-bottom: 15px;\">🎩 «Гэтсби стайл» — идеальный выбор для тех, кто хочет добавить в свой праздник нотку гламура и элегантности. Корпоратив, свадьба, светский приём или тематическая вечеринка — это шоу станет жемчужиной вашего вечера и подарит гостям ощущение настоящего праздника из прошлого.</p>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">🎯 Идеально для тех, кто хочет:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Погрузить гостей в атмосферу роскоши и джаза</li>\n            <li>Удивить элегантным и зрелищным номером</li>\n            <li>Создать вечер, о котором будут говорить ещё долго</li>\n        </ul>\n    ", "media": [
+  {"month": "06", "year": "2027", "image": "./show6.png?v=1791580001", "event_date": "2027-06-12 19:00:00", "title": "Гэтсби стайл", "description": "Яркий и элегантный танец в стиле 1920-х годов, эпоха свободы и расцвета джаза, блеска страз и игривости ретро гламура - бурлеска. Роскошь, джаз и атмосфера великих вечеринок: чарльстон, шик и ожившая эпоха 1920-х.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">Яркий и элегантный танец в стиле 1920-х годов, эпоха свободы и расцвета джаза, блеска страз и игривости ретро гламура - бурлеска.</p>\n        <p style=\"margin-bottom: 15px;\">🥂 <strong>Гэтсби стайл — роскошь, джаз и атмосфера великих вечеринок!</strong></p>\n        <p style=\"margin-bottom: 15px;\">✨ «Гэтсби стайл» — это шоу, которое переносит вас в эпоху джаза, блеска и безудержного веселья. Роскошные костюмы, расшитые бисером и стразами, элегантные платья с бахромой, сверкающие украшения — каждая деталь воссоздаёт атмосферу легендарных вечеринок Великого Гэтсби. Это не просто танец, это ожившая эпоха 1920-х.</p>\n        <p style=\"margin-bottom: 15px;\">💃 Зажигательный чарльстон, чувственное танго, элегантный фокстрот и джазовые ритмы — артисты вовлекают гостей в атмосферу бала, где каждый чувствует себя частью высшего света. Шоу наполнено шиком, драйвом и той самой атмосферой, которую так любили герои Фицджеральда.</p>\n        <p style=\"margin-bottom: 15px;\">🎩 «Гэтсби стайл» — идеальный выбор для тех, кто хочет добавить в свой праздник нотку гламура и элегантности. Корпоратив, свадьба, светский приём или тематическая вечеринка — это шоу станет жемчужиной вашего вечера и подарит гостям ощущение настоящего праздника из прошлого.</p>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">🎯 Идеально для тех, кто хочет:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Погрузить гостей в атмосферу роскоши и джаза</li>\n            <li>Удивить элегантным и зрелищным номером</li>\n            <li>Создать вечер, о котором будут говорить ещё долго</li>\n        </ul>\n    ", "media": [
     {"type": "video", "label": "Видео 1", "url": "./img/block/show6_video1.mp4", "poster": "./img/block/show6_v1_thumb.jpg"},
     {"type": "video", "label": "Видео 2", "url": "./img/block/show6_video2.mp4", "poster": "./img/block/show6_v2_thumb.jpg"},
     {"type": "video", "label": "Видео 3", "url": "./img/block/show6_video3.mp4", "poster": "./img/block/show6_v3_thumb.jpg"},
     {"type": "image", "label": "Фото 1", "url": "./img/block/show6_photo1.webp"},
     {"type": "image", "label": "Фото 2", "url": "./img/block/show6_photo2.webp"},
-    {"type": "image", "label": "Фото 3", "url": "./img/block/show6_photo3.webp"}
+    {"type": "image", "label": "Фото 3", "url": "./img/block/show6_photo3.png"}
   ], "is_custom_image": true},
   {"month": "07", "year": "2027", "image": "./show7.webp?v=1789900001", "event_date": "2027-07-07 19:00:00", "title": "Океан нежности", "description": "Легкость морского прибоя средиземного моря, плеск и нежность волн мягких лазурных тканей поведуют своему зрителю красивую сказку морских нимф. Номер со световыми эффектами. Шоу, которое окутывает чувствами и светом: плавность, грация, романтика и морская лазурь.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">Легкость морского прибоя средиземного моря, плеск и нежность волн мягких лазурных тканей поведуют своему зрителю красивую сказку морских нимф. Номер со световыми эффектами.</p>\n        <p style=\"margin-bottom: 15px;\">🌊 <strong>Океан нежности — шоу, которое окутывает чувствами и светом!</strong></p>\n        <p style=\"margin-bottom: 15px;\">✨ «Океан нежности» — это завораживающее представление, наполненное плавностью, грацией и глубокими эмоциями. Каждое движение артистов подобно волне: мягкое, но неотвратимое, оно увлекает зрителя в мир красоты и гармонии. Это шоу о любви, нежности и той тихой силе, которая способна тронуть самое сердце.</p>\n        <p style=\"margin-bottom: 15px;\">💙 Костюмы в оттенках морской глади, переливающиеся ткани и завораживающая музыка создают ощущение, будто вы находитесь на берегу бескрайнего океана. Танец рассказывает историю без слов — о чувствах, которые невозможно выразить, но можно почувствовать. Это идеальный выбор для тех, кто хочет добавить в свой праздник нотку романтики и изысканности.</p>\n        <p style=\"margin-bottom: 15px;\">🕊️ «Океан нежности» — это больше, чем танец. Это атмосфера, которая окутывает гостей теплом и спокойствием. Свадьба, корпоратив, день рождения или светский вечер — это шоу станет украшением любого мероприятия и подарит незабываемые эмоции.</p>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">🎯 Идеально для тех, кто хочет:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Создать атмосферу романтики и гармонии</li>\n            <li>Удивить гостей изящным и чувственным номером</li>\n            <li>Подарить вечер, наполненный теплом и красотой</li>\n        </ul>\n    ", "media": [
-    {"type": "video", "label": "Видео 1", "url": "./img/block/show7_video1.mp4", "poster": "./img/block/show7_v1_thumb.jpg"},
-    {"type": "video", "label": "Видео 2", "url": "./img/block/show7_video2.mp4", "poster": "./img/block/show7_v2_thumb.jpg"},
-    {"type": "video", "label": "Видео 3", "url": "./img/block/show7_video3.mp4", "poster": "./img/block/show7_v3_thumb.jpg"},
-    {"type": "image", "label": "Фото 1", "url": "./img/block/show7_photo1.webp"}
+    {"type": "video", "label": "Видео 1", "url": "./img/block/show7_video3.mp4", "poster": "./img/block/show7_v3_thumb.jpg"},
+    {"type": "video", "label": "Видео 2", "url": "./img/block/show7_video4.mp4", "poster": "./img/block/show7_video4_thumb.jpg"},
+    {"type": "image", "label": "Фото 1", "url": "./img/block/show7.png"},
+    {"type": "image", "label": "Фото 2", "url": "./img/block/show7_photo2.webp"}
   ], "is_custom_image": true},
   {"month": "08", "year": "2027", "image": "./show8.webp?v=1789900001", "event_date": "2027-08-15 19:00:00", "title": "Экипаж", "description": "Шоу, которое отправляет зал в незабываемый полёт: динамика, стиль, драйв и лёгкость.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">✈️ <strong>«Экипаж» — шоу, которое отправляет зал в незабываемый полёт!</strong></p>\n        <p style=\"margin-bottom: 15px;\">✨ «Экипаж» — это динамичная и эффектная постановка, где каждая деталь работает на создание образа настоящего путешествия. Стильные костюмы, отточенная хореография и особая атмосфера лёгкости и свободы — всё это делает шоу ярким и запоминающимся. Это танец о движении, драйве и ощущении полёта.</p>\n        <p style=\"margin-bottom: 15px;\">💃 Артисты словно ведут зрителей за собой: ритм, энергия, синхронность и харизма превращают выступление в настоящее приключение. Шоу легко адаптируется под любой формат — от камерного вечера до большой сцены, и всегда попадает точно в настроение праздника.</p>\n        <p style=\"margin-bottom: 15px;\">🌟 «Экипаж» — это больше, чем танец. Это ощущение дороги, предвкушения и радости. Корпоратив, свадьба, день рождения или городской праздник — это шоу станет ярким акцентом вечера и подарит гостям море эмоций.</p>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">🎯 Идеально для тех, кто хочет:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Добавить в праздник динамику и стиль</li>\n            <li>Удивить гостей эффектным и современным номером</li>\n            <li>Создать атмосферу лёгкости и праздника</li>\n        </ul>\n    ", "media": [
-    {"type": "image", "label": "Фото 1", "url": "./img/block/show8_photo1.png"},
-    {"type": "image", "label": "Фото 2", "url": "./img/block/show8_photo2.png"}
+    {"type": "image", "label": "Фото", "url": "./img/block/show8_photo1.png"}
   ], "is_custom_image": true},
   {"month": "09", "year": "2027", "image": "./show9.webp?v=1791553010000", "event_date": "2027-09-01 19:00:00", "title": "Люли", "description": "Шоу, где народная душа встречается с современным ритмом: задор, живая энергия и искренние эмоции.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">🎶 <strong>«Люли» — шоу, где народная душа встречается с современным ритмом!</strong></p>\n        <p style=\"margin-bottom: 15px;\">✨ «Люли» — это яркая и самобытная постановка, в основе которой лежат знакомые с детства мотивы, переосмысленные в современном ключе. Задорные ритмы, живая энергия и искренние эмоции — это шоу одинаково тепло принимают и старшее поколение, и молодёжь. Здесь традиция звучит свежо, а знакомое — удивляет.</p>\n        <p style=\"margin-bottom: 15px;\">💃 Артисты сочетают народную пластику с современной хореографией, создавая номер, от которого невозможно усидеть на месте. Яркие костюмы с этническими акцентами, зажигательная музыка и вовлечение зрителей превращают выступление в настоящий праздник.</p>\n        <p style=\"margin-bottom: 15px;\">🌾 «Люли» — это больше, чем танец. Это связь поколений, тепло родных мелодий и радость, которой хочется делиться. Корпоратив, свадьба, день рождения или городской праздник — это шоу станет душевным и ярким акцентом вечера.</p>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">🎯 Идеально для тех, кто хочет:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Добавить в праздник народный колорит и задор</li>\n            <li>Удивить гостей знакомым, но свежим номером</li>\n            <li>Создать атмосферу тепла и веселья</li>\n        </ul>\n    ", "media": [
-    {"type": "video", "label": "Видео 1", "url": "./img/block/show9_video1.mp4", "poster": "./img/block/show9_v1_thumb.jpg"},
-    {"type": "image", "label": "Фото 1", "url": "./img/block/show9_photo1.webp"},
-    {"type": "image", "label": "Фото 2", "url": "./img/block/show9_photo2.webp"},
-    {"type": "image", "label": "Фото 3", "url": "./img/block/show9_photo3.webp"}
+    {"type": "video", "label": "Видео", "url": "./img/block/show9_video1.mp4", "poster": "./img/block/show9_v1_thumb.jpg"},
+    {"type": "image", "label": "Фото 1", "url": "./img/block/show9_photo2.webp"},
+    {"type": "image", "label": "Фото 2", "url": "./img/block/show9_photo3.png"}
   ], "is_custom_image": true},
   {"month": "10", "year": "2027", "image": "./show10.webp?v=1791553010000", "event_date": "2027-10-31 19:00:00", "title": "Мимы", "description": "Выразительный, театрализованный номер, где главные участники номера танцующие мимы, рассказывают историю романтической любви главных персонажей. Номер с элементами акробатики, также является победителем многих международных хореографических конкурсов. Шоу, где эмоции говорят громче слов: искусство безмолвия, пластика, мимика и тайна пантомимы.", "detailsText": "\n        <h3 style=\"color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;\">О шоу</h3>\n        <p style=\"margin-bottom: 15px;\">Выразительный, театрализованный номер, где главные участники номера танцующие мимы, рассказывают историю романтической любви главных персонажей. Номер с элементами акробатики, также является победителем многих международных хореографических конкурсов.</p>\n        <p style=\"margin-bottom: 15px;\">🎭 <strong>«Мимы» — шоу, где эмоции говорят громче слов!</strong></p>\n        <p style=\"margin-bottom: 15px;\">✨ «Мимы» — это завораживающее представление, построенное на языке жестов, пластики и мимики. Без единого слова артисты рассказывают истории, которые трогают до глубины души. Каждое движение отточено до мелочей, а каждая эмоция — искренна и понятна без перевода. Это театр, где правит пантомима.</p>\n        <p style=\"margin-bottom: 15px;\">🖤 Строгие, стильные костюмы и минималистичная сценография создают особую атмосферу, в которой ничто не отвлекает от главного — от чувств. Зрители замирают, следя за каждым жестом, и не замечают, как оказываются внутри истории. Это шоу, которое одинаково впечатляет и в камерном зале, и на большой сцене.</p>\n        <p style=\"margin-bottom: 15px;\">🌟 «Мимы» — это больше, чем танец. Это искусство безмолвия, которое говорит громче любых слов. Корпоратив, свадьба, день рождения или светский вечер — это шоу станет изысканным и запоминающимся акцентом вашего праздника.</p>\n        <p style=\"margin-bottom: 8px; font-weight: 600; color: #f8e7bc;\">🎯 Идеально для тех, кто хочет:</p>\n        <ul style=\"margin-top: 0; margin-bottom: 15px; padding-left: 20px; line-height: 1.6;\">\n            <li>Удивить гостей необычным и элегантным номером</li>\n            <li>Создать атмосферу тайны и артистизма</li>\n            <li>Подарить вечер, наполненный эмоциями без слов</li>\n        </ul>\n    ", "media": [
-    {"type": "video", "label": "Видео", "url": "./img/block/show10_video2.mp4", "poster": "./img/block/show10_v2_thumb.jpg"},
+    {"type": "video", "label": "Видео 1", "url": "./img/block/show10_video1.mp4", "poster": "./img/block/show10_v1_thumb.jpg"},
+    {"type": "video", "label": "Видео 2", "url": "./img/block/show10_video2.mp4", "poster": "./img/block/show10_v2_thumb.jpg"},
     {"type": "image", "label": "Фото 1", "url": "./img/block/show10_photo1.webp"},
     {"type": "image", "label": "Фото 2", "url": "./img/block/show10_photo2.webp"}
   ], "is_custom_image": true}
@@ -2166,7 +2168,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="order-messenger-modal-buttons">
             <!-- MAX button -->
-            <a href="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-max" onclick="window.closeOrderMessengerModal(event);">
+            <a href="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-max" onclick="window.handleMessengerLinkClick();">
                 <div class="order-messenger-btn-icon-wrap max-icon-wrap">
                     <img src="./max_logo.svg" alt="MAX logo" width="30" height="30">
                 </div>
@@ -2178,7 +2180,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </a>
 
             <!-- Telegram button -->
-            <a href="https://t.me/anzhelika_foris" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-tg" onclick="window.closeOrderMessengerModal(event);">
+            <a href="https://t.me/anzhelika_foris" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-tg" onclick="window.handleMessengerLinkClick();">
                 <div class="order-messenger-btn-icon-wrap tg-icon-wrap">
                     <img src="./telegram_logo.svg" alt="Telegram logo" width="28" height="28">
                 </div>
@@ -2193,6 +2195,12 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <script>
+window.handleMessengerLinkClick = function() {
+    setTimeout(function() {
+        window.closeOrderMessengerModal();
+    }, 250);
+};
+
 window.openOrderMessengerModal = function(e) {
     if (e && e.preventDefault) e.preventDefault();
     if (e && e.stopPropagation) e.stopPropagation();
@@ -2207,7 +2215,11 @@ window.openOrderMessengerModal = function(e) {
 };
 
 window.closeOrderMessengerModal = function(e) {
-    if (e && e.preventDefault) e.preventDefault();
+    if (e && e.target && e.target.closest && e.target.closest('a.order-messenger-btn')) {
+        // Do not block link navigation
+    } else if (e && e.preventDefault) {
+        e.preventDefault();
+    }
     if (e && e.stopPropagation) e.stopPropagation();
     const modal = document.getElementById('order-messenger-modal');
     if (modal) {

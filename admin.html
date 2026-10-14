@@ -1317,7 +1317,7 @@
 
             // 1. window.monthsData
             let monthsData = [];
-            const matchMonths = htmlResp.match(/window.monthsDatas*=s*([[sS]*?]);s*window.ticketPrices/);
+            const matchMonths = htmlResp.match(/window\.monthsData\s*=\s*(\[[\s\S]*?\]);\s*window\.ticketPrices/);
             if (matchMonths) {
                 try {
                     monthsData = JSON.parse(matchMonths[1]);
@@ -1331,7 +1331,7 @@
                 1: 'left center', 2: 'left center', 3: 'left 55%', 4: '65% center', 5: 'left center',
                 6: 'left bottom', 7: 'left bottom', 8: 'left center', 9: 'left bottom', 10: 'left bottom'
             };
-            const matchPos = seatsResp.match(/const showPosMaps*=s*({[sS]*?});/);
+            const matchPos = seatsResp.match(/const showPosMap\s*=\s*(\{[\s\S]*?\});/);
             if (matchPos) {
                 try {
                     const evaluated = new Function('return ' + matchPos[1])();
@@ -1350,15 +1350,15 @@
                 email: 'asm.samara@yandex.ru',
                 address: 'Самара, улица Водников, 49'
             };
-            const matchMax = htmlResp.match(/href="(https://max.ru[^"]+)"/);
+            const matchMax = htmlResp.match(/href="(https:\/\/max\.ru[^"]+)"/);
             if (matchMax) links.max = matchMax[1];
-            const matchTg = htmlResp.match(/href="(https://t.me[^"]+)"/);
+            const matchTg = htmlResp.match(/href="(https:\/\/t\.me[^"]+)"/);
             if (matchTg) links.telegram = matchTg[1];
-            const matchVkP = htmlResp.match(/href="(https://vk.(?:com|ru)/angelikaforis[^"]*)"/);
+            const matchVkP = htmlResp.match(/href="(https:\/\/vk\.(?:com|ru)\/angelikaforis[^"]*)"/);
             if (matchVkP) links.vkPersonal = matchVkP[1];
-            const matchVkG = htmlResp.match(/href="(https://vk.(?:com|ru)/danceshowtais[^"]*)"/);
+            const matchVkG = htmlResp.match(/href="(https:\/\/vk\.(?:com|ru)\/danceshowtais[^"]*)"/);
             if (matchVkG) links.vkGroup = matchVkG[1];
-            const matchInst = htmlResp.match(/href="(https://(?:www.)?instagram.com[^"]+)"/);
+            const matchInst = htmlResp.match(/href="(https:\/\/(?:www\.)?instagram\.com[^"]+)"/);
             if (matchInst) links.instagram = matchInst[1];
             const matchPhone = htmlResp.match(/href="tel:([^"]+)"/);
             if (matchPhone) links.phone = matchPhone[1];
@@ -1885,9 +1885,8 @@
                 if (appState.data?.monthsData) {
                     const formattedJson = JSON.stringify(appState.data.monthsData, null, 2);
                     indexHtml = indexHtml.replace(
-                        /window.monthsDatas*=s*[[sS]*?];s*window.ticketPrices/,
-                        'window.monthsData = ' + formattedJson + ';
-window.ticketPrices'
+                        new RegExp('window\\.monthsData\\s*=\\s*\\[[\\s\\S]*?\\];\\s*window\\.ticketPrices'),
+                        'window.monthsData = ' + formattedJson + ';\nwindow.ticketPrices'
                     );
                     appState.data.monthsData.forEach((show, idx) => {
                         const pos = (appState.data.showPosMap && appState.data.showPosMap[idx + 1]) || 'left center';
@@ -1899,18 +1898,18 @@ window.ticketPrices'
 
                 // Apply showPosMap to seats.js
                 if (appState.data?.showPosMap) {
-                    const formattedMap = JSON.stringify(appState.data.showPosMap, null, 16).replace(/"(d+)":/g, '$1:');
-                    seatsJs = seatsJs.replace(/const showPosMaps*=s*{[sS]*?};/, 'const showPosMap = ' + formattedMap + ';');
+                    const formattedMap = JSON.stringify(appState.data.showPosMap, null, 16).replace(/"(\d+)":/g, '$1:');
+                    seatsJs = seatsJs.replace(/const showPosMap\s*=\s*\{[\s\S]*?\};/, 'const showPosMap = ' + formattedMap + ';');
                 }
 
                 // Apply links to index.html
                 if (appState.data?.links) {
                     const l = appState.data.links;
-                    if (l.max) indexHtml = indexHtml.replace(/href="https://max.ru[^"]*"/g, 'href="' + l.max + '"');
-                    if (l.telegram) indexHtml = indexHtml.replace(/href="https://t.me[^"]*"/g, 'href="' + l.telegram + '"');
-                    if (l.vkPersonal) indexHtml = indexHtml.replace(/href="https://vk.(?:com|ru)/angelikaforis[^"]*"/g, 'href="' + l.vkPersonal + '"');
-                    if (l.vkGroup) indexHtml = indexHtml.replace(/href="https://vk.(?:com|ru)/danceshowtais[^"]*"/g, 'href="' + l.vkGroup + '"');
-                    if (l.instagram) indexHtml = indexHtml.replace(/href="https://(?:www.)?instagram.com[^"]*"/g, 'href="' + l.instagram + '"');
+                    if (l.max) indexHtml = indexHtml.replace(/href="https:\/\/max\.ru[^"]*"/g, 'href="' + l.max + '"');
+                    if (l.telegram) indexHtml = indexHtml.replace(/href="https:\/\/t\.me[^"]*"/g, 'href="' + l.telegram + '"');
+                    if (l.vkPersonal) indexHtml = indexHtml.replace(/href="https:\/\/vk\.(?:com|ru)\/angelikaforis[^"]*"/g, 'href="' + l.vkPersonal + '"');
+                    if (l.vkGroup) indexHtml = indexHtml.replace(/href="https:\/\/vk\.(?:com|ru)\/danceshowtais[^"]*"/g, 'href="' + l.vkGroup + '"');
+                    if (l.instagram) indexHtml = indexHtml.replace(/href="https:\/\/(?:www\.)?instagram\.com[^"]*"/g, 'href="' + l.instagram + '"');
                     if (l.phone) indexHtml = indexHtml.replace(/href="tel:[^"]*"/g, 'href="tel:' + l.phone + '"');
                     if (l.email) indexHtml = indexHtml.replace(/href="mailto:[^"]*"/g, 'href="mailto:' + l.email + '"');
                 }

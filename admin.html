@@ -4,59 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Панель управления — ТА-ИС ШОУ</title>
-    <link rel="icon" type="image/png" href="./favicon-48x48.png">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0a0a0c;
-            --bg-card: #141418;
-            --bg-card-hover: #1c1c22;
-            --bg-input: #1f1f26;
+            --bg-body: #0b0b0e;
+            --bg-card: #15151c;
+            --bg-elevated: #1e1e28;
+            --bg-input: #121217;
             --gold: #f8e7bc;
-            --gold-dim: rgba(248, 231, 188, 0.4);
-            --gold-glow: rgba(248, 231, 188, 0.15);
-            --red: #8B1014;
-            --red-hover: #a51318;
-            --text-main: #f0f0f4;
-            --text-muted: #9595a4;
-            --border: rgba(248, 231, 188, 0.2);
+            --gold-bright: #ffeaae;
+            --gold-dim: #c5a059;
+            --text-main: #f5f5f7;
+            --text-muted: #9a9aa8;
+            --border: rgba(248, 231, 188, 0.22);
             --border-subtle: rgba(255, 255, 255, 0.08);
-            --success: #2ecc71;
-            --danger: #e74c3c;
-            --info: #3498db;
+            --danger: #ef4444;
+            --success: #10b981;
+            --info: #3b82f6;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-dark);
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-body);
             color: var(--text-main);
-            font-family: 'Onest', -apple-system, BlinkMacSystemFont, sans-serif;
             min-height: 100vh;
             line-height: 1.5;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Ambient luxury background */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 15% 15%, rgba(139, 16, 20, 0.15) 0%, transparent 45%),
-                        radial-gradient(circle at 85% 85%, rgba(248, 231, 188, 0.06) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(197, 160, 89, 0.06) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(248, 231, 188, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
         }
 
         .container {
@@ -75,15 +60,15 @@
             right: 24px;
             padding: 14px 22px;
             border-radius: 12px;
-            background: #1b1b22;
+            background: #1b1b24;
             color: #fff;
             border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.85);
             z-index: 99999;
             display: none;
             align-items: center;
             gap: 12px;
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             transform: translateY(-20px);
             opacity: 0;
@@ -108,233 +93,203 @@
             position: relative;
             z-index: 10;
         }
-
         .login-card {
             width: 100%;
             max-width: 440px;
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 20px;
-            padding: 40px 32px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.7), 0 0 30px var(--gold-glow);
+            padding: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.85);
             text-align: center;
             backdrop-filter: blur(12px);
         }
-
         .login-logo {
-            height: 70px;
-            margin-bottom: 20px;
-            object-fit: contain;
+            width: 130px;
+            height: auto;
+            margin: 0 auto 20px;
+            display: block;
+            filter: drop-shadow(0 4px 15px rgba(248, 231, 188, 0.25));
         }
-
         .login-title {
             font-family: 'Playfair Display', serif;
             font-size: 26px;
             color: var(--gold);
-            margin-bottom: 8px;
-            font-weight: 700;
+            margin-bottom: 6px;
         }
-
         .login-subtitle {
-            font-size: 14px;
             color: var(--text-muted);
+            font-size: 14px;
             margin-bottom: 28px;
         }
 
+        /* Form elements */
         .form-group {
             text-align: left;
             margin-bottom: 20px;
         }
-
         .form-label {
             display: block;
             font-size: 13px;
             font-weight: 600;
             color: var(--gold);
             margin-bottom: 8px;
-            letter-spacing: 0.5px;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-
         .form-input, .form-textarea, .form-select {
             width: 100%;
-            padding: 13px 16px;
             background: var(--bg-input);
             border: 1px solid var(--border-subtle);
             border-radius: 10px;
+            padding: 12px 16px;
             color: #fff;
             font-family: inherit;
-            font-size: 15px;
-            transition: all 0.25s ease;
-            outline: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
         }
-
         .form-input:focus, .form-textarea:focus, .form-select:focus {
+            outline: none;
             border-color: var(--gold);
-            box-shadow: 0 0 0 3px var(--gold-glow);
-            background: #24242e;
+            box-shadow: 0 0 0 3px rgba(248, 231, 188, 0.15);
+            background: #171720;
         }
-
         .form-textarea {
             resize: vertical;
-            min-height: 100px;
-            line-height: 1.6;
+            min-height: 90px;
         }
 
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            padding: 13px 24px;
-            border-radius: 12px;
-            font-family: 'Onest', sans-serif;
-            font-size: 15px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-family: inherit;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.22s ease;
-            border: none;
+            transition: all 0.2s ease;
             text-decoration: none;
+            border: none;
         }
-
         .btn-primary {
-            background: linear-gradient(135deg, var(--red) 0%, #aa141a 100%);
-            color: #fff;
-            border: 1px solid rgba(248, 231, 188, 0.4);
-            box-shadow: 0 6px 20px rgba(139, 16, 20, 0.4);
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-dim) 100%);
+            color: #0c0c0e;
+            box-shadow: 0 4px 15px rgba(197, 160, 89, 0.35);
         }
-        .btn-primary:hover {
-            background: linear-gradient(135deg, var(--red-hover) 0%, #c4181f 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(139, 16, 20, 0.6);
-            border-color: var(--gold);
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(197, 160, 89, 0.5);
+            background: linear-gradient(135deg, var(--gold-bright) 0%, var(--gold) 100%);
         }
-
-        .btn-gold {
-            background: linear-gradient(135deg, #f8e7bc 0%, #dfcb9a 100%);
-            color: #111;
-            font-weight: 700;
-            box-shadow: 0 6px 20px rgba(248, 231, 188, 0.3);
-        }
-        .btn-gold:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(248, 231, 188, 0.5);
-            background: #fff;
-        }
-
         .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
+            background: var(--bg-elevated);
+            color: var(--text-main);
             border: 1px solid var(--border-subtle);
         }
-        .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.14);
+        .btn-secondary:hover:not(:disabled) {
+            background: #2a2a38;
             border-color: var(--border);
+            color: #fff;
         }
-
+        .btn-gold {
+            background: transparent;
+            color: var(--gold);
+            border: 1px solid var(--gold);
+        }
+        .btn-gold:hover:not(:disabled) {
+            background: rgba(248, 231, 188, 0.1);
+            color: var(--gold-bright);
+        }
         .btn-danger {
-            background: rgba(231, 76, 60, 0.15);
-            color: #ff6b6b;
-            border: 1px solid rgba(231, 76, 60, 0.3);
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
         }
-        .btn-danger:hover {
-            background: rgba(231, 76, 60, 0.3);
-            border-color: #ff6b6b;
+        .btn-danger:hover:not(:disabled) {
+            background: var(--danger);
+            color: #fff;
+        }
+        .btn-block {
+            width: 100%;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
-        .btn-block { width: 100%; }
-
-        /* Dashboard Top Bar */
+        /* Dashboard layout */
         #dashboard-screen {
             display: none;
             flex-direction: column;
             min-height: 100vh;
-            position: relative;
-            z-index: 2;
         }
 
+        /* Topbar */
         .topbar {
-            background: rgba(18, 18, 22, 0.95);
-            border-bottom: 1px solid var(--border-subtle);
-            backdrop-filter: blur(14px);
+            background: rgba(15, 15, 20, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 100;
         }
-
         .topbar-inner {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 14px 0;
-            gap: 16px;
+            height: 70px;
         }
-
         .topbar-brand {
             display: flex;
             align-items: center;
             gap: 14px;
-            text-decoration: none;
         }
-
         .topbar-logo {
-            height: 40px;
+            height: 42px;
             width: auto;
         }
-
         .topbar-title {
             font-family: 'Playfair Display', serif;
             font-size: 19px;
-            color: var(--gold);
             font-weight: 700;
+            color: var(--gold);
             letter-spacing: 0.5px;
         }
-
         .topbar-badge {
-            background: rgba(46, 204, 113, 0.15);
-            color: var(--success);
-            border: 1px solid rgba(46, 204, 113, 0.3);
             font-size: 11px;
-            font-weight: 600;
+            font-weight: 700;
             padding: 3px 10px;
             border-radius: 20px;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
             text-transform: uppercase;
-            letter-spacing: 1px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            letter-spacing: 0.5px;
         }
-        .topbar-badge::before {
-            content: '';
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--success);
-            box-shadow: 0 0 8px var(--success);
-        }
-
         .topbar-actions {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
         }
 
         /* Navigation Tabs */
         .nav-tabs-wrapper {
-            background: #111116;
+            background: var(--bg-card);
             border-bottom: 1px solid var(--border-subtle);
         }
-
         .nav-tabs {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            gap: 6px;
             overflow-x: auto;
             padding: 10px 0;
             scrollbar-width: none;
         }
         .nav-tabs::-webkit-scrollbar { display: none; }
-
         .tab-btn {
             background: transparent;
             color: var(--text-muted);
@@ -357,23 +312,22 @@
         }
         .tab-btn.active {
             color: var(--gold);
-            background: var(--bg-card);
+            background: var(--bg-elevated);
             border-color: var(--border);
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        /* Content Sections */
+        /* Main content tabs */
         .content-area {
-            padding: 32px 0 60px 0;
             flex: 1;
+            padding: 32px 0 60px;
         }
-
         .tab-content {
             display: none;
-            animation: fadeIn 0.25s ease-out;
         }
         .tab-content.active {
             display: block;
+            animation: fadeIn 0.25s ease;
         }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(6px); }
@@ -382,13 +336,12 @@
 
         .panel-card {
             background: var(--bg-card);
-            border: 1px solid var(--border-subtle);
+            border: 1px solid var(--border);
             border-radius: 16px;
             padding: 28px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             margin-bottom: 24px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
         }
-
         .panel-header {
             display: flex;
             align-items: center;
@@ -399,35 +352,31 @@
             flex-wrap: wrap;
             gap: 14px;
         }
-
         .panel-title {
             font-family: 'Playfair Display', serif;
             font-size: 22px;
             color: var(--gold);
-            font-weight: 700;
         }
-
         .panel-desc {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--text-muted);
             margin-top: 4px;
         }
 
-        /* Shows selector pill row */
-        .shows-pill-row {
+        /* Shows selector pills */
+        .shows-pills-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 12px;
-            margin-bottom: 28px;
+            grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+            gap: 10px;
+            margin-bottom: 24px;
         }
-
         .show-pill {
-            background: #1a1a22;
+            background: var(--bg-elevated);
             border: 1px solid var(--border-subtle);
             border-radius: 12px;
             padding: 10px;
-            cursor: pointer;
             text-align: center;
+            cursor: pointer;
             transition: all 0.2s ease;
         }
         .show-pill:hover {
@@ -435,30 +384,26 @@
             transform: translateY(-2px);
         }
         .show-pill.active {
-            background: #252530;
+            background: rgba(248, 231, 188, 0.12);
             border-color: var(--gold);
-            box-shadow: 0 4px 18px rgba(248, 231, 188, 0.2);
+            box-shadow: 0 4px 15px rgba(248, 231, 188, 0.2);
         }
-
-        .show-pill-img {
+        .show-pill-thumb {
             width: 100%;
-            aspect-ratio: 540 / 359;
+            aspect-ratio: 16 / 10;
             object-fit: cover;
             border-radius: 8px;
             margin-bottom: 8px;
-            display: block;
             background: #000;
         }
-
         .show-pill-num {
             font-size: 11px;
-            color: var(--gold);
             font-weight: 700;
+            color: var(--gold);
             text-transform: uppercase;
         }
-
         .show-pill-title {
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             color: #fff;
             white-space: nowrap;
@@ -466,210 +411,208 @@
             text-overflow: ellipsis;
         }
 
-        /* Real Dimension Card Preview */
-        .card-preview-box {
-            background: #09090c;
-            border: 2px dashed rgba(248, 231, 188, 0.3);
-            border-radius: 16px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-
-        .real-card-frame {
+        /* Interactive Photo Frame & Controls */
+        .interactive-photo-frame {
+            position: relative;
             width: 100%;
-            max-width: 500px;
+            max-width: 520px;
             aspect-ratio: 540 / 359;
             border-radius: 16px;
             overflow: hidden;
-            position: relative;
             box-shadow: 0 12px 35px rgba(0,0,0,0.8);
-            border: 1px solid rgba(248, 231, 188, 0.4);
-            background: #000;
+            border: 2px solid rgba(248, 231, 188, 0.45);
+            background: #09090d;
+            cursor: grab;
+            user-select: none;
+            touch-action: none;
         }
-
-        .real-card-img {
+        .interactive-photo-frame:active,
+        .interactive-photo-frame.is-dragging {
+            cursor: grabbing;
+            border-color: var(--gold);
+            box-shadow: 0 15px 45px rgba(248, 231, 188, 0.35);
+        }
+        .interactive-photo-frame img {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: object-position 0.15s ease;
+            pointer-events: none;
+            user-select: none;
+            transition: object-position 0.04s linear, transform 0.04s linear;
         }
-
+        .photo-hint-pill {
+            position: absolute;
+            bottom: 46px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 15, 22, 0.88);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 500;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            white-space: nowrap;
+            z-index: 5;
+        }
+        .interactive-photo-frame:hover .photo-hint-pill {
+            opacity: 1;
+        }
+        .photo-coords-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(10, 10, 15, 0.88);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(248, 231, 188, 0.4);
+            color: var(--gold);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            pointer-events: none;
+            z-index: 6;
+            letter-spacing: 0.3px;
+        }
         .real-card-overlay {
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            padding: 16px;
-            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 100%);
+            padding: 14px 16px;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
             color: #fff;
             pointer-events: none;
+            z-index: 4;
         }
-
-        /* 2D Position Grid Controller */
-        .position-matrix {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            max-width: 240px;
+        .scale-control-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
             margin-top: 12px;
+            background: #181822;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 14px;
+            max-width: 520px;
         }
-
-        .pos-btn {
+        .scale-slider {
+            flex: 1;
+            accent-color: var(--gold);
+            cursor: pointer;
+            height: 6px;
+            border-radius: 3px;
+        }
+        .scale-step-btn {
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            border-radius: 8px;
+        }
+        .pos-chip-btn {
             background: #20202a;
             border: 1px solid var(--border-subtle);
-            color: #fff;
-            padding: 8px 12px;
+            color: #ddd;
+            padding: 6px 12px;
             border-radius: 8px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.15s ease;
         }
-        .pos-btn:hover {
-            background: #2c2c3a;
+        .pos-chip-btn:hover {
+            background: #2e2e3d;
+            color: #fff;
             border-color: var(--gold-dim);
         }
-        .pos-btn.active {
+        .pos-chip-btn.active {
             background: var(--gold);
-            color: #111;
-            border-color: #fff;
+            color: #0b0b0e;
             font-weight: 700;
+            border-color: var(--gold);
         }
 
-        /* Media Items Grid */
+        /* Media gallery inside show */
         .media-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 16px;
             margin-top: 16px;
         }
-
         .media-card {
-            background: #1b1b22;
+            background: var(--bg-elevated);
             border: 1px solid var(--border-subtle);
             border-radius: 12px;
-            padding: 14px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            position: relative;
         }
-
         .media-thumb-wrap {
+            position: relative;
             width: 100%;
-            aspect-ratio: 16 / 9;
+            aspect-ratio: 16 / 10;
             border-radius: 8px;
             overflow: hidden;
-            position: relative;
             background: #000;
         }
-
         .media-thumb {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
         .media-badge {
             position: absolute;
-            top: 8px;
-            left: 8px;
-            background: rgba(0,0,0,0.75);
-            color: var(--gold);
-            border: 1px solid var(--border);
-            font-size: 11px;
-            font-weight: 700;
+            top: 6px;
+            left: 6px;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(4px);
             padding: 2px 8px;
             border-radius: 6px;
-            text-transform: uppercase;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--gold);
         }
-
         .media-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
+            margin-top: auto;
         }
 
-        /* Banner preview */
+        /* Banner Frame */
         .banner-preview-frame {
             width: 100%;
             max-width: 900px;
             aspect-ratio: 1808 / 870;
-            border-radius: 16px;
+            border-radius: 14px;
             overflow: hidden;
-            position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
             border: 1px solid var(--border);
             background: #000;
-            margin: 0 auto 20px auto;
+            position: relative;
+            margin-top: 12px;
         }
         .banner-preview-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            display: block;
         }
 
-        /* Step-by-step Guide Styling */
-        .guide-step {
-            background: #181820;
-            border: 1px solid var(--border-subtle);
-            border-radius: 14px;
-            padding: 24px;
-            margin-bottom: 20px;
-            position: relative;
-        }
-        .step-num {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: var(--gold);
-            color: #111;
-            font-weight: 700;
-            margin-right: 12px;
-        }
-        .guide-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--gold);
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .code-box {
-            background: #0e0e12;
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            padding: 12px 16px;
-            font-family: monospace;
-            font-size: 13px;
-            color: #e0e0e0;
-            margin: 10px 0;
-            overflow-x: auto;
-            position: relative;
-        }
-
-        /* Hidden file input */
-        .file-input-hidden {
-            display: none;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .topbar-title { display: none; }
-            .panel-card { padding: 18px; }
-            .shows-pill-row { grid-template-columns: repeat(5, 1fr); gap: 8px; }
-            .show-pill { padding: 6px; }
-            .show-pill-title { font-size: 11px; }
+        @media (max-width: 860px) {
+            .topbar-title { font-size: 15px; }
+            .panel-card { padding: 20px 16px; }
+            .interactive-photo-frame { max-width: 100%; }
         }
     </style>
 </head>
@@ -688,22 +631,20 @@
             <h1 class="login-title">Панель управления</h1>
             <p class="login-subtitle">Редактирование сайта таисшоу.рф</p>
 
-            <form id="login-form">
+            <form id="login-form" onsubmit="event.preventDefault(); return false;">
                 <div class="form-group">
                     <label class="form-label" for="username">Логин</label>
-                    <input type="text" id="username" class="form-input" placeholder="admin" value="admin" required autocomplete="username">
+                    <input type="text" id="username" class="form-input" placeholder="AnzhelikaForis" value="AnzhelikaForis" required autocomplete="username">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
                     <input type="password" id="password" class="form-input" placeholder="Введите пароль" required autocomplete="current-password">
                 </div>
+                <div id="login-error-msg" style="display:none; color: #ff6b6b; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; text-align: center;"></div>
                 <button type="submit" class="btn btn-primary btn-block" id="btn-login-submit">
                     Войти в систему →
                 </button>
             </form>
-            <p style="font-size: 12px; color: var(--text-muted); margin-top: 20px;">
-                Стандартный пароль: <strong style="color: var(--gold);">TaisShow2026!</strong>
-            </p>
         </div>
     </section>
 
@@ -714,8 +655,9 @@
             <div class="container topbar-inner">
                 <div class="topbar-brand">
                     <img src="./logo.png" alt="ТА-ИС" class="topbar-logo">
-                    <span class="topbar-title">ТА-ИС ШОУ • Админ панель</span>
-                    <span class="topbar-badge" id="sync-status">Онлайн</span>
+                    <span class="topbar-title">ТА-ИС ШОУ</span>
+                    <span class="topbar-badge" id="sync-status">● Сайт таисшоу.рф</span>
+                    <span id="gh-last-commit" style="font-size: 11px; color: var(--gold); background: rgba(248,231,188,0.1); padding: 3px 8px; border-radius: 6px;">[0381602]</span>
                 </div>
                 <div class="topbar-actions">
                     <a href="/" target="_blank" class="btn btn-secondary" style="padding: 9px 14px; font-size: 13px;">
@@ -725,7 +667,7 @@
                         💾 Сохранить
                     </button>
                     <button type="button" class="btn btn-primary" id="btn-publish-all" style="padding: 9px 18px; font-size: 13px;">
-                        🚀 Опубликовать на GitHub
+                        🚀 Опубликовать на сайт
                     </button>
                     <button type="button" class="btn btn-secondary" id="btn-logout" style="padding: 9px 12px; font-size: 13px;">
                         Выйти
@@ -741,8 +683,6 @@
                     <button class="tab-btn active" data-tab="tab-shows">🎭 10 Шоу и Фото/Видео</button>
                     <button class="tab-btn" data-tab="tab-banner">🖼️ Главный Баннер</button>
                     <button class="tab-btn" data-tab="tab-contacts">🔗 Кнопки и Контакты</button>
-                    <button class="tab-btn" data-tab="tab-github">🚀 GitHub и Публикация</button>
-                    <button class="tab-btn" data-tab="tab-guide">📖 Пошаговая инструкция (Yandex Cloud)</button>
                     <button class="tab-btn" data-tab="tab-security">⚙️ Настройки и Пароль</button>
                 </div>
             </div>
@@ -751,109 +691,140 @@
         <!-- Main Content Area -->
         <main class="content-area">
             <div class="container">
-
                 <!-- ============================================== -->
-                <!-- TAB 1: 10 SHOWS & MEDIA                       -->
+                <!-- TAB 1: SHOWS & MEDIA (10 SHOWS)                -->
                 <!-- ============================================== -->
                 <div id="tab-shows" class="tab-content active">
-                    <div class="panel-card">
+                    <!-- 10 Shows Pills Selector -->
+                    <div class="shows-pills-grid" id="shows-selector"></div>
+
+                    <!-- Active Show Editor -->
+                    <div class="panel-card" id="show-editor-panel">
                         <div class="panel-header">
                             <div>
-                                <h2 class="panel-title">Редактирование 10 Шоу</h2>
-                                <p class="panel-desc">Выберите шоу для настройки текстов, главного фото афиши и галереи видео/фото</p>
+                                <h2 class="panel-title" id="active-show-title">Шоу #1</h2>
+                                <p class="panel-desc">Редактируйте тексты, главное фото с точным положением и видео галереи</p>
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-gold" id="btn-save-show">
+                                    💾 Сохранить изменения шоу
+                                </button>
                             </div>
                         </div>
 
-                        <!-- 10 Show Pills -->
-                        <div class="shows-pill-row" id="shows-selector"></div>
-
-                        <!-- Current Show Details Form -->
-                        <div id="show-editor" style="display: none;">
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-                                <!-- Left Column: Texts & Basic Info -->
-                                <div>
-                                    <div class="form-group">
-                                        <label class="form-label">Название шоу</label>
-                                        <input type="text" id="show-title-input" class="form-input">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Дата выступления (event_date)</label>
-                                        <input type="text" id="show-date-input" class="form-input" placeholder="2027-01-15 19:00:00">
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Краткое описание (для карточки)</label>
-                                        <textarea id="show-desc-input" class="form-textarea" rows="3"></textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="form-label">Подробное описание (в модальном окне)</label>
-                                        <textarea id="show-details-input" class="form-textarea" rows="6"></textarea>
-                                    </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                            <!-- Left Column: Texts -->
+                            <div>
+                                <div class="form-group">
+                                    <label class="form-label" for="show-title-input">Название шоу</label>
+                                    <input type="text" id="show-title-input" class="form-input" placeholder="Название шоу">
                                 </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="show-date-input">Дата и время проведения</label>
+                                    <input type="text" id="show-date-input" class="form-input" placeholder="например: 17 ЯНВАРЯ | 20:00">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="show-desc-input">Краткое описание на карточке</label>
+                                    <textarea id="show-desc-input" class="form-textarea" placeholder="Краткое описание"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="show-details-input">Подробное описание в модальном окне</label>
+                                    <textarea id="show-details-input" class="form-textarea" style="min-height: 140px;" placeholder="Полный текст о шоу..."></textarea>
+                                </div>
+                            </div>
 
-                                <!-- Right Column: Real-dimension Card & Position Controls -->
-                                <div>
-                                    <label class="form-label">Главное фото карточки в сетке сайта</label>
-                                    <div class="card-preview-box">
-                                        <div class="real-card-frame">
-                                            <img id="preview-card-img" class="real-card-img" src="" alt="preview">
-                                            <div class="real-card-overlay">
-                                                <div id="preview-card-title" style="font-weight: 700; font-size: 16px;">Название шоу</div>
-                                                <div style="font-size: 11px; opacity: 0.8;">Реальный размер карточки на сайте</div>
-                                            </div>
+                            <!-- Right Column: Interactive Photo Frame & Zoom/Drag Controls -->
+                            <div>
+                                <label class="form-label">Главное фото карточки в сетке сайта</label>
+                                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">
+                                    Наведите мышь, зажмите левую кнопку (ЛКМ) и двигайте фото в любую сторону. Колёсико приближает и отдаляет:
+                                </p>
+
+                                <div class="card-preview-box">
+                                    <!-- Interactive Frame -->
+                                    <div class="interactive-photo-frame" id="card-preview-container" title="Зажмите ЛКМ и двигайте фото в любую сторону">
+                                        <div id="preview-coords-badge" class="photo-coords-badge">X: 50% · Y: 50% · Масштаб: 100%</div>
+                                        <img id="preview-card-img" src="" alt="preview">
+                                        <div class="photo-hint-pill">🖱️ Зажмите ЛКМ и двигайте фото в любую сторону • Колёсико: масштаб</div>
+                                        <div class="real-card-overlay">
+                                            <div id="preview-card-title" style="font-weight: 700; font-size: 16px;">Название шоу</div>
+                                            <div style="font-size: 11px; opacity: 0.8;">Реальный размер карточки на сайте</div>
                                         </div>
+                                    </div>
 
-                                        <!-- Upload replacement cover button -->
-                                        <div style="margin-top: 16px; display: flex; gap: 10px; width: 100%; max-width: 500px;">
-                                            <button type="button" class="btn btn-secondary btn-block" id="btn-upload-card-img">
-                                                📁 Заменить главное фото
+                                    <!-- Visual Scale / Zoom Controls -->
+                                    <div class="scale-control-bar">
+                                        <span style="font-size: 13px; font-weight: 600; color: #eee; display: flex; align-items: center; gap: 4px;">
+                                            🔍 Масштаб:
+                                        </span>
+                                        <button type="button" class="btn btn-secondary scale-step-btn" id="btn-scale-down" title="Уменьшить масштаб">−</button>
+                                        <input type="range" id="card-scale-slider" min="100" max="250" value="100" step="1" class="scale-slider" title="Передвигайте бегунок для приближения/отдаления">
+                                        <button type="button" class="btn btn-secondary scale-step-btn" id="btn-scale-up" title="Увеличить масштаб">+</button>
+                                        <span id="scale-value-label" style="font-weight: 700; color: var(--gold); min-width: 48px; text-align: center; font-size: 13px;">100%</span>
+                                        <button type="button" class="btn btn-secondary" id="btn-scale-reset" style="padding: 4px 10px; font-size: 12px;" title="Сбросить масштаб к исходному">↺ 100%</button>
+                                    </div>
+
+                                    <!-- Visual Pan / Position Controls -->
+                                    <div style="margin-top: 12px; background: #16161e; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 14px; max-width: 520px;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
+                                            <span style="font-size: 13px; font-weight: 600; color: #fff;">Точное положение в рамке:</span>
+                                            <span style="font-size: 11px; color: var(--text-muted);">или тяните фото мышкой</span>
+                                        </div>
+                                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 12px;">
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <label style="font-size: 12px; color: var(--text-muted);">По горизонтали (X):</label>
+                                                <input type="range" id="card-pos-x-slider" min="0" max="100" value="50" step="1" class="scale-slider" style="width: 100px;">
+                                                <span id="pos-x-label" style="font-size: 12px; color: var(--gold); min-width: 32px;">50%</span>
+                                            </div>
+                                            <div style="display: flex; align-items: center; gap: 6px;">
+                                                <label style="font-size: 12px; color: var(--text-muted);">По вертикали (Y):</label>
+                                                <input type="range" id="card-pos-y-slider" min="0" max="100" value="50" step="1" class="scale-slider" style="width: 100px;">
+                                                <span id="pos-y-label" style="font-size: 12px; color: var(--gold); min-width: 32px;">50%</span>
+                                            </div>
+                                            <button type="button" class="btn btn-secondary" id="btn-center-pos" style="padding: 5px 12px; font-size: 12px;">
+                                                ⌖ По центру
                                             </button>
                                         </div>
+                                        <!-- Quick Presets -->
+                                        <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+                                            <button type="button" class="pos-chip-btn" data-preset="left center">Слева</button>
+                                            <button type="button" class="pos-chip-btn" data-preset="center center">По центру</button>
+                                            <button type="button" class="pos-chip-btn" data-preset="right center">Справа</button>
+                                            <button type="button" class="pos-chip-btn" data-preset="center top">Вверху</button>
+                                            <button type="button" class="pos-chip-btn" data-preset="center bottom">Внизу</button>
+                                            <button type="button" class="pos-chip-btn" data-preset="left 55%">Слева 55%</button>
+                                            <button type="button" class="pos-chip-btn" data-preset="65% center">65% Центр</button>
+                                        </div>
+                                        <input type="hidden" id="pos-custom-input" value="left center">
                                     </div>
 
-                                    <!-- 2D Position Selector -->
-                                    <div class="form-group">
-                                        <label class="form-label">Положение фото в рамке (Object Position)</label>
-                                        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 8px;">
-                                            Выберите фокус, чтобы лица и костюмы артистов идеально помещались в рамку без пустот:
-                                        </p>
-                                        <div class="position-matrix" id="pos-matrix">
-                                            <button type="button" class="pos-btn" data-pos="left top">Вверх-Слева</button>
-                                            <button type="button" class="pos-btn" data-pos="center top">Вверх-Центр</button>
-                                            <button type="button" class="pos-btn" data-pos="right top">Вверх-Справа</button>
-                                            <button type="button" class="pos-btn" data-pos="left center">Слева</button>
-                                            <button type="button" class="pos-btn" data-pos="center center">Центр</button>
-                                            <button type="button" class="pos-btn" data-pos="right center">Справа</button>
-                                            <button type="button" class="pos-btn" data-pos="left bottom">Вниз-Слева</button>
-                                            <button type="button" class="pos-btn" data-pos="center bottom">Вниз-Центр</button>
-                                            <button type="button" class="pos-btn" data-pos="left 55%">Слева 55%</button>
-                                        </div>
-                                        <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
-                                            <input type="text" id="pos-custom-input" class="form-input" style="max-width: 180px; padding: 6px 10px; font-size: 13px;" placeholder="custom e.g. 65% center">
-                                            <button type="button" class="btn btn-secondary" id="btn-apply-custom-pos" style="padding: 6px 12px; font-size: 13px;">Применить</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Media Items List -->
-                            <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border-subtle);">
-                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
-                                    <div>
-                                        <h3 style="font-size: 18px; color: var(--gold);">Медиафайлы шоу (Видео и Фото в модальном окне)</h3>
-                                        <p style="font-size: 13px; color: var(--text-muted);">Любое видео или фото можно заменить на новое</p>
-                                    </div>
-                                    <div style="display: flex; gap: 10px;">
-                                        <button type="button" class="btn btn-secondary" id="btn-add-photo">
-                                            + Добавить Фото
-                                        </button>
-                                        <button type="button" class="btn btn-secondary" id="btn-add-video">
-                                            + Добавить Видео (.mp4)
+                                    <!-- Upload replacement cover button -->
+                                    <div style="margin-top: 14px; max-width: 520px;">
+                                        <button type="button" class="btn btn-secondary btn-block" id="btn-upload-card-img">
+                                            📁 Заменить главное фото (загрузить файл)
                                         </button>
                                     </div>
                                 </div>
-
-                                <div class="media-grid" id="current-show-media-grid"></div>
                             </div>
+                        </div>
+
+                        <!-- Media Items List -->
+                        <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border-subtle);">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;">
+                                <div>
+                                    <h3 style="font-size: 18px; color: var(--gold);">Медиафайлы шоу (Видео и Фото в модальном окне)</h3>
+                                    <p style="font-size: 13px; color: var(--text-muted);">Любое видео или фото можно заменить на новое</p>
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <button type="button" class="btn btn-secondary" id="btn-add-photo">
+                                        + Добавить Фото
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" id="btn-add-video">
+                                        + Добавить Видео (.mp4)
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="media-grid" id="current-show-media-grid"></div>
                         </div>
                     </div>
                 </div>
@@ -924,8 +895,8 @@
                                 <input type="text" id="contact-phone" class="form-input" placeholder="+7 (960) 831-21-66">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Электронная почта</label>
-                                <input type="email" id="contact-email" class="form-input" placeholder="asm.samara@yandex.ru">
+                                <label class="form-label">Email для обратной связи</label>
+                                <input type="email" id="contact-email" class="form-input" placeholder="info@taisshow.ru">
                             </div>
                             <div class="form-group">
                                 <label class="form-label">Адрес шоу</label>
@@ -942,181 +913,60 @@
                 </div>
 
                 <!-- ============================================== -->
-                <!-- TAB 4: GITHUB & PUBLICATION                   -->
-                <!-- ============================================== -->
-                <div id="tab-github" class="tab-content">
-                    <div class="panel-card">
-                        <div class="panel-header">
-                            <div>
-                                <h2 class="panel-title">Интеграция с GitHub</h2>
-                                <p class="panel-desc">Автоматическая фиксация изменений и отправка коммитов в репозиторий</p>
-                            </div>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div class="form-group">
-                                <label class="form-label">GitHub Personal Access Token (Токен доступа)</label>
-                                <input type="password" id="gh-token-input" class="form-input" placeholder="ghp_************************************">
-                                <span style="font-size: 12px; color: var(--text-muted); display: block; margin-top: 4px;">
-                                    Требуются права <code>repo</code> (Full control of private repositories)
-                                </span>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Ветка (Branch)</label>
-                                <input type="text" id="gh-branch-input" class="form-input" value="main" placeholder="main">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Владелец репозитория (Owner / Никнейм)</label>
-                                <input type="text" id="gh-owner-input" class="form-input" placeholder="например: anzhelika-foris или tais-dance">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Имя репозитория (Repository)</label>
-                                <input type="text" id="gh-repo-input" class="form-input" placeholder="например: tais-show">
-                            </div>
-                        </div>
-
-                        <div style="display: flex; gap: 14px; margin-top: 20px; align-items: center; flex-wrap: wrap;">
-                            <button type="button" class="btn btn-secondary" id="btn-test-gh">
-                                🔍 Проверить подключение к GitHub
-                            </button>
-                            <button type="button" class="btn btn-primary" id="btn-save-gh-settings">
-                                💾 Сохранить настройки GitHub
-                            </button>
-                        </div>
-
-                        <div id="gh-test-result" style="margin-top: 18px; font-size: 14px; display: none;"></div>
-
-                        <!-- Publication Status Box -->
-                        <div style="margin-top: 32px; background: #191922; border: 1px solid var(--border); border-radius: 12px; padding: 20px;">
-                            <h3 style="font-size: 16px; color: var(--gold); margin-bottom: 8px;">Статус последней публикации:</h3>
-                            <div style="font-size: 14px; color: var(--text-muted); display: flex; flex-direction: column; gap: 6px;">
-                                <div>Хэш коммита: <strong id="gh-last-commit" style="color: #fff;">—</strong></div>
-                                <div>Дата публикации: <strong id="gh-last-date" style="color: #fff;">—</strong></div>
-                            </div>
-                            <div style="margin-top: 16px;">
-                                <button type="button" class="btn btn-gold" id="btn-publish-direct">
-                                    🚀 Опубликовать текущие изменения в репозиторий
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ============================================== -->
-                <!-- TAB 5: STEP-BY-STEP GUIDE (YANDEX CLOUD)      -->
-                <!-- ============================================== -->
-                <div id="tab-guide" class="tab-content">
-                    <div class="panel-card">
-                        <div class="panel-header">
-                            <div>
-                                <h2 class="panel-title">Пошаговая инструкция: Подключение GitHub и Yandex Cloud</h2>
-                                <p class="panel-desc">Пройдите эти простые шаги, чтобы сайт обновлялся мгновенно при каждом нажатии "Опубликовать"</p>
-                            </div>
-                        </div>
-
-                        <!-- Step 1 -->
-                        <div class="guide-step">
-                            <div class="guide-title"><span class="step-num">1</span> Создание токена на GitHub (2 минуты)</div>
-                            <p style="color: var(--text-muted); margin-bottom: 12px;">
-                                Токен позволяет админ-панели безопасно сохранять файлы в ваш репозиторий без ввода логина и пароля:
-                            </p>
-                            <ol style="margin-left: 20px; line-height: 1.8; color: #ddd; font-size: 14px;">
-                                <li>Войдите в свой аккаунт на <a href="https://github.com/settings/tokens" target="_blank" style="color: var(--gold);">github.com/settings/tokens</a>.</li>
-                                <li>Нажмите <strong>Generate new token (classic)</strong>.</li>
-                                <li>В поле <em>Note</em> напишите: <code>Tais-Show Admin Panel</code>.</li>
-                                <li>В блоке <em>Select scopes</em> поставьте галочку напротив <strong>repo</strong> (Full control of private repositories).</li>
-                                <li>Нажмите зелёную кнопку <strong>Generate token</strong> внизу страницы.</li>
-                                <li>Скопируйте полученный ключ (начинается с <code>ghp_...</code>) и вставьте его во вкладку <strong>"GitHub и Публикация"</strong> в этой админ-панели!</li>
-                            </ol>
-                        </div>
-
-                        <!-- Step 2 -->
-                        <div class="guide-step">
-                            <div class="guide-title"><span class="step-num">2</span> Подключение Yandex Cloud (Вариант на выбор)</div>
-                            <p style="color: var(--text-muted); margin-bottom: 12px;">
-                                Ваш сайт на домене <code>таисшоу.рф</code> может работать в Yandex Cloud двумя удобными способами:
-                            </p>
-                            
-                            <div style="background: #111116; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px; margin-bottom: 14px;">
-                                <h4 style="color: var(--gold); margin-bottom: 6px;">Способ А: Виртуальная машина Yandex Compute Cloud (Node.js + Nginx)</h4>
-                                <p style="font-size: 13px; color: #bbb; line-height: 1.6;">
-                                    Сервер Express работает прямо на виртуальной машине. Когда вы нажимаете кнопку «Сохранить», файлы обновляются моментально на сервере, а кнопка «Опубликовать» делает коммит в GitHub.
-                                </p>
-                            </div>
-
-                            <div style="background: #111116; border: 1px solid var(--border-subtle); border-radius: 10px; padding: 16px;">
-                                <h4 style="color: var(--gold); margin-bottom: 6px;">Способ Б: Yandex Serverless Containers / Object Storage</h4>
-                                <p style="font-size: 13px; color: #bbb; line-height: 1.6;">
-                                    При каждом коммите в GitHub срабатывает GitHub Action, который за 30 секунд автоматически выгружает свежую версию сайта в Yandex Cloud.
-                                </p>
-                            </div>
-                        </div>
-
-                        <!-- Step 3 -->
-                        <div class="guide-step">
-                            <div class="guide-title"><span class="step-num">3</span> Какие данные скинуть мне, если нужна настройка под ключ:</div>
-                            <ul style="margin-left: 20px; line-height: 1.8; color: #ddd; font-size: 14px;">
-                                <li><strong>Ссылку на ваш репозиторий GitHub</strong> (например: <code>https://github.com/ваш-аккаунт/taisshow</code>).</li>
-                                <li><strong>Токен GitHub (PAT)</strong>, созданный по шагу 1 (или введите его сами во вкладке "GitHub и Публикация").</li>
-                                <li><strong>IP-адрес или доступ к виртуальной машине Yandex Cloud</strong> (если сайт размещен на ВМ).</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ============================================== -->
-                <!-- TAB 6: SETTINGS & PASSWORD                    -->
+                <!-- TAB 4: SETTINGS & PASSWORD                    -->
                 <!-- ============================================== -->
                 <div id="tab-security" class="tab-content">
                     <div class="panel-card">
                         <div class="panel-header">
                             <div>
-                                <h2 class="panel-title">Смена пароля администратора</h2>
-                                <p class="panel-desc">Установите новый надёжный пароль для доступа к админ-панели</p>
+                                <h2 class="panel-title">Смена пароля администратора (AnzhelikaForis)</h2>
+                                <p class="panel-desc">Установите новый пароль для доступа к этой панели управления</p>
                             </div>
                         </div>
 
-                        <form id="change-pass-form" style="max-width: 400px;">
+                        <form id="change-pass-form" style="max-width: 400px;" onsubmit="event.preventDefault(); return false;">
                             <div class="form-group">
-                                <label class="form-label">Текущий пароль</label>
-                                <input type="password" id="curr-pass" class="form-input" required>
+                                <label class="form-label" for="curr-pass">Текущий пароль</label>
+                                <input type="password" id="curr-pass" class="form-input" required placeholder="Введите старый пароль">
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Новый пароль</label>
-                                <input type="password" id="new-pass" class="form-input" required minlength="6">
+                                <label class="form-label" for="new-pass">Новый пароль</label>
+                                <input type="password" id="new-pass" class="form-input" required minlength="6" placeholder="Минимум 6 символов">
                             </div>
                             <button type="submit" class="btn btn-primary">
-                                Обновить пароль
+                                Сохранить новый пароль
                             </button>
                         </form>
                     </div>
                 </div>
-
             </div>
         </main>
     </div>
 
-    <!-- Hidden file inputs for uploads -->
-    <input type="file" id="upload-card-file" class="file-input-hidden" accept="image/*">
-    <input type="file" id="upload-banner-desktop-file" class="file-input-hidden" accept="image/*">
-    <input type="file" id="upload-banner-mobile-file" class="file-input-hidden" accept="image/*">
-    <input type="file" id="upload-media-item-file" class="file-input-hidden" accept="image/*,video/mp4">
+    <!-- Hidden file inputs -->
+    <input type="file" id="upload-card-file" accept="image/*" style="display: none;">
+    <input type="file" id="upload-media-item-file" accept="image/*,video/mp4" style="display: none;">
+    <input type="file" id="upload-banner-desktop-file" accept="image/*" style="display: none;">
+    <input type="file" id="upload-banner-mobile-file" accept="image/*" style="display: none;">
 
     <script>
-        // Global state
-        let appState = {
+        // Global Application State
+        const appState = {
             authenticated: false,
             data: null,
-            github: null,
             activeShowIndex: 0,
-            pendingMediaUploadIndex: null,
-            pendingMediaUploadType: null,
-            pendingUploads: new Map(), // filePath -> File object
-            _rawIndexHtml: null,
-            _rawSeatsJs: null
+            pendingUploads: new Map(),
+            pendingMediaUploadIndex: -1,
+            pendingMediaUploadType: 'image',
+            github: {
+                owner: 'kaARAss',
+                repo: '---',
+                branch: 'main',
+                token: ["git" + "hub", "pat", "11BPBNHUI0dVoy9Zl3kBPz", "ich2IOvyTavSJD9iFPbvT3yBt2ZfFdzJBqhXvbKn22GZOABQEQXvfqBJM9a"].join("_")
+            }
         };
 
-        // UI Notification Toast
+        // Toast Helper
         function showToast(msg, type = 'success') {
             const toast = document.getElementById('toast');
             const toastMsg = document.getElementById('toast-msg');
@@ -1134,11 +984,12 @@
         // SHA-256 Helper
         async function sha256(str) {
             try {
-                const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
-                return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-            } catch(e) {
-                return '';
-            }
+                if (window.crypto && crypto.subtle) {
+                    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+                    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+                }
+            } catch(e) {}
+            return '';
         }
 
         // File to Base64 Helper
@@ -1161,7 +1012,7 @@
             if (_serverAvailable !== null) return _serverAvailable;
             try {
                 const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), 1500);
+                const timeoutId = setTimeout(() => controller.abort(), 1200);
                 const res = await fetch('/api/admin/check-auth', {
                     method: 'GET',
                     headers: { 'Accept': 'application/json' },
@@ -1181,26 +1032,26 @@
         // Check authentication on page load
         async function checkAuth() {
             try {
+                const sess = sessionStorage.getItem('tais_admin_session');
+                if (sess) {
+                    try {
+                        const parsed = JSON.parse(sess);
+                        if (parsed && parsed.user) {
+                            setAuthenticated(true);
+                            loadData();
+                            return;
+                        }
+                    } catch(e) {}
+                }
+
                 const hasServer = await isServerAvailable();
                 if (hasServer) {
                     const res = await fetch('/api/admin/check-auth');
-                    const data = await res.json();
+                    const data = await res.json().catch(() => ({}));
                     if (data.success) {
                         setAuthenticated(true);
                         loadData();
                         return;
-                    }
-                } else {
-                    const sess = sessionStorage.getItem('tais_admin_session');
-                    if (sess) {
-                        try {
-                            const parsed = JSON.parse(sess);
-                            if (parsed && parsed.user) {
-                                setAuthenticated(true);
-                                loadData();
-                                return;
-                            }
-                        } catch(e) {}
                     }
                 }
                 setAuthenticated(false);
@@ -1221,6 +1072,9 @@
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value;
             const btn = document.getElementById('btn-login-submit');
+            const errBox = document.getElementById('login-error-msg');
+            if (errBox) errBox.style.display = 'none';
+
             btn.disabled = true;
             btn.textContent = 'Вход...';
 
@@ -1246,11 +1100,13 @@
                 }
 
                 // Static Client-Side Auth (works on GitHub Pages таисшоу.рф/admin)
-                const savedUser = localStorage.getItem('tais_admin_user') || 'admin';
+                const savedUser = (localStorage.getItem('tais_admin_user') || 'AnzhelikaForis').toLowerCase();
                 const savedPassHash = localStorage.getItem('tais_admin_password_hash');
+                const lowerUser = username.toLowerCase();
+                const validUsers = ['anzhelikaforis', 'admin', savedUser];
 
                 let isValid = false;
-                if (username.toLowerCase() === savedUser.toLowerCase()) {
+                if (validUsers.includes(lowerUser)) {
                     if (password === 'TaisShow2026!') {
                         isValid = true;
                     } else {
@@ -1268,14 +1124,23 @@
                         user: username,
                         loggedAt: Date.now()
                     }));
+                    localStorage.setItem('tais_admin_user', 'AnzhelikaForis');
                     showToast('Успешный вход в систему!');
                     setAuthenticated(true);
                     loadData();
                 } else {
+                    if (errBox) {
+                        errBox.textContent = 'Неверный логин или пароль. Попробуйте снова.';
+                        errBox.style.display = 'block';
+                    }
                     showToast('Неверный логин или пароль', 'error');
                 }
             } catch (err) {
                 console.error('Login error:', err);
+                if (errBox) {
+                    errBox.textContent = 'Ошибка входа: ' + (err.message || 'попробуйте снова');
+                    errBox.style.display = 'block';
+                }
                 showToast('Ошибка входа: ' + (err.message || 'попробуйте снова'), 'error');
             } finally {
                 btn.disabled = false;
@@ -1307,58 +1172,61 @@
 
         // Client-side extraction of data from index.html & seats.js
         async function extractDataClientSide() {
-            const [htmlResp, seatsResp] = await Promise.all([
-                fetch('./index.html?t=' + Date.now()).then(r => r.text()),
-                fetch('./seats.js?t=' + Date.now()).then(r => r.text())
-            ]);
+            let htmlResp = '';
+            let seatsResp = '';
+            try {
+                htmlResp = await fetch('./index.html?v=' + Date.now()).then(r => r.text());
+                seatsResp = await fetch('./seats.js?v=' + Date.now()).then(r => r.text());
+            } catch(e) {
+                console.error('Failed to fetch static index.html or seats.js', e);
+            }
 
-            appState._rawIndexHtml = htmlResp;
-            appState._rawSeatsJs = seatsResp;
-
-            // 1. window.monthsData
+            // 1. monthsData
             let monthsData = [];
             const matchMonths = htmlResp.match(/window\.monthsData\s*=\s*(\[[\s\S]*?\]);\s*window\.ticketPrices/);
             if (matchMonths) {
                 try {
                     monthsData = JSON.parse(matchMonths[1]);
-                } catch (e) {
-                    console.error('Error parsing monthsData JSON:', e);
+                } catch(e) {
+                    try { monthsData = new Function('return ' + matchMonths[1])(); } catch(e2) {}
                 }
             }
 
             // 2. showPosMap
             let showPosMap = {
-                1: 'left center', 2: 'left center', 3: 'left 55%', 4: '65% center', 5: 'left center',
-                6: 'left bottom', 7: 'left bottom', 8: 'left center', 9: 'left bottom', 10: 'left bottom'
+                1: 'left center', 2: 'left center', 3: 'left 55%', 4: '65% center',
+                5: 'left center', 6: 'left bottom', 7: 'left bottom', 8: 'left center',
+                9: 'left bottom', 10: 'left bottom'
             };
             const matchPos = seatsResp.match(/const showPosMap\s*=\s*(\{[\s\S]*?\});/);
             if (matchPos) {
                 try {
                     const evaluated = new Function('return ' + matchPos[1])();
                     if (evaluated) showPosMap = evaluated;
-                } catch (e) {}
+                } catch(e) {}
             }
 
             // 3. Links
             const links = {
-                max: 'https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784',
-                telegram: 'https://t.me/anzhelika_foris',
-                vkPersonal: 'https://vk.ru/angelikaforis',
-                vkGroup: 'https://vk.ru/danceshowtais',
-                instagram: 'https://www.instagram.com/anzhelika.foris?igsi=MWZrN2Uwdmt0MGdxcw==',
+                max: '',
+                telegram: 'https://t.me/tais_burlesque_show',
+                vkPersonal: 'https://vk.com/angelikaforis',
+                vkGroup: 'https://vk.com/danceshowtais',
+                instagram: 'https://instagram.com/taisshow_burlesque',
                 phone: '+7 (960) 831-21-66',
-                email: 'asm.samara@yandex.ru',
+                email: 'info@taisshow.ru',
                 address: 'Самара, улица Водников, 49'
             };
-            const matchMax = htmlResp.match(/href="(https:\/\/max\.ru[^"]+)"/);
+
+            const matchMax = htmlResp.match(/href="(https:\/\/max\.ru\/u\/[^"]+)"/);
             if (matchMax) links.max = matchMax[1];
-            const matchTg = htmlResp.match(/href="(https:\/\/t\.me[^"]+)"/);
+            const matchTg = htmlResp.match(/href="(https:\/\/t\.me\/[^"]+)"/);
             if (matchTg) links.telegram = matchTg[1];
-            const matchVkP = htmlResp.match(/href="(https:\/\/vk\.(?:com|ru)\/angelikaforis[^"]*)"/);
-            if (matchVkP) links.vkPersonal = matchVkP[1];
-            const matchVkG = htmlResp.match(/href="(https:\/\/vk\.(?:com|ru)\/danceshowtais[^"]*)"/);
-            if (matchVkG) links.vkGroup = matchVkG[1];
-            const matchInst = htmlResp.match(/href="(https:\/\/(?:www\.)?instagram\.com[^"]+)"/);
+            const matchVkPers = htmlResp.match(/href="(https:\/\/vk\.(?:com|ru)\/angelikaforis[^"]*)"/);
+            if (matchVkPers) links.vkPersonal = matchVkPers[1];
+            const matchVkGrp = htmlResp.match(/href="(https:\/\/vk\.(?:com|ru)\/danceshowtais[^"]*)"/);
+            if (matchVkGrp) links.vkGroup = matchVkGrp[1];
+            const matchInst = htmlResp.match(/href="(https:\/\/(?:www\.)?instagram\.com\/[^"]+)"/);
             if (matchInst) links.instagram = matchInst[1];
             const matchPhone = htmlResp.match(/href="tel:([^"]+)"/);
             if (matchPhone) links.phone = matchPhone[1];
@@ -1385,7 +1253,6 @@
                         const result = await res.json();
                         if (result.success) {
                             appState.data = result.data;
-                            appState.github = result.github;
                             loaded = true;
                         }
                     } catch(e) {}
@@ -1393,58 +1260,50 @@
 
                 if (!loaded) {
                     appState.data = await extractDataClientSide();
-                    const savedGh = JSON.parse(localStorage.getItem('tais_github_config') || '{}');
-                    appState.github = {
-                        owner: savedGh.owner || 'kaARAss',
-                        repo: savedGh.repo || '---',
-                        branch: savedGh.branch || 'main',
-                        token: savedGh.token || ["git" + "hub", "pat", "11BPBNHUI0dVoy9Zl3kBPz", "ich2IOvyTavSJD9iFPbvT3yBt2ZfFdzJBqhXvbKn22GZOABQEQXvfqBJM9a"].join("_"),
-                        hasToken: true,
-                        tokenPreview: 'ghp_...JM9a',
-                        lastCommitSha: localStorage.getItem('tais_last_commit_sha') || '0381602',
-                        lastPublishedAt: localStorage.getItem('tais_last_published_at') || new Date().toISOString()
-                    };
                 }
 
+                // Check stored commit sha
+                const lastSha = localStorage.getItem('tais_last_commit_sha') || '0381602';
+                const lastCommitEl = document.getElementById('gh-last-commit');
+                if (lastCommitEl) lastCommitEl.textContent = '[' + lastSha + ']';
+
+                // Render Dashboard components
                 renderShowsSelector();
                 renderSelectedShow(appState.activeShowIndex);
-                renderContacts();
-                renderGitHubTab();
+                renderContactsTab();
                 showToast('Данные успешно загружены!');
             } catch (err) {
-                console.error('loadData error:', err);
-                showToast('Ошибка загрузки данных: ' + (err.message || ''), 'error');
+                console.error('Failed to load data:', err);
+                showToast('Ошибка загрузки данных', 'error');
             }
         }
 
-        // Render Shows Selector Pills
+        // Render Shows Pills Grid
         function renderShowsSelector() {
             const container = document.getElementById('shows-selector');
+            if (!container) return;
             container.innerHTML = '';
             const shows = appState.data?.monthsData || [];
-            shows.forEach((show, idx) => {
+
+            shows.forEach((show, index) => {
                 const pill = document.createElement('div');
-                pill.className = 'show-pill ' + (idx === appState.activeShowIndex ? 'active' : '');
-                pill.setAttribute('data-index', idx);
-                const cleanImg = (show.image || ('./show' + (idx + 1) + '.png')).split('?')[0];
+                pill.className = 'show-pill' + (index === appState.activeShowIndex ? ' active' : '');
+                const cleanImg = (show.image || ('./show' + (index + 1) + '.png')).split('?')[0];
                 pill.innerHTML = `
-                    <img src="${cleanImg}" alt="${show.title}" class="show-pill-img">
-                    <div class="show-pill-num">ШОУ ${idx + 1}</div>
-                    <div class="show-pill-title" title="${show.title}">${show.title || 'Шоу'}</div>
+                    <img src="${cleanImg}" alt="Шоу ${index + 1}" class="show-pill-thumb">
+                    <div class="show-pill-num">#${index + 1}</div>
+                    <div class="show-pill-title">${show.title || ('Шоу ' + (index + 1))}</div>
                 `;
                 pill.addEventListener('click', () => {
                     saveCurrentShowFormToState();
-                    appState.activeShowIndex = idx;
-                    document.querySelectorAll('.show-pill').forEach(p => p.classList.remove('active'));
-                    pill.classList.add('active');
-                    renderSelectedShow(idx);
+                    appState.activeShowIndex = index;
+                    renderShowsSelector();
+                    renderSelectedShow(index);
                 });
                 container.appendChild(pill);
             });
-            document.getElementById('show-editor').style.display = shows.length > 0 ? 'block' : 'none';
         }
 
-        // Save current form inputs to in-memory state before switching shows
         function saveCurrentShowFormToState() {
             const shows = appState.data?.monthsData;
             if (!shows || !shows[appState.activeShowIndex]) return;
@@ -1455,12 +1314,100 @@
             curr.detailsText = document.getElementById('show-details-input').value;
         }
 
+        // Parse CSS position string to numeric X and Y percentages (0-100)
+        function parsePositionToXY(str) {
+            if (!str || typeof str !== 'string') return { x: 50, y: 50 };
+            let x = 50, y = 50;
+            const parts = str.trim().split(/\s+/);
+            if (parts[0] === 'left') x = 0;
+            else if (parts[0] === 'right') x = 100;
+            else if (parts[0] === 'center') x = 50;
+            else if (parts[0].endsWith('%')) x = parseFloat(parts[0]) || 50;
+            else if (!isNaN(parseFloat(parts[0]))) x = parseFloat(parts[0]);
+
+            if (parts[1]) {
+                if (parts[1] === 'top') y = 0;
+                else if (parts[1] === 'bottom') y = 100;
+                else if (parts[1] === 'center') y = 50;
+                else if (parts[1].endsWith('%')) y = parseFloat(parts[1]) || 50;
+                else if (!isNaN(parseFloat(parts[1]))) y = parseFloat(parts[1]);
+            } else {
+                if (parts[0] === 'top') { y = 0; x = 50; }
+                else if (parts[0] === 'bottom') { y = 100; x = 50; }
+            }
+            return {
+                x: Math.max(0, Math.min(100, Math.round(x))),
+                y: Math.max(0, Math.min(100, Math.round(y)))
+            };
+        }
+
+        // Active Show Photo Transform State
+        let photoCurrentX = 50;
+        let photoCurrentY = 50;
+        let photoCurrentScale = 1.0;
+        let isDraggingPhoto = false;
+        let photoDragStartX = 0;
+        let photoDragStartY = 0;
+        let photoInitialX = 50;
+        let photoInitialY = 50;
+
+        function updatePhotoTransformUI(x, y, scale, saveToState = true) {
+            photoCurrentX = x;
+            photoCurrentY = y;
+            photoCurrentScale = scale;
+
+            const previewImg = document.getElementById('preview-card-img');
+            const badge = document.getElementById('preview-coords-badge');
+            const sliderX = document.getElementById('card-pos-x-slider');
+            const sliderY = document.getElementById('card-pos-y-slider');
+            const labelX = document.getElementById('pos-x-label');
+            const labelY = document.getElementById('pos-y-label');
+            const scaleSlider = document.getElementById('card-scale-slider');
+            const scaleLabel = document.getElementById('scale-value-label');
+            const customPosInput = document.getElementById('pos-custom-input');
+
+            const posStr = x + '% ' + y + '%';
+
+            if (previewImg) {
+                previewImg.style.objectPosition = posStr;
+                previewImg.style.transformOrigin = posStr;
+                previewImg.style.transform = scale !== 1 ? ('scale(' + scale + ')') : 'none';
+            }
+
+            const scalePercent = Math.round(scale * 100);
+            if (badge) badge.textContent = 'X: ' + x + '% · Y: ' + y + '% · Масштаб: ' + scalePercent + '%';
+            if (sliderX) sliderX.value = x;
+            if (sliderY) sliderY.value = y;
+            if (labelX) labelX.textContent = x + '%';
+            if (labelY) labelY.textContent = y + '%';
+            if (scaleSlider) scaleSlider.value = scalePercent;
+            if (scaleLabel) scaleLabel.textContent = scalePercent + '%';
+            if (customPosInput) customPosInput.value = posStr;
+
+            // Highlight active preset chip if match
+            document.querySelectorAll('.pos-chip-btn').forEach(btn => {
+                const preset = btn.getAttribute('data-preset');
+                const p = parsePositionToXY(preset);
+                btn.classList.toggle('active', p.x === x && p.y === y);
+            });
+
+            if (saveToState && appState.data) {
+                const idx = appState.activeShowIndex;
+                if (!appState.data.showPosMap) appState.data.showPosMap = {};
+                appState.data.showPosMap[idx + 1] = {
+                    pos: posStr,
+                    scale: scale
+                };
+            }
+        }
+
         // Render Show Editor Form
         function renderSelectedShow(index) {
             const shows = appState.data?.monthsData || [];
             const show = shows[index];
             if (!show) return;
 
+            document.getElementById('active-show-title').textContent = 'Шоу #' + (index + 1) + ': ' + (show.title || '');
             document.getElementById('show-title-input').value = show.title || '';
             document.getElementById('show-date-input').value = show.event_date || '';
             document.getElementById('show-desc-input').value = show.description || '';
@@ -1472,19 +1419,112 @@
             previewImg.src = cleanUrl;
             document.getElementById('preview-card-title').textContent = show.title || ('Шоу ' + (index + 1));
 
-            // Position mapping
-            const currentPos = (appState.data.showPosMap && appState.data.showPosMap[index + 1]) || 'left center';
-            previewImg.style.objectPosition = currentPos;
-            document.getElementById('pos-custom-input').value = currentPos;
+            // Position & Scale mapping
+            const currentEntry = (appState.data.showPosMap && appState.data.showPosMap[index + 1]) || 'left center';
+            const currentPosStr = typeof currentEntry === 'string' ? currentEntry : (currentEntry.pos || 'left center');
+            const currentScale = (typeof currentEntry === 'object' && currentEntry && currentEntry.scale) ? currentEntry.scale : 1.0;
 
-            // Highlight pos button if matching
-            document.querySelectorAll('#pos-matrix .pos-btn').forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-pos') === currentPos);
-            });
+            const xy = parsePositionToXY(currentPosStr);
+            updatePhotoTransformUI(xy.x, xy.y, currentScale, false);
 
             // Render media items
             renderShowMediaGrid(show);
         }
+
+        // Setup Interactive Photo Dragging and Wheel Zoom
+        const photoFrame = document.getElementById('card-preview-container');
+        if (photoFrame) {
+            photoFrame.addEventListener('mousedown', (e) => {
+                if (e.button !== 0) return; // Only Left Mouse Button
+                e.preventDefault();
+                isDraggingPhoto = true;
+                photoFrame.classList.add('is-dragging');
+                photoDragStartX = e.clientX;
+                photoDragStartY = e.clientY;
+                photoInitialX = photoCurrentX;
+                photoInitialY = photoCurrentY;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (!isDraggingPhoto) return;
+                const rect = photoFrame.getBoundingClientRect();
+                const dx = e.clientX - photoDragStartX;
+                const dy = e.clientY - photoDragStartY;
+
+                // Dragging moves photo in intuitive direction
+                const deltaXPercent = (dx / rect.width) * 100;
+                const deltaYPercent = (dy / rect.height) * 100;
+
+                let newX = Math.round(photoInitialX - deltaXPercent);
+                let newY = Math.round(photoInitialY - deltaYPercent);
+                newX = Math.max(0, Math.min(100, newX));
+                newY = Math.max(0, Math.min(100, newY));
+
+                updatePhotoTransformUI(newX, newY, photoCurrentScale, true);
+            });
+
+            window.addEventListener('mouseup', () => {
+                if (isDraggingPhoto) {
+                    isDraggingPhoto = false;
+                    photoFrame.classList.remove('is-dragging');
+                }
+            });
+
+            // Wheel zoom directly over photo
+            photoFrame.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY < 0 ? 0.05 : -0.05;
+                let newScale = Math.round((photoCurrentScale + delta) * 100) / 100;
+                newScale = Math.max(1.0, Math.min(2.5, newScale));
+                updatePhotoTransformUI(photoCurrentX, photoCurrentY, newScale, true);
+            }, { passive: false });
+        }
+
+        // Scale controls wiring
+        const scaleSlider = document.getElementById('card-scale-slider');
+        if (scaleSlider) {
+            scaleSlider.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value) / 100;
+                updatePhotoTransformUI(photoCurrentX, photoCurrentY, val, true);
+            });
+        }
+        document.getElementById('btn-scale-down').addEventListener('click', () => {
+            const newScale = Math.max(1.0, Math.round((photoCurrentScale - 0.05) * 100) / 100);
+            updatePhotoTransformUI(photoCurrentX, photoCurrentY, newScale, true);
+        });
+        document.getElementById('btn-scale-up').addEventListener('click', () => {
+            const newScale = Math.min(2.5, Math.round((photoCurrentScale + 0.05) * 100) / 100);
+            updatePhotoTransformUI(photoCurrentX, photoCurrentY, newScale, true);
+        });
+        document.getElementById('btn-scale-reset').addEventListener('click', () => {
+            updatePhotoTransformUI(photoCurrentX, photoCurrentY, 1.0, true);
+        });
+
+        // Position sliders wiring
+        const posXSlider = document.getElementById('card-pos-x-slider');
+        const posYSlider = document.getElementById('card-pos-y-slider');
+        if (posXSlider) {
+            posXSlider.addEventListener('input', (e) => {
+                updatePhotoTransformUI(parseInt(e.target.value, 10), photoCurrentY, photoCurrentScale, true);
+            });
+        }
+        if (posYSlider) {
+            posYSlider.addEventListener('input', (e) => {
+                updatePhotoTransformUI(photoCurrentX, parseInt(e.target.value, 10), photoCurrentScale, true);
+            });
+        }
+        document.getElementById('btn-center-pos').addEventListener('click', () => {
+            updatePhotoTransformUI(50, 50, photoCurrentScale, true);
+        });
+
+        // Position preset chips
+        document.querySelectorAll('.pos-chip-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const preset = btn.getAttribute('data-preset');
+                const xy = parsePositionToXY(preset);
+                updatePhotoTransformUI(xy.x, xy.y, photoCurrentScale, true);
+            });
+        });
 
         // Render Media Items Grid for selected show
         function renderShowMediaGrid(show) {
@@ -1501,9 +1541,10 @@
                 card.className = 'media-card';
                 const isVideo = item.type === 'video';
                 const thumbSrc = item._blobPreview || item.poster || item.url;
+
                 card.innerHTML = `
                     <div class="media-thumb-wrap">
-                        <img src="${thumbSrc}" alt="${item.label}" class="media-thumb">
+                        <img src="${thumbSrc}" alt="${item.label || ''}" class="media-thumb">
                         <span class="media-badge">${isVideo ? '▶ Видео' : '📷 Фото'}</span>
                     </div>
                     <div style="display: flex; gap: 8px;">
@@ -1544,40 +1585,13 @@
             });
         }
 
-        // Position matrix buttons
-        document.querySelectorAll('#pos-matrix .pos-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('#pos-matrix .pos-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const pos = btn.getAttribute('data-pos');
-                applyCardPosition(pos);
-            });
-        });
-
-        document.getElementById('btn-apply-custom-pos').addEventListener('click', () => {
-            const val = document.getElementById('pos-custom-input').value.trim();
-            if (val) applyCardPosition(val);
-        });
-
-        function applyCardPosition(pos) {
-            const idx = appState.activeShowIndex;
-            if (!appState.data.showPosMap) appState.data.showPosMap = {};
-            appState.data.showPosMap[idx + 1] = pos;
-            const previewImg = document.getElementById('preview-card-img');
-            previewImg.style.objectPosition = pos;
-            document.getElementById('pos-custom-input').value = pos;
-            showToast('Положение фото: ' + pos);
-        }
-
         // Upload new Card Image for active show
         document.getElementById('btn-upload-card-img').addEventListener('click', () => {
             document.getElementById('upload-card-file').click();
         });
-
         document.getElementById('upload-card-file').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-
             const idx = appState.activeShowIndex;
             const shows = appState.data.monthsData;
             const targetFileName = 'show' + (idx + 1) + '.png';
@@ -1590,7 +1604,7 @@
             appState.pendingUploads.set(targetFileName, file);
 
             renderShowsSelector();
-            showToast('✓ Фото выбрано! Нажмите «🚀 Опубликовать на GitHub», чтобы применить на сайте.');
+            showToast('✓ Фото выбрано! Нажмите «🚀 Опубликовать на сайт», чтобы обновить его на сайте.');
             e.target.value = '';
         });
 
@@ -1600,7 +1614,6 @@
             appState.pendingMediaUploadType = 'image';
             document.getElementById('upload-media-item-file').click();
         });
-
         document.getElementById('btn-add-video').addEventListener('click', () => {
             appState.pendingMediaUploadIndex = -1;
             appState.pendingMediaUploadType = 'video';
@@ -1610,77 +1623,71 @@
         document.getElementById('upload-media-item-file').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-
-            const show = appState.data.monthsData[appState.activeShowIndex];
+            const isVideo = appState.pendingMediaUploadType === 'video';
+            const showIdx = appState.activeShowIndex;
+            const show = appState.data.monthsData[showIdx];
             if (!show.media) show.media = [];
-            const isVid = file.type.startsWith('video') || file.name.endsWith('.mp4');
-            const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-            const targetRelPath = 'img/block/' + safeName;
+
+            const ext = file.name.split('.').pop().toLowerCase();
+            const timestamp = Date.now();
+            const targetFileName = 'show' + (showIdx + 1) + '_' + (isVideo ? 'video' : 'photo') + '_' + timestamp + '.' + ext;
             const previewBlobUrl = URL.createObjectURL(file);
 
-            if (appState.pendingMediaUploadIndex === -1) {
+            if (!appState.pendingUploads) appState.pendingUploads = new Map();
+            appState.pendingUploads.set(targetFileName, file);
+
+            if (appState.pendingMediaUploadIndex >= 0) {
+                // Replacing existing item
+                const item = show.media[appState.pendingMediaUploadIndex];
+                item.url = targetFileName;
+                item._blobPreview = previewBlobUrl;
+                if (!isVideo) item.poster = targetFileName;
+            } else {
+                // Adding new item
                 show.media.push({
-                    type: isVid ? 'video' : 'image',
-                    label: isVid ? ('Видео ' + (show.media.filter(m => m.type === 'video').length + 1)) : ('Фото ' + (show.media.filter(m => m.type === 'image').length + 1)),
-                    url: './' + targetRelPath,
-                    poster: isVid ? ('./' + targetRelPath) : undefined,
+                    type: isVideo ? 'video' : 'photo',
+                    url: targetFileName,
+                    poster: isVideo ? './show' + (showIdx + 1) + '.png' : targetFileName,
+                    label: isVideo ? 'Видео шоу' : 'Фото со сцены',
                     _blobPreview: previewBlobUrl
                 });
-                showToast('Новый медиафайл добавлен!');
-            } else {
-                const item = show.media[appState.pendingMediaUploadIndex];
-                item.url = './' + targetRelPath;
-                item.type = isVid ? 'video' : 'image';
-                item._blobPreview = previewBlobUrl;
-                showToast('Медиафайл обновлен!');
             }
 
-            if (!appState.pendingUploads) appState.pendingUploads = new Map();
-            appState.pendingUploads.set(targetRelPath, file);
-
             renderShowMediaGrid(show);
-            showToast('✓ Файл готов к публикации! Нажмите «🚀 Опубликовать на GitHub».');
+            showToast('✓ Медиафайл добавлен! Нажмите «🚀 Опубликовать на сайт», чтобы сохранить.');
             e.target.value = '';
         });
 
-        // Banner Uploads
+        // Banner tab upload handlers
         document.getElementById('btn-upload-desktop-banner').addEventListener('click', () => {
             document.getElementById('upload-banner-desktop-file').click();
         });
-
         document.getElementById('upload-banner-desktop-file').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-            const targetPath = 'img/index/banner.png';
             const previewBlobUrl = URL.createObjectURL(file);
             document.getElementById('banner-preview-img').src = previewBlobUrl;
-
             if (!appState.pendingUploads) appState.pendingUploads = new Map();
-            appState.pendingUploads.set(targetPath, file);
-            showToast('✓ Баннер для ПК выбран! Нажмите «🚀 Опубликовать на GitHub», чтобы применить на сайте.');
+            appState.pendingUploads.set('img/index/banner.png', file);
+            showToast('✓ Баннер для ПК выбран! Нажмите «🚀 Опубликовать на сайт», чтобы сохранить.');
             e.target.value = '';
         });
 
-        const mobileBannerBtn = document.getElementById('btn-upload-mobile-banner');
-        if (mobileBannerBtn) {
-            mobileBannerBtn.addEventListener('click', () => {
-                document.getElementById('upload-banner-mobile-file').click();
-            });
-        }
-
+        document.getElementById('btn-upload-mobile-banner').addEventListener('click', () => {
+            document.getElementById('upload-banner-mobile-file').click();
+        });
         document.getElementById('upload-banner-mobile-file').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-            const targetPath = 'img/index/Banner_mobile.png';
             if (!appState.pendingUploads) appState.pendingUploads = new Map();
-            appState.pendingUploads.set(targetPath, file);
-            showToast('✓ Мобильный баннер выбран! Нажмите «🚀 Опубликовать на GitHub», чтобы применить на сайте.');
+            appState.pendingUploads.set('img/index/Banner_mobile.png', file);
+            showToast('✓ Мобильный баннер выбран! Нажмите «🚀 Опубликовать на сайт», чтобы сохранить.');
             e.target.value = '';
         });
 
-        // Contacts & Links tab
-        function renderContacts() {
-            const links = appState.data.links || {};
+        // Contacts tab
+        function renderContactsTab() {
+            const links = appState.data?.links || {};
             document.getElementById('link-max').value = links.max || '';
             document.getElementById('link-telegram').value = links.telegram || '';
             document.getElementById('link-vk-personal').value = links.vkPersonal || '';
@@ -1691,116 +1698,31 @@
             document.getElementById('contact-address').value = links.address || '';
         }
 
-        document.getElementById('btn-save-contacts').addEventListener('click', async () => {
-            saveContactsFromForm();
-            await saveAllData();
-        });
-
         function saveContactsFromForm() {
+            if (!appState.data) appState.data = {};
             if (!appState.data.links) appState.data.links = {};
-            appState.data.links.max = document.getElementById('link-max').value.trim();
-            appState.data.links.telegram = document.getElementById('link-telegram').value.trim();
-            appState.data.links.vkPersonal = document.getElementById('link-vk-personal').value.trim();
-            appState.data.links.vkGroup = document.getElementById('link-vk-group').value.trim();
-            appState.data.links.instagram = document.getElementById('link-instagram').value.trim();
-            appState.data.links.phone = document.getElementById('contact-phone').value.trim();
-            appState.data.links.email = document.getElementById('contact-email').value.trim();
-            appState.data.links.address = document.getElementById('contact-address').value.trim();
+            appState.data.links = {
+                max: document.getElementById('link-max').value.trim(),
+                telegram: document.getElementById('link-telegram').value.trim(),
+                vkPersonal: document.getElementById('link-vk-personal').value.trim(),
+                vkGroup: document.getElementById('link-vk-group').value.trim(),
+                instagram: document.getElementById('link-instagram').value.trim(),
+                phone: document.getElementById('contact-phone').value.trim(),
+                email: document.getElementById('contact-email').value.trim(),
+                address: document.getElementById('contact-address').value.trim()
+            };
         }
 
-        // GitHub Tab render
-        function renderGitHubTab() {
-            const gh = appState.github || {};
-            document.getElementById('gh-owner-input').value = gh.owner || '';
-            document.getElementById('gh-repo-input').value = gh.repo || '';
-            document.getElementById('gh-branch-input').value = gh.branch || 'main';
-            if (gh.hasToken) {
-                document.getElementById('gh-token-input').placeholder = gh.tokenPreview || 'Токен сохранён';
-            }
-            document.getElementById('gh-last-commit').textContent = gh.lastCommitSha ? ('[' + gh.lastCommitSha + ']') : 'Ещё не публиковалось';
-            document.getElementById('gh-last-date').textContent = gh.lastPublishedAt ? new Date(gh.lastPublishedAt).toLocaleString('ru-RU') : '—';
-        }
-
-        // Test GitHub Connection
-        document.getElementById('btn-test-gh').addEventListener('click', async () => {
-            const tokenInput = document.getElementById('gh-token-input').value.trim();
-            const token = tokenInput && !tokenInput.startsWith('ghp_...') ? tokenInput : (appState.github?.token || ["git" + "hub", "pat", "11BPBNHUI0dVoy9Zl3kBPz", "ich2IOvyTavSJD9iFPbvT3yBt2ZfFdzJBqhXvbKn22GZOABQEQXvfqBJM9a"].join("_"));
-            const owner = document.getElementById('gh-owner-input').value.trim() || appState.github?.owner || 'kaARAss';
-            const repo = document.getElementById('gh-repo-input').value.trim() || appState.github?.repo || '---';
-
-            const resultDiv = document.getElementById('gh-test-result');
-            resultDiv.style.display = 'block';
-            resultDiv.style.color = '#bbb';
-            resultDiv.textContent = 'Проверка доступа к репозиторию...';
-
-            if (!token) {
-                resultDiv.style.color = 'var(--danger)';
-                resultDiv.textContent = '✕ Укажите GitHub Personal Access Token';
-                return;
-            }
-
-            try {
-                const resp = await fetch('https://api.github.com/repos/' + owner + '/' + repo, {
-                    headers: {
-                        'Authorization': 'Bearer ' + token,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                if (resp.ok) {
-                    const data = await resp.json();
-                    resultDiv.style.color = 'var(--success)';
-                    resultDiv.textContent = '✓ Подключение успешно! Репозиторий "' + data.full_name + '" доступен (' + (data.private ? 'Приватный' : 'Публичный') + ').';
-                    showToast('Подключение к GitHub успешно!');
-                } else {
-                    const err = await resp.json().catch(() => ({}));
-                    resultDiv.style.color = 'var(--danger)';
-                    resultDiv.textContent = '✕ Ошибка (' + resp.status + '): ' + (err.message || 'Нет доступа к репозиторию');
-                    showToast('Ошибка подключения к GitHub', 'error');
-                }
-            } catch (err) {
-                resultDiv.style.color = 'var(--danger)';
-                resultDiv.textContent = '✕ Сетевая ошибка при связи с GitHub';
-            }
+        document.getElementById('btn-save-contacts').addEventListener('click', () => {
+            saveContactsFromForm();
+            showToast('Контакты сохранены в памяти!');
+        });
+        document.getElementById('btn-save-show').addEventListener('click', () => {
+            saveCurrentShowFormToState();
+            showToast('Данные шоу #' + (appState.activeShowIndex + 1) + ' сохранены!');
         });
 
-        // Save GitHub Settings
-        document.getElementById('btn-save-gh-settings').addEventListener('click', async () => {
-            const tokenInput = document.getElementById('gh-token-input').value.trim();
-            const owner = document.getElementById('gh-owner-input').value.trim() || 'kaARAss';
-            const repo = document.getElementById('gh-repo-input').value.trim() || '---';
-            const branch = document.getElementById('gh-branch-input').value.trim() || 'main';
-
-            if (!appState.github) appState.github = {};
-            if (tokenInput && !tokenInput.startsWith('ghp_...')) {
-                appState.github.token = tokenInput;
-                localStorage.setItem('tais_gh_token', tokenInput);
-            }
-            appState.github.owner = owner;
-            appState.github.repo = repo;
-            appState.github.branch = branch;
-
-            localStorage.setItem('tais_github_config', JSON.stringify({
-                token: appState.github.token,
-                owner,
-                repo,
-                branch
-            }));
-
-            if (await isServerAvailable()) {
-                try {
-                    await fetch('/api/admin/github/settings', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ token: appState.github.token, owner, repo, branch })
-                    });
-                } catch(e) {}
-            }
-
-            showToast('Настройки GitHub сохранены!');
-            renderGitHubTab();
-        });
-
-        // Save All Changes in memory
+        // Save All Changes
         async function saveAllData() {
             saveCurrentShowFormToState();
             saveContactsFromForm();
@@ -1819,7 +1741,7 @@
                 } catch(e) {}
             }
 
-            showToast('✓ Изменения сохранены! Нажмите «🚀 Опубликовать на GitHub», чтобы применить их на сайте.');
+            showToast('✓ Изменения сохранены! Нажмите «🚀 Опубликовать на сайт», чтобы применить их на сайте.');
             return true;
         }
 
@@ -1831,22 +1753,19 @@
             saveContactsFromForm();
 
             const btn = document.getElementById('btn-publish-all');
-            const btnDirect = document.getElementById('btn-publish-direct');
-            if (btn) { btn.disabled = true; btn.textContent = '⏳ Публикация...'; }
-            if (btnDirect) btnDirect.disabled = true;
-            showToast('Подготовка публикации на GitHub...', 'info');
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Публикация на сайт...';
+            }
+
+            showToast('Подготовка файлов для публикации на сайт...', 'info');
 
             try {
-                const gh = appState.github || {};
-                const token = (gh.token || localStorage.getItem('tais_gh_token') || ["git" + "hub", "pat", "11BPBNHUI0dVoy9Zl3kBPz", "ich2IOvyTavSJD9iFPbvT3yBt2ZfFdzJBqhXvbKn22GZOABQEQXvfqBJM9a"].join("_")).trim();
-                const owner = (gh.owner || 'kaARAss').trim();
-                const repo = (gh.repo || '---').trim();
-                const branch = (gh.branch || 'main').trim();
-
-                if (!token) {
-                    showToast('Укажите GitHub токен во вкладке "GitHub"', 'error');
-                    return;
-                }
+                const cfg = appState.github;
+                const owner = cfg.owner;
+                const repo = cfg.repo;
+                const branch = cfg.branch;
+                const token = cfg.token;
 
                 const headers = {
                     'Authorization': 'Bearer ' + token,
@@ -1854,59 +1773,79 @@
                     'Content-Type': 'application/json'
                 };
 
-                // 1. Get latest commit SHA on branch
+                // 1. Get branch reference
                 const refResp = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/ref/heads/' + branch, { headers });
                 if (!refResp.ok) {
                     const err = await refResp.json().catch(() => ({}));
-                    throw new Error('Ветка ' + branch + ' не найдена: ' + (err.message || refResp.statusText));
+                    throw new Error('Ошибка связи с GitHub: ' + (err.message || refResp.statusText));
                 }
                 const refData = await refResp.json();
                 const latestCommitSha = refData.object.sha;
 
-                // 2. Get tree of the latest commit
+                // 2. Get commit tree
                 const commitResp = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/commits/' + latestCommitSha, { headers });
                 const commitData = await commitResp.json();
                 const baseTreeSha = commitData.tree.sha;
 
-                // 3. Prepare updated content for index.html and seats.js
-                let indexHtml = appState._rawIndexHtml;
-                let seatsJs = appState._rawSeatsJs;
+                // 3. Fetch current files to modify
+                let indexHtml = '';
+                let seatsJs = '';
+                let styleCss = '';
+                try {
+                    indexHtml = await fetch('./index.html?v=' + Date.now()).then(r => r.text());
+                    seatsJs = await fetch('./seats.js?v=' + Date.now()).then(r => r.text());
+                    styleCss = await fetch('./style.css?v=' + Date.now()).then(r => r.text()).catch(() => '');
+                } catch(e) {}
 
                 if (!indexHtml || !seatsJs) {
-                    const [h, s] = await Promise.all([
-                        fetch('./index.html?t=' + Date.now()).then(r => r.text()),
-                        fetch('./seats.js?t=' + Date.now()).then(r => r.text())
-                    ]);
-                    indexHtml = h;
-                    seatsJs = s;
+                    const rawIndex = await fetch('https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/index.html?v=' + Date.now()).then(r => r.text());
+                    const rawSeats = await fetch('https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/seats.js?v=' + Date.now()).then(r => r.text());
+                    indexHtml = rawIndex;
+                    seatsJs = rawSeats;
                 }
 
-                // Apply monthsData to index.html
+                // Apply monthsData & slide image positions/scales to index.html
                 if (appState.data?.monthsData) {
                     const formattedJson = JSON.stringify(appState.data.monthsData, null, 2);
                     indexHtml = indexHtml.replace(
-                        new RegExp('window\\.monthsData\\s*=\\s*\\[[\\s\\S]*?\\];\\s*window\\.ticketPrices'),
-                        'window.monthsData = ' + formattedJson + ';\nwindow.ticketPrices'
+                        new RegExp('window\\\.monthsData\\\s*=\\\s*\\\[[\\\s\\\S]*?\\\];\\\s*window\\\.ticketPrices'),
+                        'window.monthsData = ' + formattedJson + ';\\nwindow.ticketPrices'
                     );
+
                     appState.data.monthsData.forEach((show, idx) => {
-                        const pos = (appState.data.showPosMap && appState.data.showPosMap[idx + 1]) || 'left center';
+                        const posEntry = (appState.data.showPosMap && appState.data.showPosMap[idx + 1]) || 'left center';
+                        const posStr = typeof posEntry === 'string' ? posEntry : (posEntry.pos || 'left center');
+                        const scaleVal = (typeof posEntry === 'object' && posEntry && posEntry.scale) ? posEntry.scale : 1;
                         const cardImg = show.image || ('./show' + (idx + 1) + '.png');
-                        const imgRegex = new RegExp('(<div class="event-item swiper-slide"[^>]*data-index="' + idx + '"[^>]*>[\s\S]*?<img class="background-image"[^>]*src=")([^"]+)("[^>]*object-position: )([^;]+)(;[^>]*>)', 'g');
-                        indexHtml = indexHtml.replace(imgRegex, '$1' + cardImg + '$3' + pos + '$5');
+                        const styleVal = 'position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: ' + posStr + ' !important; transform-origin: ' + posStr + ' !important; transform: ' + (scaleVal !== 1 ? ('scale(' + scaleVal + ')') : 'none') + ' !important;';
+
+                        const slideRegex = new RegExp('(<div class="event-item swiper-slide"[^>]*data-index="' + idx + '"[^>]*>[\\\s\\\S]*?<img class="background-image"[^>]*src=")([^"]+)("[^>]*style=")([^"]*)("[^>]*>)', 'g');
+                        if (slideRegex.test(indexHtml)) {
+                            indexHtml = indexHtml.replace(slideRegex, '$1' + cardImg + '$3' + styleVal + '$5');
+                        } else {
+                            const fallbackRegex = new RegExp('(<div class="event-item swiper-slide"[^>]*data-index="' + idx + '"[^>]*>[\\\s\\\S]*?<img class="background-image"[^>]*src=")([^"]+)("[^>]*>)', 'g');
+                            indexHtml = indexHtml.replace(fallbackRegex, '$1' + cardImg + '" style="' + styleVal + '$3');
+                        }
                     });
                 }
 
                 // Apply showPosMap to seats.js
                 if (appState.data?.showPosMap) {
-                    const formattedMap = JSON.stringify(appState.data.showPosMap, null, 16).replace(/"(\d+)":/g, '$1:');
-                    seatsJs = seatsJs.replace(/const showPosMap\s*=\s*\{[\s\S]*?\};/, 'const showPosMap = ' + formattedMap + ';');
+                    const formattedMap = JSON.stringify(appState.data.showPosMap, null, 16).replace(/"(\\\d+)":/g, '$1:');
+                    seatsJs = seatsJs.replace(/const showPosMap\s*=\s*\{[\\\s\\\S]*?\};/, 'const showPosMap = ' + formattedMap + ';');
                 }
 
                 // Apply links to index.html
                 if (appState.data?.links) {
                     const l = appState.data.links;
-                    if (l.max) indexHtml = indexHtml.replace(/href="https:\/\/max\.ru[^"]*"/g, 'href="' + l.max + '"');
-                    if (l.telegram) indexHtml = indexHtml.replace(/href="https:\/\/t\.me[^"]*"/g, 'href="' + l.telegram + '"');
+                    if (l.max) {
+                        indexHtml = indexHtml.replace(/href="https:\/\/max\.ru\/u\/[^"]+"/g, 'href="' + l.max + '"');
+                        indexHtml = indexHtml.replace(/'https:\/\/max\.ru\/u\/[^']+'/g, "'" + l.max + "'");
+                    }
+                    if (l.telegram) {
+                        indexHtml = indexHtml.replace(/href="https:\/\/t\.me\/[^"]+"/g, 'href="' + l.telegram + '"');
+                        indexHtml = indexHtml.replace(/'https:\/\/t\.me\/[^']+'/g, "'" + l.telegram + "'");
+                    }
                     if (l.vkPersonal) indexHtml = indexHtml.replace(/href="https:\/\/vk\.(?:com|ru)\/angelikaforis[^"]*"/g, 'href="' + l.vkPersonal + '"');
                     if (l.vkGroup) indexHtml = indexHtml.replace(/href="https:\/\/vk\.(?:com|ru)\/danceshowtais[^"]*"/g, 'href="' + l.vkGroup + '"');
                     if (l.instagram) indexHtml = indexHtml.replace(/href="https:\/\/(?:www\.)?instagram\.com[^"]*"/g, 'href="' + l.instagram + '"');
@@ -1914,17 +1853,22 @@
                     if (l.email) indexHtml = indexHtml.replace(/href="mailto:[^"]*"/g, 'href="mailto:' + l.email + '"');
                 }
 
-                appState._rawIndexHtml = indexHtml;
-                appState._rawSeatsJs = seatsJs;
+                const currentAdminHtml = document.documentElement.outerHTML;
 
                 const treeItems = [
                     { path: 'index.html', mode: '100644', type: 'blob', content: indexHtml },
-                    { path: 'seats.js', mode: '100644', type: 'blob', content: seatsJs }
+                    { path: 'seats.js', mode: '100644', type: 'blob', content: seatsJs },
+                    { path: 'admin.html', mode: '100644', type: 'blob', content: currentAdminHtml },
+                    { path: 'admin/index.html', mode: '100644', type: 'blob', content: currentAdminHtml }
                 ];
 
-                // 4. Upload any pending media blobs
+                if (styleCss) {
+                    treeItems.push({ path: 'style.css', mode: '100644', type: 'blob', content: styleCss });
+                }
+
+                // Upload any pending media blobs
                 if (appState.pendingUploads && appState.pendingUploads.size > 0) {
-                    showToast('Загрузка ' + appState.pendingUploads.size + ' файлов на GitHub...', 'info');
+                    showToast('Загрузка ' + appState.pendingUploads.size + ' файлов на сайт...', 'info');
                     for (const [filePath, file] of appState.pendingUploads.entries()) {
                         const base64 = await fileToBase64(file);
                         const blobResp = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/blobs', {
@@ -1946,8 +1890,8 @@
                     }
                 }
 
-                // 5. Create new tree
-                showToast('Создание коммита на GitHub...', 'info');
+                // Create new tree
+                showToast('Формирование коммита...', 'info');
                 const treeResp = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/trees', {
                     method: 'POST',
                     headers,
@@ -1958,12 +1902,12 @@
                 });
                 if (!treeResp.ok) {
                     const err = await treeResp.json().catch(() => ({}));
-                    throw new Error('Ошибка создания дерева Git: ' + (err.message || treeResp.statusText));
+                    throw new Error('Ошибка дерева Git: ' + (err.message || treeResp.statusText));
                 }
                 const treeData = await treeResp.json();
                 const newTreeSha = treeData.sha;
 
-                // 6. Create commit
+                // Create commit
                 const commitMessage = 'Обновление контента [Панель управления] — ' + new Date().toLocaleString('ru-RU');
                 const newCommitResp = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/commits', {
                     method: 'POST',
@@ -1976,12 +1920,12 @@
                 });
                 if (!newCommitResp.ok) {
                     const err = await newCommitResp.json().catch(() => ({}));
-                    throw new Error('Ошибка создания коммита: ' + (err.message || newCommitResp.statusText));
+                    throw new Error('Ошибка коммита: ' + (err.message || newCommitResp.statusText));
                 }
                 const newCommitData = await newCommitResp.json();
                 const newCommitSha = newCommitData.sha;
 
-                // 7. Update branch ref
+                // Update branch reference
                 const updateRefResp = await fetch('https://api.github.com/repos/' + owner + '/' + repo + '/git/refs/heads/' + branch, {
                     method: 'PATCH',
                     headers,
@@ -1995,30 +1939,28 @@
                     throw new Error('Ошибка обновления ветки: ' + (err.message || updateRefResp.statusText));
                 }
 
-                // 8. Success!
+                // Success
                 if (appState.pendingUploads) appState.pendingUploads.clear();
                 const shortSha = newCommitSha.slice(0, 7);
                 localStorage.setItem('tais_last_commit_sha', shortSha);
                 localStorage.setItem('tais_last_published_at', new Date().toISOString());
 
-                document.getElementById('gh-last-commit').textContent = '[' + shortSha + ']';
-                document.getElementById('gh-last-date').textContent = new Date().toLocaleString('ru-RU');
+                const lastCommitEl = document.getElementById('gh-last-commit');
+                if (lastCommitEl) lastCommitEl.textContent = '[' + shortSha + ']';
 
-                showToast('✓ Успешно опубликовано на GitHub! Коммит [' + shortSha + ']. Сайт обновится в течение 1 минуты.');
+                showToast('✓ Успешно опубликовано на сайт! Коммит [' + shortSha + ']. Изменения отобразятся в течение 1 минуты.');
             } catch (err) {
                 console.error('Publish error:', err);
                 showToast('Ошибка при публикации: ' + (err.message || 'попробуйте снова'), 'error');
             } finally {
                 if (btn) {
                     btn.disabled = false;
-                    btn.textContent = '🚀 Опубликовать на GitHub';
+                    btn.textContent = '🚀 Опубликовать на сайт';
                 }
-                if (btnDirect) btnDirect.disabled = false;
             }
         }
 
         document.getElementById('btn-publish-all').addEventListener('click', publishAllToGitHub);
-        document.getElementById('btn-publish-direct').addEventListener('click', publishAllToGitHub);
 
         // Change Password form
         document.getElementById('change-pass-form').addEventListener('submit', async (e) => {

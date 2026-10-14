@@ -239,8 +239,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 9: 'left bottom',
                 10: 'left bottom'
             };
-            imgBg.style.objectPosition = showPosMap[index + 1] || 'left center';
-            imgBg.style.transform = 'none';
+            const posVal = showPosMap[index + 1] || 'left center';
+            const posStr = typeof posVal === 'string' ? posVal : (posVal.pos || 'left center');
+            const scaleVal = (typeof posVal === 'object' && posVal && posVal.scale) ? posVal.scale : 1;
+            imgBg.style.setProperty('object-position', posStr, 'important');
+            imgBg.style.setProperty('transform-origin', posStr, 'important');
+            if (scaleVal && scaleVal !== 1) {
+                imgBg.style.setProperty('transform', `scale(${scaleVal})`, 'important');
+            } else {
+                imgBg.style.setProperty('transform', 'none', 'important');
+            }
         }
         eventItem.appendChild(content);
 

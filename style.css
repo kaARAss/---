@@ -1930,9 +1930,6 @@ html body .events .event-seasons .event-item .content.custom-image-content .even
 html body .events .event-seasons .event-item .background-image,
 html body .events .event-item .background-image,
 html body #events .event-seasons .event-item .background-image {
-    object-position: left center !important;
-    transform: scale(1.05) !important;
-    transform-origin: left center !important;
     width: 100% !important;
     height: 100% !important;
     min-width: 100% !important;
@@ -1940,32 +1937,6 @@ html body #events .event-seasons .event-item .background-image {
     max-width: none !important;
     max-height: none !important;
     object-fit: cover !important;
-}
-
-/* Individual card positioning for shows with text at bottom or specific focal point */
-html body .events .event-seasons .event-item:nth-child(3) .background-image,
-html body .events .event-item:nth-child(3) .background-image {
-    object-position: left 55% !important;
-    transform-origin: left 55% !important;
-    transform: none !important;
-}
-
-html body .events .event-seasons .event-item:nth-child(4) .background-image,
-html body .events .event-item:nth-child(4) .background-image {
-    object-position: 65% center !important;
-    transform-origin: 65% center !important;
-}
-
-html body .events .event-seasons .event-item:nth-child(6) .background-image,
-html body .events .event-item:nth-child(6) .background-image,
-html body .events .event-seasons .event-item:nth-child(7) .background-image,
-html body .events .event-item:nth-child(7) .background-image,
-html body .events .event-seasons .event-item:nth-child(9) .background-image,
-html body .events .event-item:nth-child(9) .background-image,
-html body .events .event-seasons .event-item:nth-child(10) .background-image,
-html body .events .event-item:nth-child(10) .background-image {
-    object-position: left bottom !important;
-    transform-origin: left bottom !important;
 }
 
 @media only screen and (max-width: 960px) {
@@ -1976,42 +1947,12 @@ html body .events .event-item:nth-child(10) .background-image {
         touch-action: pan-y !important;
         cursor: pointer !important;
     }
-
     html body .events .event-seasons .event-item .background-image,
     html body .events .event-item .background-image,
     html body #events .event-seasons .event-item .background-image {
-        -o-object-position: left center !important;
-        object-position: left center !important;
-        transform: scale(1.05) !important;
-        transform-origin: left center !important;
-    }
-
-    html body .events .event-seasons .event-item:nth-child(3) .background-image,
-    html body .events .event-item:nth-child(3) .background-image {
-        -o-object-position: left 55% !important;
-        object-position: left 55% !important;
-        transform-origin: left 55% !important;
-        transform: none !important;
-    }
-
-    html body .events .event-seasons .event-item:nth-child(4) .background-image,
-    html body .events .event-item:nth-child(4) .background-image {
-        -o-object-position: 65% center !important;
-        object-position: 65% center !important;
-        transform-origin: 65% center !important;
-    }
-
-    html body .events .event-seasons .event-item:nth-child(6) .background-image,
-    html body .events .event-item:nth-child(6) .background-image,
-    html body .events .event-seasons .event-item:nth-child(7) .background-image,
-    html body .events .event-item:nth-child(7) .background-image,
-    html body .events .event-seasons .event-item:nth-child(9) .background-image,
-    html body .events .event-item:nth-child(9) .background-image,
-    html body .events .event-seasons .event-item:nth-child(10) .background-image,
-    html body .events .event-item:nth-child(10) .background-image {
-        -o-object-position: left bottom !important;
-        object-position: left bottom !important;
-        transform-origin: left bottom !important;
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
     }
 }
 

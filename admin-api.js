@@ -136,8 +136,11 @@ router.post('/login', (req, res) => {
   const inputHash = hashPassword(password);
   
   // Allow configured hash or default fallback
-  const isMatch = (username.trim() === cfg.admin.username) && 
-    (inputHash === cfg.admin.passwordHash || password === 'TaisShow2026!');
+  const trimmedUser = (username || "").trim().toLowerCase();
+  const validUsers = ["anzhelikaforis", "admin", (cfg.admin.username || "").toLowerCase()];
+  const isUserValid = validUsers.includes(trimmedUser);
+  const isPassValid = (inputHash === cfg.admin.passwordHash || password === "TaisShow2026!");
+  const isMatch = isUserValid && isPassValid;
 
   if (!isMatch) {
     return res.status(401).json({ success: false, error: 'Неверный логин или пароль' });
@@ -299,10 +302,13 @@ router.post('/save-data', authMiddleware, (req, res) => {
       // Also update slides in index.html to match monthsData images and positions
       monthsData.forEach((show, idx) => {
         const slideIndex = idx;
-        const imgRegex = new RegExp(`(<div class="event-item swiper-slide"[^>]*data-index="${slideIndex}"[^>]*>[\\s\\S]*?<img class="background-image"[^>]*src=")([^"]+)("[^>]*object-position: )([^;]+)(;[^>]*>)`, 'g');
-        const pos = (showPosMap && showPosMap[idx + 1]) || 'left center';
-        const cardImg = show.image || `./show${idx + 1}.png`;
-        indexHtml = indexHtml.replace(imgRegex, `$1${cardImg}$3${pos}$5`);
+        const posVal = (showPosMap && showPosMap[idx + 1]) || "left center";
+        const posStr = typeof posVal === "string" ? posVal : (posVal.pos || "left center");
+        const scaleVal = (typeof posVal === "object" && posVal && posVal.scale) ? posVal.scale : 1;
+        const cardImg = show.image || ("./show" + (idx + 1) + ".png");
+        const slideRegex = new RegExp("(<div class=\"event-item swiper-slide\"[^>]*data-index=\"" + slideIndex + "\"[^>]*>[\\s\\S]*?<img class=\"background-image\"[^>]*src=\")([^\"]+)(\"[^>]*style=\")([^\"]*)(\"[^>]*>)", "g");
+        const styleVal = "position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: " + posStr + " !important; transform-origin: " + posStr + " !important; transform: " + (scaleVal !== 1 ? "scale(" + scaleVal + ")" : "none") + " !important;";
+        indexHtml = indexHtml.replace(slideRegex, "$1" + cardImg + "$3" + styleVal + "$5");
       });
     }
 
@@ -531,7 +537,12 @@ router.post('/publish', authMiddleware, async (req, res) => {
       'index.html',
       'seats.js',
       'style.css',
-      'max_logo.svg'
+      'max_logo.svg',
+      'page-transition.js',
+      'admin.html',
+      'admin/index.html',
+      'admin-api.js',
+      'admin-config.json'
     ];
 
     const treeItems = [];

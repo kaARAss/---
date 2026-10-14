@@ -1791,17 +1791,23 @@
                 let indexHtml = '';
                 let seatsJs = '';
                 let styleCss = '';
+                let adminHtml = '';
                 try {
                     indexHtml = await fetch('./index.html?v=' + Date.now()).then(r => r.text());
                     seatsJs = await fetch('./seats.js?v=' + Date.now()).then(r => r.text());
                     styleCss = await fetch('./style.css?v=' + Date.now()).then(r => r.text()).catch(() => '');
+                    adminHtml = await fetch('./admin.html?v=' + Date.now()).then(r => r.text()).catch(() => '');
                 } catch(e) {}
 
-                if (!indexHtml || !seatsJs) {
-                    const rawIndex = await fetch('https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/index.html?v=' + Date.now()).then(r => r.text());
-                    const rawSeats = await fetch('https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/seats.js?v=' + Date.now()).then(r => r.text());
-                    indexHtml = rawIndex;
-                    seatsJs = rawSeats;
+                if (!indexHtml || !seatsJs || !adminHtml) {
+                    try {
+                        if (!indexHtml) indexHtml = await fetch('https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/index.html?v=' + Date.now()).then(r => r.text());
+                        if (!seatsJs) seatsJs = await fetch('https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/seats.js?v=' + Date.now()).then(r => r.text());
+                        if (!adminHtml) adminHtml = await fetch('https://raw.githubusercontent.com/' + owner + '/' + repo + '/' + branch + '/admin.html?v=' + Date.now()).then(r => r.text()).catch(() => '');
+                    } catch(e) {}
+                }
+                if (!adminHtml) {
+                    adminHtml = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
                 }
 
                 // Apply monthsData & slide image positions/scales to index.html
@@ -1853,13 +1859,11 @@
                     if (l.email) indexHtml = indexHtml.replace(/href="mailto:[^"]*"/g, 'href="mailto:' + l.email + '"');
                 }
 
-                const currentAdminHtml = document.documentElement.outerHTML;
-
                 const treeItems = [
                     { path: 'index.html', mode: '100644', type: 'blob', content: indexHtml },
                     { path: 'seats.js', mode: '100644', type: 'blob', content: seatsJs },
-                    { path: 'admin.html', mode: '100644', type: 'blob', content: currentAdminHtml },
-                    { path: 'admin/index.html', mode: '100644', type: 'blob', content: currentAdminHtml }
+                    { path: 'admin.html', mode: '100644', type: 'blob', content: adminHtml },
+                    { path: 'admin/index.html', mode: '100644', type: 'blob', content: adminHtml }
                 ];
 
                 if (styleCss) {

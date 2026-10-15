@@ -1079,7 +1079,7 @@ footer .footer_section .footer_block .link_block svg {
 
 .banner .banner_image {
     background-image: url('img/index/banner.png?v=1791580001') !important;
-    background-size: cover !important;
+    background-size: contain !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
     aspect-ratio: 1808 / 870 !important;
@@ -1090,7 +1090,7 @@ footer .footer_section .footer_block .link_block svg {
 @media only screen and (max-width: 1024px) and (min-width: 761px) {
     .banner .banner_image {
         background-image: url('img/index/banner.png?v=1791580001') !important;
-        background-size: cover !important;
+        background-size: contain !important;
         background-position: center center !important;
     }
 }
@@ -2106,12 +2106,21 @@ h1.section_title {
     text-shadow: none !important;
 }
 
-/* Prevent document height collapse when modals open so page doesn't scroll to top */
+/* Complete background scroll lock when modals are open */
+html.modal-open,
+body.modal-open,
 body.no-scroll,
 .no-scroll {
     overflow: hidden !important;
-    height: auto !important;
-    min-height: 100vh !important;
+    touch-action: none !important;
+}
+
+.modal-desc-content,
+.modal-details-scrollable {
+    overflow-y: auto !important;
+    overscroll-behavior: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    touch-action: pan-y !important;
 }
 
 /* Perfect Gold Frame & Image Alignment across all devices */
@@ -2212,59 +2221,60 @@ body.no-scroll,
 @media (min-width: 769px) {
     .about_show .show_block {
         display: flex !important;
-        flex-direction: row !important;
+        flex-direction: column !important;
         align-items: center !important;
-        justify-content: center !important;
-        gap: clamp(14px, 3vw, 40px) !important;
+        justify-content: flex-start !important;
+        gap: 18px !important;
         width: 100% !important;
-        max-width: 1100px !important;
-        margin: 0 auto 36px auto !important;
+        max-width: 720px !important;
+        margin: 0 auto 52px auto !important;
         box-sizing: border-box !important;
         position: relative !important;
     }
 
-    /* Нечетные блоки (1, 3): фотка слева, текст справа */
-    .about_show .show_block:nth-child(odd) .image-frame {
-        order: 1 !important;
-    }
-    .about_show .show_block:nth-child(odd) .block_info {
-        order: 2 !important;
-        text-align: left !important;
-    }
-
-    /* Четные блоки (2, 4): текст слева, фотка справа */
-    .about_show .show_block:nth-child(even) .block_info {
-        order: 1 !important;
-        text-align: left !important;
-    }
+    .about_show .show_block .image-frame,
+    .about_show .show_block:nth-child(odd) .image-frame,
     .about_show .show_block:nth-child(even) .image-frame {
-        order: 2 !important;
-    }
-
-    .about_show .show_block .image-frame {
-        flex: 0 0 46% !important;
-        width: 46% !important;
-        max-width: 500px !important;
-        min-width: 160px !important;
+        order: 1 !important;
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: 620px !important;
         aspect-ratio: 2080 / 1200 !important;
         height: auto !important;
-        margin: 0 !important;
-        position: relative !important;
+        margin: 0 auto !important;
         overflow: hidden !important;
         box-sizing: border-box !important;
         border-radius: 8px !important;
+        padding: 0 !important;
     }
 
-    .about_show .show_block .block_info {
-        flex: 1 1 50% !important;
-        max-width: 540px !important;
-        width: auto !important;
-        padding: clamp(8px, 2vw, 28px) !important;
+    .about_show .show_block .block_info,
+    .about_show .show_block:nth-child(odd) .block_info,
+    .about_show .show_block:nth-child(even) .block_info {
+        order: 2 !important;
+        width: 100% !important;
+        max-width: 620px !important;
+        text-align: center !important;
+        margin: 0 auto !important;
+        padding: 0 10px !important;
         box-sizing: border-box !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
-        text-align: left !important;
+        align-items: center !important;
+    }
+
+    .about_show .show_block .block_info h3 {
+        text-align: center !important;
+        font-size: 24px !important;
+        margin-bottom: 12px !important;
+    }
+
+    .about_show .show_block .block_info p {
+        text-align: center !important;
+        font-size: 16px !important;
+        line-height: 1.6 !important;
     }
 }
 

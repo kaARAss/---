@@ -48,17 +48,85 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function restoreScrollPosition() {
+    function lockBackgroundScroll() {
+        if (savedScrollPosition === null) {
+            const currentScroll = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+            savedScrollPosition = currentScroll;
+        }
+        document.documentElement.classList.add('modal-open');
+        document.body.classList.add('modal-open');
+        document.body.classList.add('no-scroll');
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedScrollPosition}px`;
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+        document.body.style.overflow = 'hidden';
+        document.documentElement.style.overflow = 'hidden';
+    }
+
+    function unlockBackgroundScroll() {
+        document.documentElement.classList.remove('modal-open');
+        document.body.classList.remove('modal-open');
+        document.body.classList.remove('no-scroll');
         const targetY = savedScrollPosition;
-        savedScrollPosition = null;
-        if (typeof targetY === 'number' && targetY > 0) {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        document.body.style.overflow = '';
+        document.documentElement.style.overflow = '';
+        if (typeof targetY === 'number') {
             window.scrollTo({
                 top: targetY,
                 left: 0,
                 behavior: 'instant'
             });
+            savedScrollPosition = null;
         }
     }
+
+    function restoreScrollPosition() {
+        unlockBackgroundScroll();
+    }
+
+    // Block scrolling of the background anywhere on the page when modal is open,
+    // allowing scrolling ONLY when the cursor/finger is in the description text area.
+    function handleModalWheel(e) {
+        const openModal = document.querySelector('.event_tickets.new_modal_layout, .event_tickets[style*="flex"], .event_tickets[style*="block"]');
+        if (!openModal || openModal.style.display === 'none') return;
+
+        const scrollableDesc = e.target.closest('.modal-desc-content, .modal-details-scrollable');
+        if (!scrollableDesc) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+
+        const delta = e.deltaY;
+        const atTop = scrollableDesc.scrollTop <= 0;
+        const atBottom = scrollableDesc.scrollTop + scrollableDesc.clientHeight >= scrollableDesc.scrollHeight - 1;
+        if ((delta < 0 && atTop) || (delta > 0 && atBottom)) {
+            e.preventDefault();
+            e.stopPropagation();
+            return false;
+        }
+    }
+
+    function handleModalTouchMove(e) {
+        const openModal = document.querySelector('.event_tickets.new_modal_layout, .event_tickets[style*="flex"], .event_tickets[style*="block"]');
+        if (!openModal || openModal.style.display === 'none') return;
+
+        const scrollableDesc = e.target.closest('.modal-desc-content, .modal-details-scrollable');
+        if (!scrollableDesc) {
+            e.preventDefault();
+            return false;
+        }
+    }
+
+    window.addEventListener('wheel', handleModalWheel, { passive: false });
+    window.addEventListener('touchmove', handleModalTouchMove, { passive: false });
 
     function closeCurrentModal() {
         const openModals = document.querySelectorAll('.event_tickets');
@@ -86,8 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeof window.closeOrderMessengerModal === 'function') {
             window.closeOrderMessengerModal();
         }
-        document.body.classList.remove('no-scroll');
-        restoreScrollPosition();
+        unlockBackgroundScroll();
     }
     window.closeCurrentModal = closeCurrentModal;
 
@@ -725,13 +792,15 @@ function createEventTickets(monthData, index) {
     detailsCol.style.padding = '10px 0';
 
     const desc = document.createElement('div');
-    desc.className = 'modal-desc-content';
+    desc.className = 'modal-desc-content modal-details-scrollable';
     desc.style.flex = '1';
     desc.style.color = '#ffffff';
     desc.style.textShadow = '0 1px 2px rgba(0, 0, 0, 0.9)';
     desc.style.fontFamily = 'Onest, sans-serif';
     desc.style.lineHeight = '1.6';
     desc.style.overflowY = 'auto';
+    desc.style.overscrollBehavior = 'contain';
+    desc.style.webkitOverflowScrolling = 'touch';
     desc.style.paddingRight = '10px';
     desc.innerHTML = monthData.detailsText || `
         <h3 style="color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;">О шоу</h3>
@@ -816,18 +885,15 @@ function openOrCreateEventTickets(targetIndex) {
 
     
 function openEventTickets(monthYear) {
-    if (savedScrollPosition === null) {
-        saveScrollPosition();
-    }
+    lockBackgroundScroll();
     document.querySelectorAll('.event_tickets').forEach(t => (t.style.display = 'none'));
     const eventTickets = document.querySelector(`#event_tickets_${monthYear}`);
     if (!eventTickets) {
+        unlockBackgroundScroll();
         return;
     }
     modalName = monthYear;
     eventTickets.style.display = 'flex';
-    
-    document.body.classList.add('no-scroll');
 }
 
 function loadEventsList(eventTickets, monthNum, year) {

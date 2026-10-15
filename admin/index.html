@@ -756,14 +756,14 @@
             <h1 class="login-title">Панель управления</h1>
             <p class="login-subtitle">Редактирование сайта таисшоу.рф</p>
 
-            <form id="login-form" onsubmit="event.preventDefault(); return false;">
+            <form id="login-form" onsubmit="event.preventDefault(); return false;" autocomplete="off">
                 <div class="form-group">
                     <label class="form-label" for="username">Логин</label>
-                    <input type="text" id="username" class="form-input" placeholder="AnzhelikaForis" value="AnzhelikaForis" required autocomplete="username">
+                    <input type="text" id="username" class="form-input" placeholder="Введите логин" value="" required autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
-                    <input type="password" id="password" class="form-input" placeholder="Введите пароль" required autocomplete="current-password">
+                    <input type="password" id="password" class="form-input" placeholder="Введите пароль" value="" required autocomplete="new-password">
                 </div>
                 <div id="login-error-msg" style="display:none; color: #ff6b6b; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; text-align: center;"></div>
                 <button type="submit" class="btn btn-primary btn-block" id="btn-login-submit">
@@ -1330,7 +1330,21 @@
             appState.authenticated = isAuth;
             document.getElementById('login-screen').style.display = isAuth ? 'none' : 'flex';
             document.getElementById('dashboard-screen').style.display = isAuth ? 'flex' : 'none';
+            if (!isAuth) {
+                const uInput = document.getElementById('username');
+                const pInput = document.getElementById('password');
+                if (uInput) uInput.value = '';
+                if (pInput) pInput.value = '';
+            }
         }
+
+        // Ensure login inputs are always completely empty on initial load
+        document.addEventListener('DOMContentLoaded', () => {
+            const uInput = document.getElementById('username');
+            const pInput = document.getElementById('password');
+            if (uInput) uInput.value = '';
+            if (pInput) pInput.value = '';
+        });
 
         // Login Handler
         document.getElementById('login-form').addEventListener('submit', async (e) => {

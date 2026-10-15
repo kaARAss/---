@@ -1078,7 +1078,7 @@ footer .footer_section .footer_block .link_block svg {
 }
 
 .banner .banner_image {
-    background-image: url('img/index/banner.png?v=1791580001') !important;
+    background-image: url('img/index/banner.png?v=1791592000') !important;
     background-size: contain !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
@@ -1089,7 +1089,7 @@ footer .footer_section .footer_block .link_block svg {
 
 @media only screen and (max-width: 1024px) and (min-width: 761px) {
     .banner .banner_image {
-        background-image: url('img/index/banner.png?v=1791580001') !important;
+        background-image: url('img/index/banner.png?v=1791592000') !important;
         background-size: contain !important;
         background-position: center center !important;
     }

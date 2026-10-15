@@ -757,13 +757,16 @@
             <p class="login-subtitle">Редактирование сайта таисшоу.рф</p>
 
             <form id="login-form" onsubmit="event.preventDefault(); return false;" autocomplete="off">
+                <!-- Prevent browser autofill -->
+                <input type="text" style="display:none" aria-hidden="true" tabindex="-1">
+                <input type="password" style="display:none" aria-hidden="true" tabindex="-1">
                 <div class="form-group">
                     <label class="form-label" for="username">Логин</label>
-                    <input type="text" id="username" class="form-input" placeholder="Введите логин" value="" required autocomplete="off">
+                    <input type="text" id="username" name="login_user_field" class="form-input" placeholder="Введите логин" value="" required autocomplete="off" readonly onfocus="this.removeAttribute('readonly');">
                 </div>
                 <div class="form-group">
                     <label class="form-label" for="password">Пароль</label>
-                    <input type="password" id="password" class="form-input" placeholder="Введите пароль" value="" required autocomplete="new-password">
+                    <input type="password" id="password" name="login_pass_field" class="form-input" placeholder="Введите пароль" value="" required autocomplete="new-password" readonly onfocus="this.removeAttribute('readonly');">
                 </div>
                 <div id="login-error-msg" style="display:none; color: #ff6b6b; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; font-size: 13px; text-align: center;"></div>
                 <button type="submit" class="btn btn-primary btn-block" id="btn-login-submit">
@@ -1326,25 +1329,36 @@
             }
         }
 
+        function clearLoginInputs() {
+            const uInput = document.getElementById('username');
+            const pInput = document.getElementById('password');
+            if (uInput) {
+                uInput.value = '';
+                uInput.setAttribute('readonly', 'readonly');
+            }
+            if (pInput) {
+                pInput.value = '';
+                pInput.setAttribute('readonly', 'readonly');
+            }
+        }
+
         function setAuthenticated(isAuth) {
             appState.authenticated = isAuth;
             document.getElementById('login-screen').style.display = isAuth ? 'none' : 'flex';
             document.getElementById('dashboard-screen').style.display = isAuth ? 'flex' : 'none';
             if (!isAuth) {
-                const uInput = document.getElementById('username');
-                const pInput = document.getElementById('password');
-                if (uInput) uInput.value = '';
-                if (pInput) pInput.value = '';
+                clearLoginInputs();
             }
         }
 
-        // Ensure login inputs are always completely empty on initial load
-        document.addEventListener('DOMContentLoaded', () => {
-            const uInput = document.getElementById('username');
-            const pInput = document.getElementById('password');
-            if (uInput) uInput.value = '';
-            if (pInput) pInput.value = '';
-        });
+        // Ensure login inputs are always completely empty on initial load & prevent password managers autofill
+        window.addEventListener('DOMContentLoaded', clearLoginInputs);
+        window.addEventListener('load', clearLoginInputs);
+        window.addEventListener('pageshow', clearLoginInputs);
+        setTimeout(clearLoginInputs, 50);
+        setTimeout(clearLoginInputs, 150);
+        setTimeout(clearLoginInputs, 400);
+        setTimeout(clearLoginInputs, 800);
 
         // Login Handler
         document.getElementById('login-form').addEventListener('submit', async (e) => {
@@ -1404,7 +1418,6 @@
                         user: username,
                         loggedAt: Date.now()
                     }));
-                    localStorage.setItem('tais_admin_user', 'AnzhelikaForis');
                     showToast('Успешный вход в систему!');
                     setAuthenticated(true);
                     loadData();

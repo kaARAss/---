@@ -366,7 +366,7 @@ body {
 .banner .banner_image {
   width: 100%;
   aspect-ratio: 1600/770;
-  background-image: url(./img/index/banner.png?v=1791570001);
+  background-image: url(./img/index/banner.png?v=1791592000);
   background-size: contain;
   background-repeat: no-repeat;
 }
@@ -10586,7 +10586,7 @@ hr {
     max-height: 480px;
     height: 100%;
     max-width: 976px;
-    background-image: url(./img/index/banner.png?v=1791570001) !important;
+    background-image: url(./img/index/banner.png?v=1791592000) !important;
     background-size: contain;
     background-repeat: no-repeat;
   }

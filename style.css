@@ -1989,7 +1989,7 @@ html body #events .event-seasons .event-item .background-image {
     background: #0d0d10 !important;
     background-color: #0d0d10 !important;
     object-fit: cover !important;
-    object-position: center !important;
+    object-position: center;
     width: 100% !important;
     height: 100% !important;
     max-height: 100% !important;

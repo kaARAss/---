@@ -249,7 +249,9 @@ document.addEventListener('DOMContentLoaded', function() {
         eventItem.setAttribute('data-index', index);
 
         const imgBg = document.createElement('img');
-        imgBg.src = image;
+        const isMobileScreen = typeof window !== 'undefined' && window.innerWidth <= 960;
+        const effectiveImg = (isMobileScreen && monthData.mobileImage) ? monthData.mobileImage : image;
+        imgBg.src = effectiveImg;
         imgBg.alt = 'afisha background';
         imgBg.className = 'background-image';
         imgBg.loading = (index < 4 ? 'eager' : 'lazy');
@@ -493,7 +495,7 @@ function createEventTickets(monthData, index) {
     thumbsCol.style.overflowY = 'auto';
     thumbsCol.style.paddingRight = '0px';
 
-    const createThumb = (text, isVideo, bgUrl, posterUrl) => {
+    const createThumb = (text, isVideo, bgUrl, posterUrl, pos) => {
         const t = document.createElement('div');
         t.style.width = '100%';
         t.style.height = '90px';
@@ -535,6 +537,9 @@ function createEventTickets(monthData, index) {
             thumbImg.style.width = '100%';
             thumbImg.style.height = '100%';
             thumbImg.style.objectFit = 'cover';
+            if (pos) {
+                thumbImg.style.objectPosition = pos;
+            }
             thumbImg.onerror = () => {
                 if (!thumbImg._retriedAlt) {
                     thumbImg._retriedAlt = true;
@@ -579,7 +584,7 @@ function createEventTickets(monthData, index) {
 
     const thumbsElements = [];
     mediaItems.forEach((item, i) => {
-        const thumb = createThumb(item.label, item.type === 'video', item.url, item.poster);
+        const thumb = createThumb(item.label, item.type === 'video', item.url, item.poster, item.pos);
         if (i === 0) thumb.style.border = '2px solid #f8e7bc';
         thumbsCol.appendChild(thumb);
         thumbsElements.push({ el: thumb, data: item });
@@ -760,7 +765,15 @@ function createEventTickets(monthData, index) {
                 }
             };
             img.style.objectFit = 'cover';
-            img.style.objectPosition = 'center';
+            const posStr = item.pos || 'center';
+            const scaleVal = (typeof item.scale === 'number') ? item.scale : 1;
+            img.style.setProperty('object-position', posStr, 'important');
+            img.style.setProperty('transform-origin', posStr, 'important');
+            if (scaleVal !== 1) {
+                img.style.setProperty('transform', `scale(${scaleVal})`, 'important');
+            } else {
+                img.style.setProperty('transform', 'none', 'important');
+            }
             img.style.maxWidth = '100%';
             img.style.maxHeight = '100%';
             img.style.width = '100%';

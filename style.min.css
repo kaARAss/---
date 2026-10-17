@@ -11573,8 +11573,11 @@ html body .events .event-item .overlay-image {
     display: block !important;
     overflow: hidden !important;
     box-sizing: border-box !important;
-    border-radius: 8px !important;
+    border-radius: 16px !important;
     padding: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
 }
 .about_show .show_block .image-frame img.cut-corners,
 .events-info .image-frame img.cut-corners {
@@ -11593,31 +11596,14 @@ html body .events .event-item .overlay-image {
     box-sizing: border-box !important;
     margin: 0 !important;
     padding: 0 !important;
-    --cut: clamp(16px, 4.3vw, 24px);
-    -webkit-mask:
-      radial-gradient(circle at 0 0, transparent calc(var(--cut) - 0.5px), #000 var(--cut)) top left,
-      radial-gradient(circle at 100% 0, transparent calc(var(--cut) - 0.5px), #000 var(--cut)) top right,
-      radial-gradient(circle at 100% 100%, transparent calc(var(--cut) - 0.5px), #000 var(--cut)) bottom right,
-      radial-gradient(circle at 0 100%, transparent calc(var(--cut) - 0.5px), #000 var(--cut)) bottom left !important;
-    -webkit-mask-size: 51% 51% !important;
-    -webkit-mask-repeat: no-repeat !important;
-    mask:
-      radial-gradient(circle at 0 0, transparent calc(var(--cut) - 0.5px), #000 var(--cut)) top left,
-      radial-gradient(circle at 100% 0, transparent calc(var(--cut) - 0.5px), #000 var(--cut)) top right,
-      radial-gradient(circle at 100% 100%, transparent calc(var(--cut) - 0.5px), #000 var(--cut)) bottom right,
-      radial-gradient(circle at 0 100%, transparent calc(var(--cut) - 0.5px), #000 var(--cut)) bottom left !important;
-    mask-size: 51% 51% !important;
-    mask-repeat: no-repeat !important;
-    clip-path: polygon(
-      var(--cut) 0%,
-      calc(100% - var(--cut)) 0%,
-      100% var(--cut),
-      100% calc(100% - var(--cut)),
-      calc(100% - var(--cut)) 100%,
-      var(--cut) 100%,
-      0% calc(100% - var(--cut)),
-      0% var(--cut)
-    ) !important;
+    border-radius: 16px !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    mask: none !important;
+    -webkit-mask: none !important;
+    clip-path: none !important;
+    -webkit-clip-path: none !important;
 }
 .about_show .show_block .image-frame picture,
 .events-info .image-frame picture {

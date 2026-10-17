@@ -6,7 +6,7 @@
     "dev": "node server.js",
     "start": "node server.js",
     "build": "echo 'No build step required'",
-    "test": "node --test tests/content.test.cjs tests/server.test.cjs tests/crypto.test.cjs",
+    "test": "node --test tests/content.test.cjs tests/server.test.cjs tests/crypto.test.cjs tests/video-poster.test.cjs",
     "test:browser": "node tests/browser.cjs",
     "check": "node scripts/check-site.cjs"
   },

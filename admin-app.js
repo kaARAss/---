@@ -39,6 +39,7 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
         let draftQueue = Promise.resolve();
         let savingDraft = false;
         let publishing = false;
+        let processingMedia = false;
         let dirty = false;
         async function jsonRequest(url, options = {}) {
             const response = await fetch(url, { cache: 'no-store', ...options });
@@ -142,10 +143,15 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
         }
         const draftRead = () => draftOperation('readonly',store => store.get(DRAFT_KEY));
         const draftDelete = () => draftOperation('readwrite',store => store.delete(DRAFT_KEY));
+        function usedUploadPaths(data) {
+            return new Set([data.banner.desktopImage,data.banner.mobileImage,...data.monthsData.flatMap(show=>[show.image,show.mobileImage,...show.media.flatMap(item=>[item.url,item.poster])])].filter(Boolean).map(url=>url.split(/[?#]/)[0].replace(/^\.\//,'')));
+        }
         async function persistDraft(force = false) {
             if (!appState.data || (publishing && !force)) return;
             saveCurrentShowFormToState(); saveContactsFromForm();
             const data = TaisContent.validate(appState.data);
+            const used = usedUploadPaths(data);
+            for(const path of appState.pendingUploads.keys())if(!used.has(path))appState.pendingUploads.delete(path);
             const snapshot = {data,files:[...appState.pendingUploads.entries()],baseContent:appState.baseContent,savedAt:Date.now()};
             draftQueue = draftQueue.catch(()=>{}).then(()=>draftOperation('readwrite',store => store.put(snapshot,DRAFT_KEY)));
             await draftQueue;
@@ -156,12 +162,12 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
             catch(e) { showToast('Черновик не сохранён: ' + e.message,'error'); }
         }
         function scheduleDraft() {
-            if (!appState.authenticated || !appState.data || appState.loading || publishing) return;
+            if (!appState.authenticated || !appState.data || appState.loading || publishing || processingMedia) return;
             dirty = true; clearTimeout(draftTimer);
             draftTimer = setTimeout(() => persistDraft().catch(e => showToast('Автосохранение не удалось: ' + e.message,'error')),500);
         }
         ['input','change','click'].forEach(type => document.getElementById('dashboard-screen').addEventListener(type,scheduleDraft));
-        window.addEventListener('beforeunload', e => { if (dirty || publishing) { e.preventDefault(); e.returnValue=''; } });
+        window.addEventListener('beforeunload', e => { if (dirty || publishing || processingMedia) { e.preventDefault(); e.returnValue=''; } });
         async function verifyUpload(file, kind) {
             if (!file.size || file.size > 95*1024*1024) throw new Error('Файл должен быть непустым и меньше 95 МБ');
             const b = new Uint8Array(await file.slice(0,32).arrayBuffer());
@@ -1070,42 +1076,40 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
         });
 
         document.getElementById('upload-media-item-file')?.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (!file) return;
-            try { await verifyUpload(file, e.target.id === 'upload-media-item-file' ? appState.pendingMediaUploadType : 'image'); } catch (err) { showToast(err.message, 'error'); e.target.value = ''; return; }
-            const isVideo = appState.pendingMediaUploadType === 'video';
-            const showIdx = appState.activeShowIndex;
-            const show = appState.data.monthsData[showIdx];
-            if (!show.media) show.media = [];
-
-            const ext = file.name.split('.').pop().toLowerCase();
-            const timestamp = Date.now();
-            const targetFileName = 'show' + (showIdx + 1) + '_' + (isVideo ? 'video' : 'photo') + '_' + timestamp + '.' + ext;
-            const previewBlobUrl = URL.createObjectURL(file);
-
-            if (!appState.pendingUploads) appState.pendingUploads = new Map();
-            appState.pendingUploads.set(targetFileName, file);
-
-            if (appState.pendingMediaUploadIndex >= 0) {
-                const item = show.media[appState.pendingMediaUploadIndex];
-                item.url = targetFileName;
-                item._blobPreview = previewBlobUrl;
-                if (!isVideo) item.poster = targetFileName;
-            } else {
-                show.media.push({
-                    type: isVideo ? 'video' : 'image',
-                    url: targetFileName,
-                    poster: isVideo ? show.image : targetFileName,
-                    label: isVideo ? 'Видео шоу' : 'Фото со сцены',
-                    _blobPreview: previewBlobUrl,
-                    pos: '50% 50%',
-                    scale: 1.0
-                });
+            const input=e.target,file=input.files[0];
+            if (!file || publishing || processingMedia || appState.loading) return;
+            const isVideo=appState.pendingMediaUploadType==='video',showIdx=appState.activeShowIndex;
+            const show=appState.data.monthsData[showIdx],replaceIndex=appState.pendingMediaUploadIndex;
+            processingMedia=true;document.getElementById('dashboard-screen').inert=true;
+            const publishButton=document.getElementById('btn-publish-all');publishButton.disabled=true;input.disabled=true;
+            try {
+                await verifyUpload(file,isVideo?'video':'image');
+                let frame=null;
+                if(isVideo) frame=await TaisVideoPoster.create(file,(step,total)=>showToast('Выбираю кадр из видео: '+step+'/'+total+'… Не закрывайте вкладку.','info'));
+                const suffix=Date.now()+'_'+crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
+                const base='show'+(showIdx+1)+'_'+(isVideo?'video':'photo')+'_'+suffix;
+                const targetFileName=base+'.'+file.name.split('.').pop().toLowerCase();
+                const posterPath=isVideo?base+'_poster.jpg':targetFileName;
+                // Apply the video and its JPEG together, only after extraction has succeeded.
+                appState.pendingUploads.set(targetFileName,file);
+                if(frame)appState.pendingUploads.set(posterPath,new File([frame.blob],posterPath,{type:'image/jpeg'}));
+                const values={type:isVideo?'video':'image',url:targetFileName,poster:posterPath,_blobPreview:URL.createObjectURL(file)};
+                if(frame){values.posterTime=frame.time;values.posterVersion=1;}
+                if(replaceIndex>=0){
+                    const item=show.media[replaceIndex];if(item._blobPreview?.startsWith('blob:'))URL.revokeObjectURL(item._blobPreview);Object.assign(item,values);
+                    if(!frame){delete item.posterTime;delete item.posterVersion;}
+                } else {
+                    if(!show.media)show.media=[];
+                    show.media.push({...values,label:isVideo?'Видео шоу':'Фото со сцены',pos:'50% 50%',scale:1});
+                }
+                renderShowMediaGrid(show);dirty=true;
+                await persistDraft();
+                showToast(isVideo?'✓ Видео и кадр-превью готовы. Нажмите «Опубликовать на сайт».':'✓ Фото добавлено. Нажмите «Опубликовать на сайт».');
+            } catch(err) { showToast('Файл не добавлен или черновик не сохранён: '+err.message,'error'); }
+            finally {
+                processingMedia=false;document.getElementById('dashboard-screen').inert=false;
+                publishButton.disabled=false;input.disabled=false;input.value='';
             }
-
-            renderShowMediaGrid(show);
-            showToast('✓ Медиафайл добавлен! Нажмите «🚀 Опубликовать на сайт», чтобы сохранить.');
-            e.target.value = '';
         });
 
         // Banner tab upload handlers
@@ -1200,6 +1204,7 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
         const b64Utf8 = value => btoa(Array.from(new TextEncoder().encode(value),b=>String.fromCharCode(b)).join(''));
         const decodeB64 = value => new TextDecoder().decode(Uint8Array.from(atob(value.replace(/\s/g,'')),c=>c.charCodeAt(0)));
         async function publishAllToGitHub() {
+            if (processingMedia) { showToast('Дождитесь создания превью видео','info'); return; }
             if (publishing || appState.loading) return;
             lockEditor(true);
             let snapshot, uploads;
@@ -1207,7 +1212,7 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
                 saveCurrentShowFormToState(); saveContactsFromForm();
                 snapshot = TaisContent.validate(appState.data);
                 await persistDraft(true);
-                const used = new Set([snapshot.banner.desktopImage,snapshot.banner.mobileImage,...snapshot.monthsData.flatMap(show=>[show.image,show.mobileImage,...show.media.flatMap(item=>[item.url,item.poster])])].filter(Boolean).map(url=>url.split(/[?#]/)[0].replace(/^\.\//,'')));
+                const used = usedUploadPaths(snapshot);
                 uploads = [...appState.pendingUploads.entries()].filter(([path])=>used.has(path));
                 for (const [path,file] of uploads) {
                     if (!/^(?:img\/(?:index|block)\/)?[\w.-]+\.(png|jpe?g|webp|gif|avif|mp4|webm|mov|m4v)$/i.test(path)) throw new Error('Недопустимый путь файла: '+path);

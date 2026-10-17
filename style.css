@@ -1017,13 +1017,14 @@ footer .footer_section .footer_block .link_block svg {
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
-        margin-bottom: 120px !important;
+        align-items: center !important;
+        margin-bottom: 90px !important;
         box-sizing: border-box !important;
     }
     .banner_main {
-        min-height: 100vh !important;
-        min-height: 100dvh !important;
-        padding: 100px 5% 40px 5% !important;
+        min-height: calc(100vh - 60px) !important;
+        min-height: calc(100dvh - 60px) !important;
+        padding: 55px 5% 0px 5% !important;
         display: flex !important;
         justify-content: center !important;
         align-items: center !important;
@@ -1078,7 +1079,7 @@ footer .footer_section .footer_block .link_block svg {
 }
 
 .banner .banner_image {
-    background-image: url('img/index/banner.png?v=1791592000') !important;
+    background-image: url('img/index/banner.png?v=1791593000') !important;
     background-size: contain !important;
     background-position: center center !important;
     background-repeat: no-repeat !important;
@@ -1089,7 +1090,7 @@ footer .footer_section .footer_block .link_block svg {
 
 @media only screen and (max-width: 1024px) and (min-width: 761px) {
     .banner .banner_image {
-        background-image: url('img/index/banner.png?v=1791592000') !important;
+        background-image: url('img/index/banner.png?v=1791593000') !important;
         background-size: contain !important;
         background-position: center center !important;
     }
@@ -1513,12 +1514,12 @@ footer .footer_section .copyright {
         position: relative !important;
         box-sizing: border-box !important;
     }
-    .new_modal_layout .modal-main-frame img,
-    .new_modal_layout .modal-main-frame video,
-    .new_modal_layout .modal-main-display img,
-    .new_modal_layout .modal-main-display video,
-    .new_modal_layout .modal-body-container > div:nth-child(2) img,
-    .new_modal_layout .modal-body-container > div:nth-child(2) video {
+    .new_modal_layout .modal-main-frame img:not(.is-hidden),
+    .new_modal_layout .modal-main-frame video:not(.is-hidden),
+    .new_modal_layout .modal-main-display img:not(.is-hidden),
+    .new_modal_layout .modal-main-display video:not(.is-hidden),
+    .new_modal_layout .modal-body-container > div:nth-child(2) img:not(.is-hidden),
+    .new_modal_layout .modal-body-container > div:nth-child(2) video:not(.is-hidden) {
         width: 100% !important;
         height: 100% !important;
         max-width: 100% !important;
@@ -1530,6 +1531,33 @@ footer .footer_section .copyright {
         background: #0d0d10 !important;
         display: block !important;
         margin: auto !important;
+    }
+    .new_modal_layout .modal-main-frame img.is-hidden,
+    .new_modal_layout .modal-main-display img.is-hidden,
+    .new_modal_layout .modal-body-container img.is-hidden,
+    .modal-main-display img.is-hidden,
+    .modal-video-poster.is-hidden {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        z-index: -10 !important;
+    }
+    .modal-video-play-btn.is-hidden {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+        pointer-events: none !important;
+        z-index: -10 !important;
+    }
+    .new_modal_layout .modal-main-display video,
+    .modal-main-display video,
+    .modal-video-element {
+        display: block !important;
+        visibility: visible !important;
+        object-fit: contain !important;
+        background: #000 !important;
+        background-color: #000 !important;
     }
     .new_modal_layout .modal-body-container > div.thumbs-wrapper {
         order: 2 !important;
@@ -1594,19 +1622,21 @@ footer .footer_section .copyright {
 
 
 
-/* Make the ticket banner slightly bigger */
+/* Slightly smaller ticket banner by ~2cm */
 .banner_image {
-    transform: scaleX(1.05);
-    transform-origin: center top;
+    transform: scale(0.96);
+    transform-origin: center center;
 }
 @media only screen and (max-width: 1024px) {
     .banner_image {
-        transform: scaleX(1.02);
+        transform: scale(0.97);
+        transform-origin: center center;
     }
 }
 @media only screen and (max-width: 760px) {
     .banner_image {
-        transform: scaleX(1);
+        transform: scale(1);
+        transform-origin: center center;
     }
 }
 
@@ -1899,31 +1929,27 @@ html body .events .event-seasons .event-item .content.custom-image-content .even
 }
 
 
-/* Hide scrollbar for thumbs column */
-.thumbs-col::-webkit-scrollbar {
-    display: none !important;
-}
+/* Thumbs column smooth scroll and gold scrollbar */
 .thumbs-col {
-    -ms-overflow-style: none !important;  /* IE and Edge */
-    scrollbar-width: none !important;  /* Firefox */
+    overflow-y: auto !important;
+    scrollbar-width: thin !important;
+    scrollbar-color: #c5a059 rgba(255, 255, 255, 0.08) !important;
+    -webkit-overflow-scrolling: touch !important;
 }
-
-/* Hide ALL scrollbars in the modal */
-.new_modal_layout, 
-.new_modal_layout *, 
-.thumbs-col, 
-.modal-body-container > div {
-    scrollbar-width: none !important;  /* Firefox */
-    -ms-overflow-style: none !important;  /* IE and Edge */
+.thumbs-col::-webkit-scrollbar {
+    display: block !important;
+    width: 6px !important;
 }
-
-.new_modal_layout::-webkit-scrollbar, 
-.new_modal_layout *::-webkit-scrollbar, 
-.thumbs-col::-webkit-scrollbar, 
-.modal-body-container > div::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
+.thumbs-col::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-radius: 4px !important;
+}
+.thumbs-col::-webkit-scrollbar-thumb {
+    background: #c5a059 !important;
+    border-radius: 4px !important;
+}
+.thumbs-col::-webkit-scrollbar-thumb:hover {
+    background: #e2be78 !important;
 }
 
 /* Card alignment and scale for preview cards - full frame fill without letterboxing */
@@ -1972,9 +1998,9 @@ html body #events .event-seasons .event-item .background-image {
 }
 
 .modal-body-container video {
-    background: transparent !important;
-    background-color: transparent !important;
-    object-fit: cover !important;
+    background: #000 !important;
+    background-color: #000 !important;
+    object-fit: contain !important;
     width: 100% !important;
     height: 100% !important;
     max-height: 100% !important;
@@ -2158,43 +2184,24 @@ body.no-scroll,
     -webkit-clip-path: none !important;
 }
 
-.about_show .show_block .image-frame picture,
-.events-info .image-frame picture {
-    position: absolute !important;
-    inset: 0 !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    display: block !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    pointer-events: none !important;
-    box-sizing: border-box !important;
+.about_show .show_block .image-frame {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75) !important;
+    border: none !important;
 }
 
+.about_show .show_block .image-frame img.cut-corners {
+    border-radius: 16px !important;
+    clip-path: none !important;
+    -webkit-clip-path: none !important;
+    border: none !important;
+}
+
+.about_show .show_block .image-frame picture,
 .about_show .show_block .image-frame picture .gold-frame,
-.about_show .show_block .image-frame .gold-frame,
-.events-info .image-frame picture .gold-frame,
-.events-info .image-frame .gold-frame {
-    position: absolute !important;
-    inset: 0 !important;
-    top: 0 !important;
-    left: 0 !important;
-    right: 0 !important;
-    bottom: 0 !important;
-    width: 100% !important;
-    height: 100% !important;
-    max-width: 100% !important;
-    max-height: 100% !important;
-    object-fit: fill !important;
-    pointer-events: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    box-sizing: border-box !important;
-    display: block !important;
+.about_show .show_block .image-frame .gold-frame {
+    display: none !important;
 }
 
 /* --- Секция "Что вас ждет на шоу": Исходный шахматный порядок --- */
@@ -2221,58 +2228,70 @@ body.no-scroll,
 @media (min-width: 769px) {
     .about_show .show_block {
         display: flex !important;
-        flex-direction: column !important;
+        flex-direction: row !important;
         align-items: center !important;
-        justify-content: flex-start !important;
-        gap: 18px !important;
+        justify-content: center !important;
+        gap: clamp(14px, 3vw, 40px) !important;
         width: 100% !important;
-        max-width: 720px !important;
-        margin: 0 auto 52px auto !important;
+        max-width: 1100px !important;
+        margin: 0 auto 36px auto !important;
         box-sizing: border-box !important;
         position: relative !important;
     }
 
-    .about_show .show_block .image-frame,
-    .about_show .show_block:nth-child(odd) .image-frame,
-    .about_show .show_block:nth-child(even) .image-frame {
+    /* Нечетные блоки (1, 3): фотка слева, текст справа */
+    .about_show .show_block:nth-child(odd) .image-frame {
         order: 1 !important;
-        position: relative !important;
-        display: block !important;
-        width: 100% !important;
-        max-width: 620px !important;
+    }
+    .about_show .show_block:nth-child(odd) .block_info {
+        order: 2 !important;
+        text-align: left !important;
+    }
+
+    /* Четные блоки (2, 4): текст слева, фотка справа */
+    .about_show .show_block:nth-child(even) .block_info {
+        order: 1 !important;
+        text-align: left !important;
+    }
+    .about_show .show_block:nth-child(even) .image-frame {
+        order: 2 !important;
+    }
+
+    .about_show .show_block .image-frame {
+        flex: 0 0 46% !important;
+        width: 46% !important;
+        max-width: 500px !important;
+        min-width: 160px !important;
         aspect-ratio: 2080 / 1200 !important;
         height: auto !important;
-        margin: 0 auto !important;
+        margin: 0 !important;
+        position: relative !important;
         overflow: hidden !important;
         box-sizing: border-box !important;
         border-radius: 8px !important;
         padding: 0 !important;
     }
 
-    .about_show .show_block .block_info,
-    .about_show .show_block:nth-child(odd) .block_info,
-    .about_show .show_block:nth-child(even) .block_info {
-        order: 2 !important;
-        width: 100% !important;
-        max-width: 620px !important;
-        text-align: center !important;
-        margin: 0 auto !important;
-        padding: 0 10px !important;
+    .about_show .show_block .block_info {
+        flex: 1 1 50% !important;
+        max-width: 540px !important;
+        width: auto !important;
+        padding: clamp(8px, 2vw, 28px) !important;
         box-sizing: border-box !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: center !important;
-        align-items: center !important;
+        text-align: left !important;
     }
 
     .about_show .show_block .block_info h3 {
-        text-align: center !important;
+        text-align: left !important;
         font-size: 24px !important;
         margin-bottom: 12px !important;
     }
 
     .about_show .show_block .block_info p {
-        text-align: center !important;
+        text-align: left !important;
         font-size: 16px !important;
         line-height: 1.6 !important;
     }
@@ -2313,6 +2332,8 @@ body.no-scroll,
         box-sizing: border-box !important;
     }
     .about_show .show_block .image-frame,
+    .about_show .show_block .image-frame.second_order,
+    .about_show .show_block .second_order,
     .about_show .show_block:nth-child(odd) .image-frame,
     .about_show .show_block:nth-child(even) .image-frame {
         order: 1 !important;

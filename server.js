@@ -11,6 +11,7 @@ const PORT = 3000;
 app.use(compression({
   filter: (req, res) => {
     if (req.headers['x-no-compression']) return false;
+    if (req.path.match(/\.(mp4|webm|mov)$/i)) return false;
     return compression.filter(req, res);
   },
   threshold: 1024

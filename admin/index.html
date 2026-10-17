@@ -734,10 +734,276 @@
             overflow-y: auto;
         }
 
+        /* Live Card Materials Rail (right beside the card preview) */
+        .card-preview-interactive-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            max-width: 620px;
+        }
+        .card-materials-rail-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 104px;
+            max-height: 280px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 4px;
+            padding-bottom: 8px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-dim) rgba(255,255,255,0.05);
+            flex-shrink: 0;
+            box-sizing: border-box;
+        }
+        .card-materials-rail-container::-webkit-scrollbar {
+            width: 5px;
+        }
+        .card-materials-rail-container::-webkit-scrollbar-thumb {
+            background: var(--gold-dim);
+            border-radius: 4px;
+        }
+        .card-materials-rail-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        .rail-thumb-item {
+            position: relative;
+            width: 96px;
+            height: 64px;
+            border-radius: 8px;
+            border: 1.5px solid var(--border);
+            overflow: hidden;
+            background: #111;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: border-color 0.2s, transform 0.2s;
+            box-sizing: border-box;
+        }
+        .rail-thumb-item:hover {
+            border-color: var(--gold);
+            transform: scale(1.02);
+        }
+        .rail-thumb-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        .rail-thumb-del {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: opacity 0.2s, background 0.2s;
+            z-index: 5;
+        }
+        .rail-thumb-del:hover {
+            opacity: 1;
+            background: #ef4444;
+            color: #fff;
+        }
+
+        /* Side materials scroll list */
+        .side-materials-scroll-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            max-height: 260px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 6px;
+            padding-bottom: 6px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--gold-dim) rgba(255,255,255,0.05);
+        }
+        .side-materials-scroll-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .side-materials-scroll-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+        }
+        .side-materials-scroll-container::-webkit-scrollbar-thumb {
+            background: var(--gold-dim);
+            border-radius: 4px;
+        }
+        .side-material-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1c1c28;
+            border: 1px solid var(--border-subtle);
+            border-radius: 10px;
+            padding: 8px 10px;
+            transition: border-color 0.2s;
+        }
+        .side-material-item:hover {
+            border-color: var(--gold-dim);
+        }
+        .side-material-thumb {
+            width: 60px;
+            height: 44px;
+            border-radius: 6px;
+            object-fit: cover;
+            border: 1px solid rgba(248, 231, 188, 0.2);
+            flex-shrink: 0;
+            background: #111;
+        }
+        .side-material-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .side-material-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .side-material-badge {
+            font-size: 11px;
+            color: var(--gold-bright);
+            margin-top: 2px;
+        }
+        .side-material-del-btn {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ff6b6b;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .side-material-del-btn:hover {
+            background: #ef4444;
+            color: #fff;
+        }
+
+        /* Full Responsive Mobile UI */
         @media (max-width: 860px) {
-            .topbar-title { font-size: 15px; }
-            .panel-card { padding: 20px 16px; }
-            .interactive-photo-frame { max-width: 100%; }
+            .show-editor-columns {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 24px !important;
+            }
+            .topbar {
+                position: sticky !important;
+                top: 0 !important;
+                z-index: 9999 !important;
+                padding: 8px 0 !important;
+            }
+            .topbar-inner {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 8px !important;
+                padding: 0 12px !important;
+            }
+            .topbar-brand {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                width: 100% !important;
+            }
+            .topbar-title {
+                font-size: 14px !important;
+            }
+            .topbar-badge {
+                font-size: 10px !important;
+                padding: 2px 6px !important;
+            }
+            #gh-last-commit {
+                display: none !important;
+            }
+            .mobile-logout-btn {
+                display: inline-flex !important;
+            }
+            .topbar-actions {
+                display: grid !important;
+                grid-template-columns: 1fr 1.1fr 1.3fr !important;
+                gap: 6px !important;
+                width: 100% !important;
+            }
+            .topbar-actions .btn {
+                padding: 8px 4px !important;
+                font-size: 11px !important;
+                text-align: center !important;
+                justify-content: center !important;
+                white-space: nowrap !important;
+                min-width: 0 !important;
+            }
+            .topbar-actions #btn-logout {
+                display: none !important;
+            }
+            .nav-tabs-wrapper {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                scrollbar-width: none !important;
+                padding: 6px 0 !important;
+            }
+            .nav-tabs-wrapper::-webkit-scrollbar {
+                display: none !important;
+            }
+            .nav-tabs {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                gap: 8px !important;
+                width: max-content !important;
+                padding: 0 12px !important;
+            }
+            .tab-btn {
+                flex-shrink: 0 !important;
+                white-space: nowrap !important;
+                padding: 8px 12px !important;
+                font-size: 12px !important;
+            }
+            .shows-pills-grid {
+                display: grid !important;
+                grid-template-columns: repeat(5, 1fr) !important;
+                gap: 6px !important;
+            }
+            .show-pill-btn {
+                padding: 8px 2px !important;
+                font-size: 12px !important;
+                text-align: center !important;
+            }
+            .panel-card {
+                padding: 16px 12px !important;
+            }
+            .interactive-photo-frame {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: auto !important;
+                aspect-ratio: 4 / 3 !important;
+            }
+            .card-preview-interactive-row {
+                flex-direction: column !important;
+                gap: 10px !important;
+            }
+            .card-materials-rail-container {
+                width: 100% !important;
+                max-height: none !important;
+                flex-direction: row !important;
+                overflow-x: auto !important;
+                overflow-y: hidden !important;
+                padding-bottom: 6px !important;
+            }
+            .rail-thumb-item {
+                width: 76px !important;
+                height: 52px !important;
+            }
         }
     </style>
 </head>
@@ -782,20 +1048,25 @@
         <header class="topbar">
             <div class="container topbar-inner">
                 <div class="topbar-brand">
-                    <img src="./logo.png" alt="ТА-ИС" class="topbar-logo">
-                    <span class="topbar-title">ТА-ИС ШОУ</span>
-                    <span class="topbar-badge" id="sync-status">● Сайт таисшоу.рф</span>
-                    <span id="gh-last-commit" style="font-size: 11px; color: var(--gold); background: rgba(248,231,188,0.1); padding: 3px 8px; border-radius: 6px;">[0381602]</span>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <img src="./logo.png" alt="ТА-ИС" class="topbar-logo">
+                        <span class="topbar-title">ТА-ИС ШОУ</span>
+                        <span class="topbar-badge" id="sync-status">● Сайт</span>
+                        <span id="gh-last-commit" style="font-size: 11px; color: var(--gold); background: rgba(248,231,188,0.1); padding: 3px 8px; border-radius: 6px;">[0381602]</span>
+                    </div>
+                    <button type="button" class="btn btn-secondary mobile-logout-btn" id="btn-logout-mobile" style="display: none; padding: 4px 10px; font-size: 11px;">
+                        Выйти
+                    </button>
                 </div>
                 <div class="topbar-actions">
-                    <a href="/" target="_blank" class="btn btn-secondary" style="padding: 9px 14px; font-size: 13px;">
-                        Открыть сайт ↗
+                    <a href="/" target="_blank" class="btn btn-secondary" style="padding: 9px 12px; font-size: 13px;">
+                        ↗ Сайт
                     </a>
-                    <button type="button" class="btn btn-gold" id="btn-save-all" style="padding: 9px 16px; font-size: 13px;">
+                    <button type="button" class="btn btn-gold" id="btn-save-all" style="padding: 9px 14px; font-size: 13px;">
                         💾 Сохранить
                     </button>
-                    <button type="button" class="btn btn-primary" id="btn-publish-all" style="padding: 9px 18px; font-size: 13px;">
-                        🚀 Опубликовать на сайт
+                    <button type="button" class="btn btn-primary" id="btn-publish-all" style="padding: 9px 14px; font-size: 13px;">
+                        🚀 Опубликовать
                     </button>
                     <button type="button" class="btn btn-secondary" id="btn-logout" style="padding: 9px 12px; font-size: 13px;">
                         Выйти
@@ -840,7 +1111,7 @@
                             </div>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                        <div class="show-editor-columns" style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
                             <!-- Left Column: Texts -->
                             <div>
                                 <div class="form-group">
@@ -896,15 +1167,19 @@
                                 </p>
 
                                 <div class="card-preview-box">
-                                    <!-- Interactive Frame -->
-                                    <div class="interactive-photo-frame" id="card-preview-container" title="Зажмите ЛКМ и двигайте фото в любую сторону">
-                                        <div id="preview-coords-badge" class="photo-coords-badge">X: 50% · Y: 50% · Масштаб: 100%</div>
-                                        <img id="preview-card-img" src="" alt="preview">
-                                        <div class="photo-hint-pill">🖱️ Зажмите ЛКМ и двигайте фото в любую сторону • Колёсико: масштаб</div>
-                                        <div class="real-card-overlay">
-                                            <div id="preview-card-title" style="font-weight: 700; font-size: 16px;">Название шоу</div>
-                                            <div id="preview-card-subtitle-badge" style="font-size: 11px; opacity: 0.85;">Вид карточки на сайте</div>
+                                    <!-- Interactive Frame with Live Materials Rail on right -->
+                                    <div class="card-preview-interactive-row">
+                                        <div class="interactive-photo-frame" id="card-preview-container" title="Зажмите ЛКМ и двигайте фото в любую сторону">
+                                            <div id="preview-coords-badge" class="photo-coords-badge">X: 50% · Y: 50% · Масштаб: 100%</div>
+                                            <img id="preview-card-img" src="" alt="preview">
+                                            <div class="photo-hint-pill">🖱️ Зажмите ЛКМ и двигайте фото в любую сторону • Колёсико: масштаб</div>
+                                            <div class="real-card-overlay">
+                                                <div id="preview-card-title" style="font-weight: 700; font-size: 16px;">Название шоу</div>
+                                                <div id="preview-card-subtitle-badge" style="font-size: 11px; opacity: 0.85;">Вид карточки на сайте</div>
+                                            </div>
                                         </div>
+                                        <!-- Live Card Materials Rail (right beside card preview) -->
+                                        <div id="card-preview-materials-rail" class="card-materials-rail-container" title="Материалы карточки справа (прокрутите колёсиком или стрелками)"></div>
                                     </div>
 
                                     <!-- Visual Scale / Zoom Controls -->
@@ -971,6 +1246,25 @@
                                         <div style="display: flex; gap: 8px; margin-top: 8px;">
                                             <button type="button" class="btn btn-secondary" id="btn-preview-pc-card" style="padding: 4px 10px; font-size: 11px;">Превью: ПК</button>
                                             <button type="button" class="btn btn-secondary" id="btn-preview-mobile-card" style="padding: 4px 10px; font-size: 11px;">Превью: Телефон</button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Materials inside the card on the right -->
+                                    <div class="card-side-materials-box" style="margin-top: 18px; background: #161622; border: 1px solid var(--border); border-radius: 14px; padding: 14px; max-width: 520px;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+                                            <div>
+                                                <div style="font-size: 13px; font-weight: 700; color: var(--gold); display: flex; align-items: center; gap: 6px;">
+                                                    <span>🎞️</span> Материалы карточки справа:
+                                                </div>
+                                                <div style="font-size: 11px; color: var(--text-muted);" id="side-materials-count">0 файлов</div>
+                                            </div>
+                                            <div style="display: flex; gap: 6px;">
+                                                <button type="button" class="btn btn-secondary" id="btn-quick-add-photo" style="padding: 4px 10px; font-size: 11px;">+ Фото</button>
+                                                <button type="button" class="btn btn-secondary" id="btn-quick-add-video" style="padding: 4px 10px; font-size: 11px;">+ Видео</button>
+                                            </div>
+                                        </div>
+                                        <div id="side-materials-scroll-list" class="side-materials-scroll-container">
+                                            <!-- Dynamically populated or empty message -->
                                         </div>
                                     </div>
                                 </div>
@@ -2093,12 +2387,104 @@
             });
         }
 
-        // Render Media Items Grid for selected show
+        // Render Media Items Grid, Side Materials List, and Live Rail for selected show
         function renderShowMediaGrid(show) {
             const grid = document.getElementById('current-show-media-grid');
+            const sideList = document.getElementById('side-materials-scroll-list');
+            const sideCount = document.getElementById('side-materials-count');
+            const railContainer = document.getElementById('card-preview-materials-rail');
+
+            const items = show.media || [];
+            if (sideCount) sideCount.textContent = items.length + ' ' + (items.length === 1 ? 'файл' : (items.length > 1 && items.length < 5 ? 'файла' : 'файлов'));
+
+            // 0. Render Live Card Materials Rail (right beside card preview)
+            if (railContainer) {
+                railContainer.innerHTML = '';
+                if (items.length === 0) {
+                    railContainer.style.display = 'none';
+                } else {
+                    railContainer.style.display = 'flex';
+                    items.forEach((item, idx) => {
+                        const isVideo = item.type === 'video';
+                        const thumbSrc = item._blobPreview || item.poster || item.url;
+                        const posStr = item.pos || 'center';
+
+                        const railItem = document.createElement('div');
+                        railItem.className = 'rail-thumb-item';
+                        railItem.title = (item.label || (isVideo ? 'Видео ' + (idx + 1) : 'Фото ' + (idx + 1))) + ' (нажмите для настройки)';
+                        railItem.innerHTML = `
+                            <img src="${thumbSrc}" alt="" style="object-position: ${posStr};">
+                            ${isVideo ? '<span style="position: absolute; bottom: 2px; left: 4px; font-size: 10px; color: #f8e7bc; text-shadow: 0 1px 4px #000;">▶</span>' : ''}
+                            <button type="button" class="rail-thumb-del" data-index="${idx}" title="Удалить из карточки">✕</button>
+                        `;
+                        railItem.querySelector('.rail-thumb-del').addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (confirm('Удалить ' + (item.label || 'элемент') + ' из карточки?')) {
+                                items.splice(idx, 1);
+                                renderShowMediaGrid(show);
+                                showToast('Элемент удалён');
+                            }
+                        });
+                        railItem.addEventListener('click', () => {
+                            if (!isVideo) {
+                                openGoldFrameModal(item, show.title);
+                            }
+                        });
+                        railContainer.appendChild(railItem);
+                    });
+                }
+            }
+
+            // 1. Render Side Materials Scroll List (inside card preview section)
+            if (sideList) {
+                sideList.innerHTML = '';
+                if (items.length === 0) {
+                    sideList.innerHTML = '<div style="color: var(--text-muted); font-size: 12px; padding: 12px; text-align: center; border: 1px dashed var(--border-subtle); border-radius: 8px;">В карточке ещё нет медиафайлов.<br>Нажмите «+ Фото» или «+ Видео», чтобы добавить</div>';
+                } else {
+                    items.forEach((item, idx) => {
+                        const isVideo = item.type === 'video';
+                        const thumbSrc = item._blobPreview || item.poster || item.url;
+                        const posStr = item.pos || 'center';
+
+                        const sideItem = document.createElement('div');
+                        sideItem.className = 'side-material-item';
+                        sideItem.innerHTML = `
+                            <img src="${thumbSrc}" alt="" class="side-material-thumb" style="object-position: ${posStr};">
+                            <div class="side-material-info">
+                                <div class="side-material-title">${item.label || (isVideo ? 'Видео ' + (idx + 1) : 'Фото ' + (idx + 1))}</div>
+                                <div class="side-material-badge">${isVideo ? '▶ Видео (.mp4)' : '📷 Фото'}</div>
+                            </div>
+                            ${!isVideo ? `
+                                <button type="button" class="btn btn-secondary btn-side-adjust" data-index="${idx}" style="padding: 5px 8px; font-size: 11px;" title="Положение в рамке">
+                                    🎯
+                                </button>
+                            ` : ''}
+                            <button type="button" class="side-material-del-btn btn-side-delete" data-index="${idx}" title="Удалить из карточки">✕</button>
+                        `;
+
+                        const adjBtn = sideItem.querySelector('.btn-side-adjust');
+                        if (adjBtn) {
+                            adjBtn.addEventListener('click', () => {
+                                openGoldFrameModal(item, show.title);
+                            });
+                        }
+
+                        sideItem.querySelector('.btn-side-delete').addEventListener('click', () => {
+                            if (confirm('Удалить ' + (item.label || 'элемент') + ' из карточки?')) {
+                                items.splice(idx, 1);
+                                renderShowMediaGrid(show);
+                                showToast('Элемент удалён из карточки');
+                            }
+                        });
+
+                        sideList.appendChild(sideItem);
+                    });
+                }
+            }
+
+            // 2. Render Bottom Media Grid
             if (!grid) return;
             grid.innerHTML = '';
-            const items = show.media || [];
             if (items.length === 0) {
                 grid.innerHTML = '<div style="color: var(--text-muted); font-size: 14px;">Медиафайлы ещё не добавлены</div>';
                 return;
@@ -2140,6 +2526,7 @@
                 const labelInput = card.querySelector('.media-label-input');
                 labelInput.addEventListener('change', (e) => {
                     item.label = e.target.value;
+                    renderShowMediaGrid(show);
                 });
 
                 // Adjust position in gold frame
@@ -2223,8 +2610,13 @@
             e.target.value = '';
         });
 
-        // Add Photo or Video to media gallery
+        // Add Photo or Video to media gallery & card side materials
         document.getElementById('btn-add-photo')?.addEventListener('click', () => {
+            appState.pendingMediaUploadIndex = -1;
+            appState.pendingMediaUploadType = 'image';
+            document.getElementById('upload-media-item-file').click();
+        });
+        document.getElementById('btn-quick-add-photo')?.addEventListener('click', () => {
             appState.pendingMediaUploadIndex = -1;
             appState.pendingMediaUploadType = 'image';
             document.getElementById('upload-media-item-file').click();
@@ -2233,6 +2625,14 @@
             appState.pendingMediaUploadIndex = -1;
             appState.pendingMediaUploadType = 'video';
             document.getElementById('upload-media-item-file').click();
+        });
+        document.getElementById('btn-quick-add-video')?.addEventListener('click', () => {
+            appState.pendingMediaUploadIndex = -1;
+            appState.pendingMediaUploadType = 'video';
+            document.getElementById('upload-media-item-file').click();
+        });
+        document.getElementById('btn-logout-mobile')?.addEventListener('click', () => {
+            document.getElementById('btn-logout')?.click();
         });
 
         document.getElementById('upload-media-item-file')?.addEventListener('change', async (e) => {
@@ -2258,7 +2658,7 @@
                 if (!isVideo) item.poster = targetFileName;
             } else {
                 show.media.push({
-                    type: isVideo ? 'video' : 'photo',
+                    type: isVideo ? 'video' : 'image',
                     url: targetFileName,
                     poster: isVideo ? './show' + (showIdx + 1) + '.png' : targetFileName,
                     label: isVideo ? 'Видео шоу' : 'Фото со сцены',

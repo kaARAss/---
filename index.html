@@ -25,8 +25,8 @@
 
     <!-- Preload Critical Background & Show Previews for Instant 0ms Load -->
     <link rel="preload" as="image" href="./img/main-bg.webp" type="image/webp" media="(min-width: 961px)" fetchpriority="high">
-    <link rel="preload" as="image" href="./img/index/banner.png?v=1791592000" type="image/png" media="(min-width: 961px)" fetchpriority="high">
-    <link rel="preload" as="image" href="./img/index/banner.png?v=1791592000" type="image/png" media="(max-width: 960px)" fetchpriority="high">
+    <link rel="preload" as="image" href="./img/index/banner.png?v=1791593000" type="image/png" media="(min-width: 961px)" fetchpriority="high">
+    <link rel="preload" as="image" href="./img/index/banner.png?v=1791593000" type="image/png" media="(max-width: 960px)" fetchpriority="high">
     <link rel="preload" as="image" href="./show1.png?v=1791580001" type="image/png" fetchpriority="high">
     <link rel="preload" as="image" href="./show2.png?v=1791580001" type="image/png" fetchpriority="high">
     <link rel="preload" as="image" href="./show3.webp?v=1791553550000" type="image/webp">
@@ -151,6 +151,22 @@
         .event-item .background-image {
             content-visibility: auto;
         }
+        /* All card photos and images always in vibrant full color - no black & white / grayscale */
+        .events .event-seasons .event-item .background-image,
+        .events .event-item .background-image,
+        .event-item .background-image,
+        .event-item img,
+        .interactive-photo-frame img,
+        #preview-card-img,
+        .team-image,
+        .team_item img,
+        .team-image-frame img {
+            filter: none !important;
+            -webkit-filter: none !important;
+            filter: grayscale(0) !important;
+            -webkit-filter: grayscale(0) !important;
+        }
+
         /* Direct HTML-level banner rules for instant PC loading */
         @media (min-width: 961px) {
             .banner {
@@ -159,15 +175,16 @@
                 display: flex !important;
                 flex-direction: column !important;
                 justify-content: center !important;
-                margin-bottom: 120px !important;
+                align-items: center !important;
+                margin-bottom: 90px !important;
                 box-sizing: border-box !important;
                 width: 100% !important;
                 padding: 0 !important;
             }
             .banner_main {
-                min-height: 100vh !important;
-                min-height: 100dvh !important;
-                padding: 100px 2% 40px 2% !important;
+                min-height: calc(100vh - 60px) !important;
+                min-height: calc(100dvh - 60px) !important;
+                padding: 55px 2% 0px 2% !important;
                 display: flex !important;
                 justify-content: center !important;
                 align-items: center !important;
@@ -177,10 +194,12 @@
                 box-sizing: border-box !important;
             }
             .banner .banner_image {
-                width: 100% !important;
-                max-width: 100% !important;
+                width: 95% !important;
+                max-width: 95% !important;
+                max-height: calc(100vh - 120px) !important;
+                max-height: calc(100dvh - 120px) !important;
                 aspect-ratio: 1808 / 870 !important;
-                background-image: url('./img/index/banner.png?v=1791592000') !important;
+                background-image: url('./img/index/banner.png?v=1791593000') !important;
                 background-size: contain !important;
                 background-position: center center !important;
                 background-repeat: no-repeat !important;
@@ -190,8 +209,25 @@
                 display: block !important;
                 box-sizing: border-box !important;
                 overflow: visible !important;
-                transform: scaleX(1.05);
-                transform-origin: center top;
+                margin: 0 auto !important;
+                transform: scale(0.96);
+                transform-origin: center center;
+            }
+        }
+        @media (max-width: 960px) {
+            .banner {
+                padding-top: 20px !important;
+                margin-bottom: 24px !important;
+            }
+            .banner_main {
+                max-width: 95% !important;
+                margin: 0 auto !important;
+                padding: 0 10px 10px 10px !important;
+            }
+            .banner .banner_image {
+                width: 100% !important;
+                max-width: 100% !important;
+                transform: none !important;
             }
         }
     </style>
@@ -889,54 +925,81 @@
     }
     .about_show .show_block {
         display: flex !important;
-        flex-direction: column !important;
+        flex-direction: row !important;
         align-items: center !important;
-        justify-content: flex-start !important;
-        gap: 18px !important;
+        justify-content: center !important;
+        gap: clamp(14px, 3vw, 40px) !important;
         width: 100% !important;
-        max-width: 720px !important;
-        margin: 0 auto !important;
+        max-width: 1100px !important;
+        margin: 0 auto 36px auto !important;
         box-sizing: border-box !important;
-    }
-    .about_show .show_block .image-frame,
-    .about_show .show_block:nth-child(odd) .image-frame,
-    .about_show .show_block:nth-child(even) .image-frame {
-        order: 1 !important;
         position: relative !important;
-        display: block !important;
-        width: 100% !important;
-        max-width: 620px !important;
+    }
+
+    /* Нечетные блоки (1, 3): фотка слева, текст справа */
+    .about_show .show_block:nth-child(odd) .image-frame {
+        order: 1 !important;
+    }
+    .about_show .show_block:nth-child(odd) .block_info {
+        order: 2 !important;
+        text-align: left !important;
+    }
+
+    /* Четные блоки (2, 4): текст слева, фотка справа */
+    .about_show .show_block:nth-child(even) .block_info {
+        order: 1 !important;
+        text-align: left !important;
+    }
+    .about_show .show_block:nth-child(even) .image-frame {
+        order: 2 !important;
+    }
+
+    .about_show .show_block .image-frame {
+        flex: 0 0 46% !important;
+        width: 46% !important;
+        max-width: 500px !important;
+        min-width: 160px !important;
         aspect-ratio: 2080 / 1200 !important;
         height: auto !important;
-        margin: 0 auto !important;
+        margin: 0 !important;
+        position: relative !important;
         overflow: hidden !important;
         box-sizing: border-box !important;
         border-radius: 8px !important;
         padding: 0 !important;
     }
-    .about_show .show_block .block_info,
-    .about_show .show_block:nth-child(odd) .block_info,
-    .about_show .show_block:nth-child(even) .block_info {
-        order: 2 !important;
-        width: 100% !important;
-        max-width: 620px !important;
-        text-align: center !important;
-        margin: 0 auto !important;
-        padding: 0 10px !important;
+
+    .about_show .show_block .block_info {
+        flex: 1 1 50% !important;
+        max-width: 540px !important;
+        width: auto !important;
+        padding: clamp(8px, 2vw, 28px) !important;
         box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        text-align: left !important;
     }
+
     .about_show .show_block .block_info h3 {
-        text-align: center !important;
+        text-align: left !important;
         font-size: 24px !important;
         margin-bottom: 12px !important;
     }
+
     .about_show .show_block .block_info p {
-        text-align: center !important;
+        text-align: left !important;
         font-size: 16px !important;
         line-height: 1.6 !important;
     }
 
-    /* Рамка и фото в блоках на ПК: фото идеально доходит до всех краев рамки и не выходит за границы */
+    /* Чистые фотографии без золотых рамок со скругленными краями */
+    .about_show .show_block .image-frame {
+        border-radius: 16px !important;
+        overflow: hidden !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75) !important;
+        border: none !important;
+    }
     .about_show .show_block .image-frame img.cut-corners {
         position: absolute !important;
         inset: 0 !important;
@@ -953,30 +1016,16 @@
         margin: 0 !important;
         padding: 0 !important;
         border: none !important;
-        border-radius: 6px !important;
+        border-radius: 16px !important;
+        clip-path: none !important;
+        -webkit-clip-path: none !important;
         z-index: 1 !important;
         display: block !important;
     }
     .about_show .show_block .image-frame picture,
     .about_show .show_block .image-frame picture .gold-frame,
     .about_show .show_block .image-frame .gold-frame {
-        position: absolute !important;
-        inset: 0 !important;
-        top: 0 !important;
-        left: 0 !important;
-        right: 0 !important;
-        bottom: 0 !important;
-        width: 100% !important;
-        height: 100% !important;
-        max-width: 100% !important;
-        max-height: 100% !important;
-        object-fit: fill !important;
-        pointer-events: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        border: none !important;
-        display: block !important;
-        z-index: 2 !important;
+        display: none !important;
     }
 }
 
@@ -1409,7 +1458,7 @@
                 <div class="content custom-image-content"></div>
             </div>
             <div class="event-item swiper-slide" data-month-year="4_2027" data-index="3" style="cursor: pointer;">
-                <img class="background-image" src="./show4.webp?v=1791549706470" alt="Rose's" loading="eager" decoding="async" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: 65% center; transform: none;">
+                <img class="background-image" src="./show4.webp?v=1791549706470" alt="Rose's" loading="eager" decoding="async" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: left center; transform: none;">
                 <div class="content custom-image-content"></div>
             </div>
             <div class="event-item swiper-slide" data-month-year="5_2027" data-index="4" style="cursor: pointer;">
@@ -1433,7 +1482,7 @@
                 <div class="content custom-image-content"></div>
             </div>
             <div class="event-item swiper-slide" data-month-year="10_2027" data-index="9" style="cursor: pointer;">
-                <img class="background-image" src="./show10.webp?v=1791592000" alt="Мимы" loading="lazy" decoding="async" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: center center; transform: none;">
+                <img class="background-image" src="./show10.webp?v=1791592000" alt="Мимы" loading="lazy" decoding="async" style="position: absolute; top: 0px; left: 0px; width: 100%; height: 100%; object-fit: cover; object-position: left center; transform: none;">
                 <div class="content custom-image-content"></div>
             </div>
         </div>
@@ -1465,11 +1514,6 @@
             <div class="show_block">
                 <div class="image-frame">
                     <img class="cut-corners" src="./about1.webp?v=1791550331972" alt="Что вас ждет на шоу" loading="lazy" decoding="async">
-                    <picture>
-                        <source media="(max-width: 800px)" srcset="img/news/gold_frame_small.png">
-                        <source media="(min-width: 801px)" srcset="img/news/gold_frame.png">
-                        <img class="gold-frame" src="./gold_frame.png" alt="gold frame" loading="lazy" decoding="async">
-                    </picture>
                 </div>
                 <div class="block_info">
                     <h3>Что вас ждет на шоу</h3>
@@ -1485,11 +1529,6 @@
                 </div>
                 <div class="image-frame second_order">
                     <img class="cut-corners" src="./about2.webp?v=1791550331972" alt="Роскошные костюмы" loading="lazy" decoding="async">
-                    <picture>
-                        <source media="(max-width: 800px)" srcset="img/news/gold_frame_small.png">
-                        <source media="(min-width: 801px)" srcset="img/news/gold_frame.png">
-                        <img class="gold-frame" src="./gold_frame.png" alt="gold frame" loading="lazy" decoding="async">
-                    </picture>
                 </div>
             </div>
 
@@ -1497,11 +1536,6 @@
             <div class="show_block">
                 <div class="image-frame">
                     <img class="cut-corners" src="./about3.webp?v=1791550331972" alt="Встреча гостей (Пре-шоу)" loading="lazy" decoding="async">
-                    <picture>
-                        <source media="(max-width: 800px)" srcset="img/news/gold_frame_small.png">
-                        <source media="(min-width: 801px)" srcset="img/news/gold_frame.png">
-                        <img class="gold-frame" src="./gold_frame.png" alt="gold frame" loading="lazy" decoding="async">
-                    </picture>
                 </div>
                 <div class="block_info">
                     <h3>Встреча гостей (Пре-шоу)</h3>

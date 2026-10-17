@@ -366,7 +366,7 @@ body {
 .banner .banner_image {
   width: 100%;
   aspect-ratio: 1600/770;
-  background-image: url(./img/index/banner.png?v=1791592000);
+  background-image: url(./img/index/banner.png?v=1791593000);
   background-size: contain;
   background-repeat: no-repeat;
 }
@@ -423,7 +423,7 @@ body {
   -o-object-fit: cover;
   object-fit: cover;
   display: block;
-  filter: grayscale(1);
+  filter: none !important;
   transition: all 0.2s ease-in-out;
   border-radius: 20px;
 }
@@ -10586,7 +10586,7 @@ hr {
     max-height: 480px;
     height: 100%;
     max-width: 976px;
-    background-image: url(./img/index/banner.png?v=1791592000) !important;
+    background-image: url(./img/index/banner.png?v=1791593000) !important;
     background-size: contain;
     background-repeat: no-repeat;
   }

@@ -92,21 +92,21 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Block scrolling of the background anywhere on the page when modal is open,
-    // allowing scrolling ONLY when the cursor/finger is in the description text area.
+    // allowing scrolling inside the description text area, thumbs column, and scrollable modal parts.
     function handleModalWheel(e) {
         const openModal = document.querySelector('.event_tickets.new_modal_layout, .event_tickets[style*="flex"], .event_tickets[style*="block"]');
         if (!openModal || openModal.style.display === 'none') return;
 
-        const scrollableDesc = e.target.closest('.modal-desc-content, .modal-details-scrollable');
-        if (!scrollableDesc) {
+        const scrollable = e.target.closest('.modal-desc-content, .modal-details-scrollable, .thumbs-col, .thumbs-wrapper, .new_modal_layout, .side-materials-scroll-container');
+        if (!scrollable) {
             e.preventDefault();
             e.stopPropagation();
             return false;
         }
 
         const delta = e.deltaY;
-        const atTop = scrollableDesc.scrollTop <= 0;
-        const atBottom = scrollableDesc.scrollTop + scrollableDesc.clientHeight >= scrollableDesc.scrollHeight - 1;
+        const atTop = scrollable.scrollTop <= 0;
+        const atBottom = scrollable.scrollTop + scrollable.clientHeight >= scrollable.scrollHeight - 1;
         if ((delta < 0 && atTop) || (delta > 0 && atBottom)) {
             e.preventDefault();
             e.stopPropagation();
@@ -118,8 +118,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const openModal = document.querySelector('.event_tickets.new_modal_layout, .event_tickets[style*="flex"], .event_tickets[style*="block"]');
         if (!openModal || openModal.style.display === 'none') return;
 
-        const scrollableDesc = e.target.closest('.modal-desc-content, .modal-details-scrollable');
-        if (!scrollableDesc) {
+        const scrollable = e.target.closest('.modal-desc-content, .modal-details-scrollable, .thumbs-col, .thumbs-wrapper, .new_modal_layout, .side-materials-scroll-container');
+        if (!scrollable) {
             e.preventDefault();
             return false;
         }
@@ -300,13 +300,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 1: 'left center',
                 2: 'left center',
                 3: 'left 55%',
-                4: '65% center',
+                4: 'left center',
                 5: 'left center',
                 6: 'left bottom',
                 7: 'left bottom',
                 8: 'left center',
                 9: 'left bottom',
-                10: 'left bottom'
+                10: 'left center'
             };
             const posVal = showPosMap[index + 1] || 'left center';
             const posStr = typeof posVal === 'string' ? posVal : (posVal.pos || 'left center');
@@ -459,13 +459,20 @@ function createEventTickets(monthData, index) {
     bodyContainer.style.overflow = 'hidden';
 
     // Left Column: Thumbnails
-    
     const thumbsWrapper = document.createElement('div');
     thumbsWrapper.className = 'thumbs-wrapper';
     thumbsWrapper.style.display = 'flex';
-    thumbsWrapper.style.alignItems = 'center';
+    thumbsWrapper.style.flexDirection = 'column';
+    thumbsWrapper.style.alignItems = 'stretch';
     thumbsWrapper.style.gap = '10px';
-    thumbsWrapper.style.width = '100%';
+    thumbsWrapper.style.width = '140px';
+    thumbsWrapper.style.minWidth = '140px';
+    thumbsWrapper.style.maxWidth = '140px';
+    thumbsWrapper.style.height = '100%';
+    thumbsWrapper.style.maxHeight = '100%';
+    thumbsWrapper.style.flexShrink = '0';
+    thumbsWrapper.style.overflow = 'hidden';
+    thumbsWrapper.style.boxSizing = 'border-box';
 
     const leftArrow = document.createElement('button');
     leftArrow.innerHTML = '&#10094;';
@@ -491,14 +498,29 @@ function createEventTickets(monthData, index) {
     thumbsCol.style.display = 'flex';
     thumbsCol.style.flexDirection = 'column';
     thumbsCol.style.gap = '15px';
-    thumbsCol.style.width = '140px';
+    thumbsCol.style.width = '100%';
+    thumbsCol.style.height = '100%';
+    thumbsCol.style.maxHeight = '100%';
     thumbsCol.style.overflowY = 'auto';
-    thumbsCol.style.paddingRight = '0px';
+    thumbsCol.style.overflowX = 'hidden';
+    thumbsCol.style.paddingRight = '6px';
+    thumbsCol.style.paddingBottom = '75px';
+    thumbsCol.style.boxSizing = 'border-box';
+    thumbsCol.style.scrollbarWidth = 'thin';
+    thumbsCol.style.scrollbarColor = '#c5a059 rgba(255, 255, 255, 0.08)';
+    thumbsCol.style.webkitOverflowScrolling = 'touch';
+
+    // Direct wheel scroll listener on thumbs column
+    thumbsCol.addEventListener('wheel', (e) => {
+        e.stopPropagation();
+        thumbsCol.scrollTop += e.deltaY;
+    }, { passive: true });
 
     const createThumb = (text, isVideo, bgUrl, posterUrl, pos) => {
         const t = document.createElement('div');
         t.style.width = '100%';
         t.style.height = '90px';
+        t.style.minHeight = '90px';
         t.style.backgroundColor = 'rgba(25, 20, 22, 0.7)';
         t.style.display = 'flex';
         t.style.alignItems = 'center';
@@ -555,10 +577,15 @@ function createEventTickets(monthData, index) {
                     }
                 }
                 thumbImg.onerror = null;
-                thumbImg.style.display = 'none';
-                if (!isVideo) t.textContent = text || 'Фото';
+                // If the thumbnail cannot load, remove this element so no blank empty frame is left
+                t.remove();
+                if (thumbsCol.children.length === 0) {
+                    thumbsWrapper.style.display = 'none';
+                }
             };
             t.appendChild(thumbImg);
+        } else {
+            return null;
         }
         
         if (isVideo) {
@@ -570,25 +597,30 @@ function createEventTickets(monthData, index) {
             playBadge.style.textShadow = '0 2px 8px rgba(0,0,0,0.9)';
             playBadge.textContent = '▶';
             t.appendChild(playBadge);
-        } else if (!effectiveImgUrl) {
-            t.textContent = text || 'Фото';
         }
         
         return t;
     };
 
     
-    const mediaItems = (monthData.media && monthData.media.length > 0) ? monthData.media : [
+    const rawMedia = (monthData.media && monthData.media.length > 0) ? monthData.media : [
         { type: 'image', label: 'Фото 1', url: monthData.image || '' }
     ];
+    // Filter out empty items
+    const mediaItems = rawMedia.filter(it => it && (it.url || it.poster));
 
     const thumbsElements = [];
     mediaItems.forEach((item, i) => {
         const thumb = createThumb(item.label, item.type === 'video', item.url, item.poster, item.pos);
-        if (i === 0) thumb.style.border = '2px solid #f8e7bc';
+        if (!thumb) return;
+        if (thumbsElements.length === 0) thumb.style.border = '2px solid #f8e7bc';
         thumbsCol.appendChild(thumb);
         thumbsElements.push({ el: thumb, data: item });
     });
+
+    if (thumbsElements.length === 0) {
+        thumbsWrapper.style.display = 'none';
+    }
 
     // Middle Column: Main Frame
     const mainFrame = document.createElement('div');
@@ -622,6 +654,14 @@ function createEventTickets(monthData, index) {
     mainFrame.appendChild(mainDisplay);
     
     function renderMedia(item) {
+        // Stop any currently playing videos before switching
+        mainDisplay.querySelectorAll('video').forEach(v => {
+            try {
+                v.pause();
+                v.removeAttribute('src');
+                v.load();
+            } catch(e) {}
+        });
         mainDisplay.innerHTML = '';
         if (!item.url) {
             mainDisplay.textContent = 'Здесь будет большое ' + (item.type === 'video' ? 'видео' : 'фото');
@@ -630,6 +670,7 @@ function createEventTickets(monthData, index) {
         
         if (item.type === 'video') {
             const videoWrap = document.createElement('div');
+            videoWrap.className = 'modal-video-wrap';
             videoWrap.style.position = 'relative';
             videoWrap.style.width = '100%';
             videoWrap.style.height = '100%';
@@ -638,12 +679,38 @@ function createEventTickets(monthData, index) {
             videoWrap.style.justifyContent = 'center';
             videoWrap.style.borderRadius = '12px';
             videoWrap.style.overflow = 'hidden';
-            videoWrap.style.backgroundColor = 'transparent';
+            videoWrap.style.backgroundColor = '#000';
 
             const effectivePoster = item.poster || (item.url ? item.url.replace(/\.mp4$/i, '_thumb.jpg').replace(/video(\d+)/i, 'v$1') : '') || (monthData && monthData.image ? monthData.image : '');
 
-            // 1. High-resolution preview poster image covering the frame before playback (NO BLACK BACKGROUND!)
+            // 1. Video element with required iOS/Android attributes
+            const video = document.createElement('video');
+            video.className = 'modal-video-element';
+            video.src = item.url;
+            if (effectivePoster) {
+                video.setAttribute('poster', effectivePoster);
+            }
+            video.setAttribute('playsinline', '');
+            video.setAttribute('webkit-playsinline', '');
+            video.setAttribute('x5-playsinline', '');
+            video.setAttribute('controls', '');
+            video.controls = true;
+            video.playsInline = true;
+            video.preload = 'metadata';
+            video.style.width = '100%';
+            video.style.height = '100%';
+            video.style.objectFit = 'contain';
+            video.style.borderRadius = '12px';
+            video.style.border = '1px solid rgba(248, 231, 188, 0.25)';
+            video.style.position = 'absolute';
+            video.style.top = '0';
+            video.style.left = '0';
+            video.style.zIndex = '1';
+            video.style.backgroundColor = '#000';
+
+            // 2. High-resolution preview poster image covering the frame before playback
             const posterImg = document.createElement('img');
+            posterImg.className = 'modal-video-poster';
             posterImg.src = effectivePoster;
             posterImg.alt = item.label || 'Видео превью';
             posterImg.loading = 'eager';
@@ -666,8 +733,9 @@ function createEventTickets(monthData, index) {
                 }
             };
 
-            // 2. Play button centered on preview
+            // 3. Play button centered on preview
             const bigPlay = document.createElement('button');
+            bigPlay.className = 'modal-video-play-btn';
             bigPlay.setAttribute('type', 'button');
             bigPlay.setAttribute('aria-label', 'Воспроизвести видео');
             bigPlay.style.position = 'absolute';
@@ -689,34 +757,41 @@ function createEventTickets(monthData, index) {
             bigPlay.onmouseenter = () => { bigPlay.style.transform = 'scale(1.1)'; bigPlay.style.backgroundColor = 'rgba(180, 20, 25, 0.95)'; };
             bigPlay.onmouseleave = () => { bigPlay.style.transform = 'scale(1)'; bigPlay.style.backgroundColor = 'rgba(139, 16, 20, 0.9)'; };
 
-            // 3. Video element (hidden until user starts playback)
-            const video = document.createElement('video');
-            video.src = item.url;
-            video.controls = true;
-            video.playsInline = true;
-            video.style.width = '100%';
-            video.style.height = '100%';
-            video.style.objectFit = 'cover';
-            video.style.borderRadius = '12px';
-            video.style.border = '1px solid rgba(248, 231, 188, 0.25)';
-            video.style.position = 'absolute';
-            video.style.top = '0';
-            video.style.left = '0';
-            video.style.zIndex = '1';
-            video.style.display = 'none';
-            video.style.backgroundColor = '#000';
-
             const startPlaying = () => {
-                posterImg.style.display = 'none';
-                bigPlay.style.display = 'none';
-                video.style.display = 'block';
+                posterImg.classList.add('is-hidden');
+                posterImg.style.setProperty('display', 'none', 'important');
+                posterImg.style.setProperty('visibility', 'hidden', 'important');
+                posterImg.style.setProperty('opacity', '0', 'important');
+                posterImg.style.setProperty('pointer-events', 'none', 'important');
+                posterImg.style.setProperty('z-index', '-10', 'important');
+
+                bigPlay.classList.add('is-hidden');
+                bigPlay.style.setProperty('display', 'none', 'important');
+                bigPlay.style.setProperty('visibility', 'hidden', 'important');
+                bigPlay.style.setProperty('pointer-events', 'none', 'important');
+
+                video.classList.remove('is-hidden');
+                video.style.setProperty('display', 'block', 'important');
+                video.style.setProperty('visibility', 'visible', 'important');
+                video.style.setProperty('opacity', '1', 'important');
+                video.style.setProperty('z-index', '10', 'important');
+                video.style.setProperty('pointer-events', 'auto', 'important');
+
                 video.preload = 'auto';
-                video.play().catch(err => {
-                    console.warn('Video play error:', err);
-                });
+                const playPromise = video.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(err => {
+                        console.warn('Video play error:', err);
+                    });
+                }
             };
 
             bigPlay.addEventListener('click', (e) => {
+                e.stopPropagation();
+                startPlaying();
+            });
+            bigPlay.addEventListener('touchend', (e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 startPlaying();
             });
@@ -725,16 +800,44 @@ function createEventTickets(monthData, index) {
                 e.stopPropagation();
                 startPlaying();
             });
+            posterImg.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                startPlaying();
+            });
 
-            video.onended = () => {
-                video.style.display = 'none';
-                posterImg.style.display = 'block';
-                bigPlay.style.display = 'flex';
-            };
+            video.addEventListener('play', () => {
+                posterImg.classList.add('is-hidden');
+                posterImg.style.setProperty('display', 'none', 'important');
+                posterImg.style.setProperty('visibility', 'hidden', 'important');
+                posterImg.style.setProperty('z-index', '-10', 'important');
 
+                bigPlay.classList.add('is-hidden');
+                bigPlay.style.setProperty('display', 'none', 'important');
+
+                video.style.setProperty('z-index', '10', 'important');
+            });
+
+            video.addEventListener('ended', () => {
+                posterImg.classList.remove('is-hidden');
+                posterImg.style.setProperty('display', 'block', 'important');
+                posterImg.style.setProperty('visibility', 'visible', 'important');
+                posterImg.style.setProperty('opacity', '1', 'important');
+                posterImg.style.setProperty('pointer-events', 'auto', 'important');
+                posterImg.style.setProperty('z-index', '2', 'important');
+
+                bigPlay.classList.remove('is-hidden');
+                bigPlay.style.setProperty('display', 'flex', 'important');
+                bigPlay.style.setProperty('visibility', 'visible', 'important');
+                bigPlay.style.setProperty('pointer-events', 'auto', 'important');
+                bigPlay.style.setProperty('z-index', '5', 'important');
+
+                video.style.setProperty('z-index', '1', 'important');
+            });
+
+            videoWrap.appendChild(video);
             videoWrap.appendChild(posterImg);
             videoWrap.appendChild(bigPlay);
-            videoWrap.appendChild(video);
             mainDisplay.appendChild(videoWrap);
         } else {
             const img = document.createElement('img');

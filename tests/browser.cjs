@@ -45,6 +45,10 @@ async function checkShows(browser,width){
 (async()=>{
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||(fs.existsSync('/usr/local/bin/chromium')?'/usr/local/bin/chromium':chromium.executablePath()),headless:true,args:['--no-sandbox']});try{
  const context=await browser.newContext({viewport:{width:1440,height:1000}});await context.route('**/*',routeAll);const p=await context.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('dialog',d=>d.accept());await p.goto(BASE+'/admin/',{waitUntil:'networkidle'});await login(p);
+ const unchanged=await p.evaluate(()=>TaisContent.stringify(appState.data));
+ for(let i=0;i<10;i++){await chooseShow(p,i);await p.evaluate(()=>saveCurrentShowFormToState());}
+ assert.equal(await p.evaluate(()=>TaisContent.stringify(appState.data)),unchanged,'viewing and saving shows preserves original HTML');
+ assert.deepEqual(await p.evaluate(()=>parsePositionToXY('0% 0%')),{x:0,y:0},'zero crop stays at zero');
  await chooseShow(p,0);const special='Тест "кавычки" </script> $&';await p.locator('#show-title-input').fill(special);await p.locator('#show-details-input').fill('Описание <script>не исполняется</script>\n\nВторая строка');await pick(p,'#upload-card-file','sample.png');await p.locator('#btn-toggle-separate').click();await pick(p,'#upload-card-mobile-file','sample.png');await p.locator('#card-pos-x-slider').fill('27');await p.locator('#card-pos-x-slider').dispatchEvent('input');await p.locator('#card-scale-slider').fill('125');await p.locator('#card-scale-slider').dispatchEvent('input');
  await chooseShow(p,6);const before6=await p.evaluate(()=>appState.data.monthsData[6].media.length);await p.locator('#btn-add-photo').click();await pick(p,'#upload-media-item-file','sample.png');
  await chooseShow(p,7);const before7=await p.evaluate(()=>appState.data.monthsData[7].media.length);await p.locator('#btn-add-video').click();await pick(p,'#upload-media-item-file','sample.png');assert.equal(await p.evaluate(()=>appState.data.monthsData[7].media.length),before7,'wrong media type rejected');await pick(p,'#upload-media-item-file','sample.mp4');

@@ -302,7 +302,7 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
             const detailsInput = document.getElementById('show-details-input');
             if (titleInput) curr.title = titleInput.value.trim();
             if (dateInput) curr.event_date = dateInput.value.trim();
-            if (detailsInput) {
+            if (detailsInput && detailsInput.value !== detailsHtmlToPlainText(curr.detailsText || '')) {
                 curr.detailsText = plainTextToDetailsHtml(detailsInput.value);
             }
         }
@@ -315,14 +315,14 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
             if (parts[0] === 'left') x = 0;
             else if (parts[0] === 'right') x = 100;
             else if (parts[0] === 'center') x = 50;
-            else if (parts[0].endsWith('%')) x = parseFloat(parts[0]) || 50;
+            else if (parts[0].endsWith('%')) x = parseFloat(parts[0]);
             else if (!isNaN(parseFloat(parts[0]))) x = parseFloat(parts[0]);
 
             if (parts[1]) {
                 if (parts[1] === 'top') y = 0;
                 else if (parts[1] === 'bottom') y = 100;
                 else if (parts[1] === 'center') y = 50;
-                else if (parts[1].endsWith('%')) y = parseFloat(parts[1]) || 50;
+                else if (parts[1].endsWith('%')) y = parseFloat(parts[1]);
                 else if (!isNaN(parseFloat(parts[1]))) y = parseFloat(parts[1]);
             } else {
                 if (parts[0] === 'top') { y = 0; x = 50; }

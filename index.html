@@ -1416,6 +1416,66 @@
         background: transparent !important;
     }
 }
+/* Large-screen show presentation. Keep the mobile slider unchanged. */
+@media (min-width: 961px) {
+    .events .events-slider-container {
+        width: 94% !important;
+        max-width: 2400px !important;
+        margin: 0 auto !important;
+    }
+    .events .events-slider-container .event-seasons {
+        width: 100% !important;
+        max-width: none !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: clamp(18px, 1.3vw, 32px) !important;
+        padding: 24px 0 !important;
+    }
+    .about .about_show {
+        width: 94% !important;
+        max-width: 1680px !important;
+        padding: 48px 0 64px !important;
+    }
+    .about .about_show .show_slider { gap: 64px !important; height: auto !important; max-height: none !important; }
+    .about .about_show .show_block {
+        max-width: none !important;
+        height: auto !important;
+        min-height: 0 !important;
+        max-height: none !important;
+        flex-shrink: 0 !important;
+        gap: clamp(32px, 3.4vw, 72px) !important;
+        margin: 0 !important;
+    }
+    .about .about_show .show_block .image-frame {
+        flex: 0 0 48% !important;
+        width: 48% !important;
+        max-width: 806px !important;
+    }
+    .about .about_show .show_block .block_info {
+        flex: 1 1 0 !important;
+        min-width: 0 !important;
+        max-width: none !important;
+        padding: 12px 0 !important;
+    }
+    .about .about_show .show_block .block_info h3 {
+        font-size: clamp(28px, 2vw, 36px) !important;
+        line-height: 1.25 !important;
+        margin-bottom: 20px !important;
+    }
+    .about .about_show .show_block .block_info p {
+        font-size: clamp(18px, 1.3vw, 24px) !important;
+        line-height: 1.6 !important;
+    }
+}
+@media (min-width: 1440px) {
+    .events .events-slider-container .event-seasons {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+}
+@media (min-width: 2200px) {
+    .events .events-slider-container .event-seasons {
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    }
+}
 </style>
 
 <body style="">

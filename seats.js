@@ -115,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleModalTouchMove(e) {
+        if (e.target.closest('#order-messenger-modal, .order-messenger-modal-overlay, .order-messenger-modal-card')) return;
         const openModal = document.querySelector('.event_tickets.new_modal_layout, .event_tickets[style*="flex"], .event_tickets[style*="block"]');
         if (!openModal || openModal.style.display === 'none') return;
 
@@ -2244,6 +2245,7 @@ document.addEventListener('keydown', (e) => {
 
 function handleOutsideModalClick(e) {
     if (Date.now() - (window._lastModalOpenTime || 0) < 400) return;
+    if (e.target.closest('#order-messenger-modal, .order-messenger-modal-overlay, .order-messenger-modal-card')) return;
     const openModal = document.querySelector('.event_tickets');
     if (!openModal) return;
     if (e.target.closest('.event-item')) return;

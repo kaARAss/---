@@ -145,7 +145,9 @@
             }
         }
         .event-item {
-            background-color: #111 !important;
+            background: transparent !important;
+            background-color: transparent !important;
+            border: none !important;
             contain: content;
         }
         .event-item .background-image {
@@ -470,7 +472,8 @@
         transform: none !important;
         margin: 0 auto !important;
         box-sizing: border-box !important;
-        border: 1px solid rgba(248, 231, 188, 0.25) !important;
+        border: none !important;
+        outline: none !important;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75) !important;
         overflow: hidden !important;
     }
@@ -534,9 +537,11 @@
         min-height: 200px !important;
         border-radius: 16px !important;
         overflow: hidden !important;
-        background: #111114 !important;
+        background: transparent !important;
+        background-color: transparent !important;
         box-shadow: 0 8px 30px rgba(0, 0, 0, 0.75) !important;
-        border: 1px solid rgba(248, 231, 188, 0.22) !important;
+        border: none !important;
+        outline: none !important;
         cursor: pointer !important;
         box-sizing: border-box !important;
         padding: 0 !important;
@@ -2329,7 +2334,7 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="order-messenger-modal-buttons">
             <!-- MAX button -->
-            <a href="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-max" onclick="window.handleMessengerLinkClick(event, 'https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784');">
+            <a href="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-max" data-url="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" onclick="window.handleMessengerLinkClick(event, 'https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784');">
                 <div class="order-messenger-btn-icon-wrap max-icon-wrap">
                     <img src="./max_logo.svg" alt="MAX logo" width="30" height="30">
                 </div>
@@ -2341,7 +2346,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </a>
 
             <!-- Telegram button -->
-            <a href="https://t.me/anzhelika_foris" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-tg" onclick="window.handleMessengerLinkClick(event, 'https://t.me/anzhelika_foris');">
+            <a href="https://t.me/anzhelika_foris" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-tg" data-url="https://t.me/anzhelika_foris" onclick="window.handleMessengerLinkClick(event, 'https://t.me/anzhelika_foris');">
                 <div class="order-messenger-btn-icon-wrap tg-icon-wrap">
                     <img src="./telegram_logo.svg" alt="Telegram logo" width="28" height="28">
                 </div>
@@ -2357,18 +2362,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
 window.handleMessengerLinkClick = function(e, url) {
-    if (e && e.stopPropagation) e.stopPropagation();
-    if (url) {
+    if (e) {
+        if (e.stopPropagation) e.stopPropagation();
+    }
+    if (!url) return;
+
+    // Detect mobile / touch environment
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile|Silk|BlackBerry/i.test(navigator.userAgent) || 
+                     (window.matchMedia && window.matchMedia('(max-width: 1024px)').matches) ||
+                     ('ontouchstart' in window);
+
+    if (isMobile) {
+        // Universal links for Telegram (t.me) and MAX (max.ru) must be opened via location.href
+        // so iOS and Android can switch directly to the installed app without popup blocking.
+        if (e && e.preventDefault) e.preventDefault();
+        window.location.href = url;
+    } else {
+        // Desktop browser: open in a new tab
         try {
-            window.open(url, '_blank', 'noopener,noreferrer');
+            const win = window.open(url, '_blank', 'noopener,noreferrer');
+            if (!win || win.closed || typeof win.closed === 'undefined') {
+                window.location.href = url;
+            }
         } catch (err) {
             window.location.href = url;
         }
     }
-    setTimeout(function() {
-        window.closeOrderMessengerModal();
-    }, 200);
 };
+
+function initOrderMessengerButtons() {
+    document.querySelectorAll('.order-messenger-btn').forEach(function(btn) {
+        if (btn.dataset.boundEvents === 'true') return;
+        btn.dataset.boundEvents = 'true';
+
+        let isProcessing = false;
+        function handleBtnAction(e) {
+            if (isProcessing) return;
+            isProcessing = true;
+            setTimeout(function() { isProcessing = false; }, 800);
+
+            const url = btn.getAttribute('data-url') || btn.getAttribute('href');
+            if (url) {
+                window.handleMessengerLinkClick(e, url);
+            }
+        }
+
+        btn.addEventListener('touchend', handleBtnAction, { passive: false });
+        btn.addEventListener('click', handleBtnAction);
+    });
+}
 
 window.openOrderMessengerModal = function(e) {
     if (e && e.preventDefault) e.preventDefault();
@@ -2381,12 +2423,14 @@ window.openOrderMessengerModal = function(e) {
         modal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('order-modal-open');
     }
+    initOrderMessengerButtons();
 };
 
 window.closeOrderMessengerModal = function(e) {
     if (e && e.target && e.target.closest && e.target.closest('a.order-messenger-btn')) {
-        // Do not block link navigation
-    } else if (e && e.preventDefault) {
+        return; // Do not block link navigation
+    }
+    if (e && e.preventDefault) {
         e.preventDefault();
     }
     if (e && e.stopPropagation) e.stopPropagation();
@@ -2404,9 +2448,11 @@ window.closeOrderMessengerModal = function(e) {
 window.closeOrderMessengerModal();
 document.addEventListener('DOMContentLoaded', function() {
     window.closeOrderMessengerModal();
+    initOrderMessengerButtons();
 });
 window.addEventListener('load', function() {
     window.closeOrderMessengerModal();
+    initOrderMessengerButtons();
 });
 
 document.addEventListener('click', function(e) {

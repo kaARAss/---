@@ -475,7 +475,7 @@
         </div>
         <div class="order-messenger-modal-buttons">
             <!-- MAX button -->
-            <a href="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-max" onclick="window.closeOrderMessengerModal(event);">
+            <a href="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-max" data-url="https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784" onclick="window.handleMessengerLinkClick(event, 'https://max.ru/u/f9LHodD0cOIOskFbAwIl7OeGcFZvnuEDcH7BXo8yN8PP2OqPMHO7WYCB784');">
                 <div class="order-messenger-btn-icon-wrap max-icon-wrap">
                     <img src="./max_logo.svg" alt="MAX logo" width="30" height="30">
                 </div>
@@ -487,7 +487,7 @@
             </a>
 
             <!-- Telegram button -->
-            <a href="https://t.me/anzhelika_foris" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-tg" onclick="window.closeOrderMessengerModal(event);">
+            <a href="https://t.me/anzhelika_foris" target="_blank" rel="noopener noreferrer" class="order-messenger-btn order-messenger-btn-tg" data-url="https://t.me/anzhelika_foris" onclick="window.handleMessengerLinkClick(event, 'https://t.me/anzhelika_foris');">
                 <div class="order-messenger-btn-icon-wrap tg-icon-wrap">
                     <img src="./telegram_logo.svg" alt="Telegram logo" width="28" height="28">
                 </div>
@@ -502,6 +502,53 @@
 </div>
 
 <script>
+window.handleMessengerLinkClick = function(e, url) {
+    if (e) {
+        if (e.stopPropagation) e.stopPropagation();
+    }
+    if (!url) return;
+
+    const isMobile = /Android|iPhone|iPad|iPod|Mobile|Silk|BlackBerry/i.test(navigator.userAgent) || 
+                     (window.matchMedia && window.matchMedia('(max-width: 1024px)').matches) ||
+                     ('ontouchstart' in window);
+
+    if (isMobile) {
+        if (e && e.preventDefault) e.preventDefault();
+        window.location.href = url;
+    } else {
+        try {
+            const win = window.open(url, '_blank', 'noopener,noreferrer');
+            if (!win || win.closed || typeof win.closed === 'undefined') {
+                window.location.href = url;
+            }
+        } catch (err) {
+            window.location.href = url;
+        }
+    }
+};
+
+function initOrderMessengerButtons() {
+    document.querySelectorAll('.order-messenger-btn').forEach(function(btn) {
+        if (btn.dataset.boundEvents === 'true') return;
+        btn.dataset.boundEvents = 'true';
+
+        let isProcessing = false;
+        function handleBtnAction(e) {
+            if (isProcessing) return;
+            isProcessing = true;
+            setTimeout(function() { isProcessing = false; }, 800);
+
+            const url = btn.getAttribute('data-url') || btn.getAttribute('href');
+            if (url) {
+                window.handleMessengerLinkClick(e, url);
+            }
+        }
+
+        btn.addEventListener('touchend', handleBtnAction, { passive: false });
+        btn.addEventListener('click', handleBtnAction);
+    });
+}
+
 window.openOrderMessengerModal = function(e) {
     if (e && e.preventDefault) e.preventDefault();
     if (e && e.stopPropagation) e.stopPropagation();
@@ -513,10 +560,16 @@ window.openOrderMessengerModal = function(e) {
         modal.setAttribute('aria-hidden', 'false');
         document.body.classList.add('order-modal-open');
     }
+    initOrderMessengerButtons();
 };
 
 window.closeOrderMessengerModal = function(e) {
-    if (e && e.preventDefault) e.preventDefault();
+    if (e && e.target && e.target.closest && e.target.closest('a.order-messenger-btn')) {
+        return;
+    }
+    if (e && e.preventDefault) {
+        e.preventDefault();
+    }
     if (e && e.stopPropagation) e.stopPropagation();
     const modal = document.getElementById('order-messenger-modal');
     if (modal) {
@@ -532,9 +585,11 @@ window.closeOrderMessengerModal = function(e) {
 window.closeOrderMessengerModal();
 document.addEventListener('DOMContentLoaded', function() {
     window.closeOrderMessengerModal();
+    initOrderMessengerButtons();
 });
 window.addEventListener('load', function() {
     window.closeOrderMessengerModal();
+    initOrderMessengerButtons();
 });
 
 document.addEventListener('click', function(e) {

@@ -29,6 +29,19 @@
           if (sub && value) sub.textContent = key === 'telegram' ? new URL(value).pathname.replace('/', '@') : 'Быстрый чат в MAX';
         }
       });
+      const aboutTitle = document.querySelector('.about .about_us .section_title');
+      if (aboutTitle) aboutTitle.textContent = data.about.title;
+      document.querySelectorAll('.about_show .show_block').forEach((node, i) => {
+        const block = data.about.blocks[i];
+        if (!block) return;
+        node.querySelector('h3').textContent = block.title;
+        const text = node.querySelector('.block_info p');
+        text.textContent = block.text;
+        text.style.whiteSpace = 'pre-line';
+        const image = node.querySelector('.image-frame img');
+        if (image.getAttribute('src') !== block.image) image.src = block.image;
+        image.alt = block.title;
+      });
       const banners = document.getElementById('published-banner-images') || document.createElement('style');
       banners.id = 'published-banner-images';
       banners.textContent = '@media(min-width:961px){.banner .banner_image{background-image:url("' + data.banner.desktopImage + '")!important}}' +

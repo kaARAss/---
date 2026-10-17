@@ -140,11 +140,11 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
         const draftRead = () => draftOperation('readonly',store => store.get(DRAFT_KEY));
         const draftDelete = () => draftOperation('readwrite',store => store.delete(DRAFT_KEY));
         function usedUploadPaths(data) {
-            return new Set([data.banner.desktopImage,data.banner.mobileImage,...data.monthsData.flatMap(show=>[show.image,show.mobileImage,...show.media.flatMap(item=>[item.url,item.poster])])].filter(Boolean).map(url=>url.split(/[?#]/)[0].replace(/^\.\//,'')));
+            return new Set([data.banner.desktopImage,data.banner.mobileImage,...data.about.blocks.map(block=>block.image),...data.monthsData.flatMap(show=>[show.image,show.mobileImage,...show.media.flatMap(item=>[item.url,item.poster])])].filter(Boolean).map(url=>url.split(/[?#]/)[0].replace(/^\.\//,'')));
         }
         async function persistDraft(force = false) {
             if (!appState.data || (publishing && !force)) return;
-            saveCurrentShowFormToState(); saveContactsFromForm();
+            saveCurrentShowFormToState(); saveContactsFromForm(); saveAboutFromForm();
             const data = TaisContent.validate(appState.data);
             const used = usedUploadPaths(data);
             for(const path of appState.pendingUploads.keys())if(!used.has(path))appState.pendingUploads.delete(path);
@@ -202,14 +202,14 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
                 const draft = await draftRead();
                 if (draft && confirm('В этом браузере есть черновик от ' + new Date(draft.savedAt).toLocaleString('ru-RU') + '. Восстановить его вместе с выбранными файлами?')) {
                     appState.data = TaisContent.validate(draft.data);
-                    appState.baseContent = draft.baseContent;
+                    appState.baseContent = draft.baseContent ? TaisContent.stringify(JSON.parse(draft.baseContent)) : appState.baseContent;
                     appState.pendingUploads = new Map(draft.files || []);
                     for (const show of appState.data.monthsData) for (const item of show.media) {
                         const file = appState.pendingUploads.get(item.url.replace(/^\.\//,''));
                         if (file) item._blobPreview = URL.createObjectURL(file);
                     }
                 }
-                renderShowsSelector(); renderSelectedShow(appState.activeShowIndex); renderContactsTab();
+                renderShowsSelector(); renderSelectedShow(appState.activeShowIndex); renderContactsTab(); renderAboutTab();
                 document.getElementById('banner-preview-img').src = appState.data.banner.desktopImage;
                 document.getElementById('banner-mobile-preview-img').src = appState.data.banner.mobileImage;
                 showToast('Данные загружены. Сохранение черновика и публикация — отдельные действия.');
@@ -1145,6 +1145,63 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
             e.target.value = '';
         });
 
+        function saveAboutFromForm() {
+            if (!appState.data?.about) return;
+            const sectionTitle = document.getElementById('about-section-title');
+            if (!document.querySelector('[data-about-title]')) return;
+            appState.data.about.title = sectionTitle.value;
+            appState.data.about.blocks.forEach((block, i) => {
+                block.title = document.querySelector('[data-about-title="'+i+'"]').value;
+                block.text = document.querySelector('[data-about-text="'+i+'"]').value;
+            });
+        }
+        function aboutPreviewSource(image) {
+            const file = appState.pendingUploads.get(image.split(/[?#]/)[0].replace(/^\.\//,''));
+            return file ? URL.createObjectURL(file) : image;
+        }
+        function renderAboutTab() {
+            const about = appState.data.about;
+            document.getElementById('about-section-title').value = about.title;
+            const container = document.getElementById('about-blocks-editor');
+            container.querySelectorAll('img').forEach(img => { if (img.src.startsWith('blob:')) URL.revokeObjectURL(img.src); });
+            container.replaceChildren();
+            about.blocks.forEach((block, i) => {
+                const card = document.createElement('section');
+                card.className = 'about-edit-card';
+                card.innerHTML = '<h3 class="panel-title">Блок '+(i+1)+'</h3><div class="about-edit-layout"><div><img class="about-edit-preview"><button type="button" class="btn btn-secondary" data-about-upload>Заменить фото</button><input id="about-photo-'+i+'" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/avif" style="display:none"></div><div><div class="form-group"><label class="form-label" for="about-title-'+i+'">Заголовок блока</label><input id="about-title-'+i+'" data-about-title="'+i+'" class="form-input" maxlength="300"></div><div class="form-group"><label class="form-label" for="about-text-'+i+'">Текст блока</label><textarea id="about-text-'+i+'" data-about-text="'+i+'" class="form-input" maxlength="10000"></textarea></div></div></div>';
+                const image = card.querySelector('img');
+                image.src = aboutPreviewSource(block.image); image.alt = block.title;
+                card.querySelector('input[data-about-title]').value = block.title;
+                card.querySelector('textarea').value = block.text;
+                card.querySelector('[data-about-upload]').addEventListener('click', () => card.querySelector('input[type=file]').click());
+                card.querySelector('input[type=file]').addEventListener('change', async event => {
+                    const input = event.target, file = input.files[0];
+                    if (!file || appState.loading || publishing || processingMedia) return;
+                    processingMedia = true;
+                    document.getElementById('btn-publish-all').disabled = true;
+                    input.disabled = true;
+                    try {
+                        await verifyUpload(file, 'image');
+                        const target = 'img/block/about_'+(i+1)+'_'+Date.now()+'.'+file.name.split('.').pop().toLowerCase();
+                        appState.pendingUploads.set(target, file);
+                        appState.data.about.blocks[i].image = target;
+                        if (image.src.startsWith('blob:')) URL.revokeObjectURL(image.src);
+                        image.src = URL.createObjectURL(file);
+                        showToast('Фото блока '+(i+1)+' выбрано. Для сайта нажмите «Опубликовать».');
+                    } catch (error) { showToast(error.message, 'error'); }
+                    finally {
+                        processingMedia = false; input.disabled = false; input.value = '';
+                        document.getElementById('btn-publish-all').disabled = false;
+                        scheduleDraft();
+                    }
+                });
+                container.appendChild(card);
+            });
+        }
+        document.getElementById('btn-save-about').addEventListener('click', () => {
+            saveAboutFromForm(); awaitDraftSave();
+        });
+
         // Contacts tab
         function renderContactsTab() {
             const links = appState.data?.links || {};
@@ -1205,7 +1262,7 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
             lockEditor(true);
             let snapshot, uploads;
             try {
-                saveCurrentShowFormToState(); saveContactsFromForm();
+                saveCurrentShowFormToState(); saveContactsFromForm(); saveAboutFromForm();
                 snapshot = TaisContent.validate(appState.data);
                 await persistDraft(true);
                 const used = usedUploadPaths(snapshot);

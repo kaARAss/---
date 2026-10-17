@@ -6,6 +6,26 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   const CONTENT_RE = /(<script\b[^>]*\bid=["']site-content["'][^>]*>)([\s\S]*?)(<\/script\s*>)/i;
+  const DEFAULT_ABOUT = {
+  "title": "ТАНЦЕВАЛЬНОЕ ШОУ НА МЕРОПРИЯТИЯ",
+  "blocks": [
+    {
+      "image": "./about1.webp?v=1791593000",
+      "title": "Что вас ждет на шоу",
+      "text": "Мы предлагаем эксклюзивное выездное танцевальное шоу, которое станет главным украшением вашего мероприятия. Команда профессиональных артистов приедет на вашу площадку, чтобы создать невероятную атмосферу красоты и праздника, адаптируясь под формат вашего события."
+    },
+    {
+      "image": "./about2.webp?v=1791593000",
+      "title": "Роскошные костюмы",
+      "text": "Особую атмосферу красоты и магии в нашем представлении создают роскошные костюмы и уникальные образы артистов в танцевальных номерах. Каждый костюм шоу является эксклюзивным, уникальным,изделием ручной работы дизайнеров и мастеров. Эти детали не просто дополняют яркое выступление, но и подчеркивают неповторимый стиль шоу Та-Ис, создавая ту самую магическую атмосферу праздника!"
+    },
+    {
+      "image": "./about3.webp?v=1791593000",
+      "title": "Встреча гостей (Пре-шоу)",
+      "text": "Помимо основной танцевальной программы, мы предлагаем красивую встречу ваших гостей. Где артисты в роскошных сценических костюмах будут приветствовать приглашенных перед началом мероприятия, подчеркивая тем самым праздничную атмосферу. Это идеальные условия для создания памятных фотографий с первых минут"
+    }
+  ]
+};
   const IMAGE_EXT = /\.(png|jpe?g|webp|gif|avif)(?:[?#]|$)/i;
   const VIDEO_EXT = /\.(mp4|webm|mov|m4v)(?:[?#]|$)/i;
   function asset(value) {
@@ -72,6 +92,13 @@
     data.banner = data.banner || { desktopImage: 'img/index/banner.png', mobileImage: 'img/index/Banner_mobile.png' };
     asset(data.banner.desktopImage);
     asset(data.banner.mobileImage);
+    data.about = data.about || JSON.parse(JSON.stringify(DEFAULT_ABOUT));
+    if (typeof data.about.title !== 'string' || !data.about.title.trim() || data.about.title.length > 300 || !Array.isArray(data.about.blocks) || data.about.blocks.length !== 3) throw new Error('Заполните заголовок раздела и все три блока о шоу');
+    data.about.blocks.forEach(block => {
+      if (typeof block.title !== 'string' || !block.title.trim() || block.title.length > 300 || typeof block.text !== 'string' || !block.text.trim() || block.text.length > 10000) throw new Error('Заполните заголовок и текст каждого блока о шоу');
+      asset(block.image);
+      if (!IMAGE_EXT.test(block.image)) throw new Error('Для блока о шоу нужно изображение');
+    });
     data.version = 1;
     data.ticketPrices = null;
     return data;

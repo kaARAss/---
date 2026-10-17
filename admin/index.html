@@ -1381,6 +1381,12 @@
                 box-sizing: border-box !important;
             }
         }
+        .about-edit-card { border-top: 1px solid var(--border-subtle); padding: 28px 0; margin-top: 20px; }
+        .about-edit-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:24px; margin-top:16px; }
+        .about-edit-preview { display:block; width:100%; aspect-ratio:26/15; object-fit:cover; border-radius:12px; margin-bottom:16px; }
+        .about-edit-layout > div { min-width:0; }
+        .about-edit-layout textarea { min-height:200px; resize:vertical; }
+        @media(max-width:768px) { .about-edit-layout { grid-template-columns:minmax(0,1fr); } }
     </style>
 </head>
 <body>
@@ -1456,6 +1462,7 @@
             <div class="container">
                 <div class="nav-tabs">
                     <button class="tab-btn active" data-tab="tab-shows">🎭 10 Шоу и Фото/Видео</button>
+                    <button class="tab-btn" data-tab="tab-about">📷 О мероприятиях</button>
                     <button class="tab-btn" data-tab="tab-banner">🖼️ Главный Баннер</button>
                     <button class="tab-btn" data-tab="tab-contacts">🔗 Кнопки и Контакты</button>
                     <button class="tab-btn" data-tab="tab-security">⚙️ Настройки и Пароль</button>
@@ -1678,6 +1685,17 @@
                 <!-- ============================================== -->
                 <!-- TAB 2: MAIN BANNER                             -->
                 <!-- ============================================== -->
+                <div id="tab-about" class="tab-content">
+                    <div class="panel-card">
+                        <div class="panel-header"><div><h2 class="panel-title">Фото и текст о мероприятиях</h2><p class="panel-desc">Три блока под карточками шоу. Расположение фото слева и справа сохраняется автоматически.</p></div></div>
+                        <div class="form-group"><label class="form-label" for="about-section-title">Общий заголовок раздела</label><input id="about-section-title" class="form-input" maxlength="300"></div>
+                        <div class="size-hint-box"><div class="size-hint-title">Размер фото: <code>2080 × 1200 px</code> (26:15)</div><div>Горизонтальное фото. В увеличенных блоках на ПК оно отображается шириной до 806 px. Края фото другой пропорции могут обрезаться.</div></div>
+                        <div id="about-blocks-editor"></div>
+                        <button type="button" id="btn-save-about" class="btn btn-gold">💾 Сохранить блоки</button>
+                        <p class="panel-desc" style="margin-top:12px">«Сохранить» сохраняет черновик в этом браузере. Чтобы изменить сайт, нажмите «Опубликовать» вверху.</p>
+                    </div>
+                </div>
+
                 <div id="tab-banner" class="tab-content">
                     <div class="panel-card">
                         <div class="panel-header">
@@ -1888,9 +1906,9 @@
         </div>
     </div>
 
-    <script src="/content-utils.js?v=20261017-fix2"></script>
+    <script src="/content-utils.js?v=20261017-about1"></script>
 <script src="/admin-crypto.js?v=20261017-password1"></script>
 <script src="/video-poster.js?v=20261017-poster1"></script>
-<script src="/admin-app.js?v=20261017-login2"></script>
+<script src="/admin-app.js?v=20261017-about1"></script>
 </body>
 </html>

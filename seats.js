@@ -298,17 +298,29 @@ document.addEventListener('DOMContentLoaded', function() {
             imgBg.style.objectFit = 'cover';
             // Show cards 3 (55% vertical), 6, 7, 9, 10 have text aligned towards bottom, 4 shifted to show girl on right, 1, 2, 5, 8 towards left/center
             const showPosMap = {
-                1: 'left center',
-                2: 'left center',
-                3: 'left 55%',
-                4: 'left center',
-                5: 'left center',
-                6: 'left bottom',
-                7: 'left bottom',
-                8: 'left center',
-                9: 'left bottom',
-                10: 'left center'
-            };
+          "1": "left center",
+          "2": "left center",
+          "3": "left 55%",
+          "4": {
+                    "pos": "0% 36%",
+                    "scale": 1
+          },
+          "5": {
+                    "pos": "0% 50%",
+                    "scale": 1
+          },
+          "6": "left bottom",
+          "7": {
+                    "pos": "20% 95%",
+                    "scale": 1
+          },
+          "8": "left center",
+          "9": {
+                    "pos": "0% 100%",
+                    "scale": 1
+          },
+          "10": "left center"
+};
             const posVal = showPosMap[index + 1] || 'left center';
             const posStr = typeof posVal === 'string' ? posVal : (posVal.pos || 'left center');
             const scaleVal = (typeof posVal === 'object' && posVal && posVal.scale) ? posVal.scale : 1;

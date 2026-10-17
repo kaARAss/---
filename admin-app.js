@@ -88,13 +88,9 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
                 document.querySelector('label[for="password"]').textContent = staticVault ? 'Пароль' : 'Личный GitHub-токен';
                 pass.placeholder = staticVault ? 'Введите ваш пароль' : 'GitHub token: доступ Contents → Read and write';
                 user.value = appState.github.owner;
-                const note = document.createElement('p');
-                note.style.cssText = 'color:#c7bea9;font-size:12px;line-height:1.6;margin:12px 0';
-                note.textContent = staticVault ? 'Вход по паролю. Ключ публикации зашифрован; после входа он используется только в памяти вкладки. Пароль не отправляется на сервер и не записывается в сайт.' : 'Для этого статического сайта нужен личный GitHub-токен с доступом Contents: Read and write только к репозиторию kaARAss/---. Токен используется лишь в памяти вкладки.';
-                document.getElementById('login-form').appendChild(note);
-                const form = document.getElementById('change-pass-form');
-                form.innerHTML = '<p style="line-height:1.7">' + (staticVault ? 'Ключ GitHub хранится в зашифрованной конфигурации, пароль — только у владельца. Для смены пароля или ключа конфигурацию нужно перешифровать и опубликовать заново. Старые версии доступны в Git-истории: при утечке пароля отзовите старый токен и замените оба секрета. Статический сайт не защищает от офлайн-подбора пароля. Если срок действия ключа закончится, его также нужно заменить.' : 'Доступ к публикации подтверждается личным токеном GitHub.') + ' Для закрытия этой сессии используйте «Выйти». Черновики хранятся только в этом браузере.</p><button type="button" id="clear-local-draft" class="btn">Удалить локальный черновик</button>';
-                document.getElementById('clear-local-draft').onclick = async () => { if (confirm('Удалить черновик и выбранные файлы из этого браузера?')) { await draftDelete(); showToast('Локальный черновик удалён'); } };
+                // Password rotation requires re-encrypting the vault, not an in-page form.
+                document.querySelector('[data-tab="tab-security"]')?.remove();
+                document.getElementById('tab-security')?.remove();
             }
             setAuthenticated(false);
         }
@@ -119,7 +115,7 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
                 document.getElementById('password').value = '';
                 setAuthenticated(true);
                 await loadData();
-            } catch (err) { document.getElementById('password').value = ''; appState.github.token = ''; setAuthenticated(false); error.textContent = err.message; error.style.display = 'block'; }
+            } catch (err) { document.getElementById('password').value = ''; appState.github.token = ''; setAuthenticated(false); error.textContent = err.message.startsWith('Неверный пароль') ? 'Неверный пароль' : err.message; error.style.display = 'block'; }
             finally { button.disabled = false; }
         });
         document.getElementById('btn-logout').addEventListener('click', async () => {

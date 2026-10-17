@@ -159,6 +159,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     window.closeCurrentModal = closeCurrentModal;
 
+    window.closeShowModal = closeCurrentModal;
+
     function enableModalZoomLock() {
       document.documentElement.classList.add('modal-open');
     
@@ -181,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function openShowModal(data, index, eventItem) {
         if (!data) return;
-        const monthYear = `${data.monthNum}_${data.year}`;
+        const monthYear = data.id;
         if (eventItem) saveScrollPosition(eventItem);
         const existingModal = document.querySelector(`#event_tickets_${monthYear}`);
         if (existingModal) {
@@ -231,19 +233,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
         eventItem.addEventListener('touchend', function(e) {
             const duration = Date.now() - startTime;
-            if (!moved && duration < 600) {
+            if (!moved && !window._isSwipingCards && duration < 600) {
                 triggerOpen(e);
             }
         }, { passive: false });
 
         eventItem.addEventListener('click', function(e) {
+            if (window._isSwipingCards || Date.now() - (window._lastCardsSwipe || 0) < 400) return;
             triggerOpen(e);
+        });
+        eventItem.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); triggerOpen(e); }
         });
     }
 
     function createEventItem(monthData, index) {
         const { monthText, year, image, monthNum } = monthData;
-        const monthYear = `${monthNum}_${year}`;
+        const monthYear = monthData.id;
 
         const eventItem = document.createElement('div');
         eventItem.className = 'event-item swiper-slide';
@@ -297,30 +303,7 @@ document.addEventListener('DOMContentLoaded', function() {
             imgBg.style.height = '100%';
             imgBg.style.objectFit = 'cover';
             // Show cards 3 (55% vertical), 6, 7, 9, 10 have text aligned towards bottom, 4 shifted to show girl on right, 1, 2, 5, 8 towards left/center
-            const showPosMap = {
-          "1": "left center",
-          "2": "left center",
-          "3": "left 55%",
-          "4": {
-                    "pos": "0% 36%",
-                    "scale": 1
-          },
-          "5": {
-                    "pos": "0% 50%",
-                    "scale": 1
-          },
-          "6": "left bottom",
-          "7": {
-                    "pos": "20% 95%",
-                    "scale": 1
-          },
-          "8": "left center",
-          "9": {
-                    "pos": "0% 100%",
-                    "scale": 1
-          },
-          "10": "left center"
-};
+            const showPosMap = window.siteContent.showPosMap;
             const posVal = showPosMap[index + 1] || 'left center';
             const posStr = typeof posVal === 'string' ? posVal : (posVal.pos || 'left center');
             const scaleVal = (typeof posVal === 'object' && posVal && posVal.scale) ? posVal.scale : 1;
@@ -342,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
 function createEventTickets(monthData, index) {
     const { monthText, year, monthNum, image } = monthData;
-    const monthYear = `${monthNum}_${year}`;
+    const monthYear = monthData.id;
 
     const eventTickets = document.createElement('div');
     eventTickets.className = 'event_tickets new_modal_layout';
@@ -931,7 +914,7 @@ function createEventTickets(monthData, index) {
     desc.style.overscrollBehavior = 'contain';
     desc.style.webkitOverflowScrolling = 'touch';
     desc.style.paddingRight = '10px';
-    desc.innerHTML = monthData.detailsText || `
+    desc.innerHTML = TaisContent.safeHtml(monthData.detailsText) || `
         <h3 style="color: #f8e7bc; margin-top: 0; font-size: 22px; font-weight: 500;">О шоу</h3>
         <p style="margin-bottom: 15px;">Уникальные номера, потрясающие костюмы и незабываемые эмоции. Погрузитесь в атмосферу настоящего праздника.</p>
         <p>Расскажем все подробности позже!</p>
@@ -1003,7 +986,7 @@ function createEventTickets(monthData, index) {
 
 function openOrCreateEventTickets(targetIndex) {
         const data = monthsData[targetIndex];
-        const monthYear = `${data.monthNum}_${data.year}`;
+        const monthYear = data.id;
         let modal = document.querySelector(`#event_tickets_${monthYear}`);
         if (!modal) {
             modal = createEventTickets(data, targetIndex);
@@ -1193,14 +1176,11 @@ function loadEventsList(eventTickets, monthNum, year) {
                             slideChangeTransitionEnd: function(sw) {
                                 updateSlideVisibility(sw);
                             },
-                            tap: function(sw, e) {
-                                const activeSlide = sw.clickedSlide || (sw.slides && sw.slides[sw.activeIndex]);
-                                if (activeSlide) {
-                                    const idx = parseInt(activeSlide.getAttribute('data-index') || sw.activeIndex, 10);
-                                    if (!isNaN(idx) && monthsData[idx]) {
-                                        window._lastModalOpenTime = Date.now();
-                                        openShowModal(monthsData[idx], idx, activeSlide);
-                                    }
+                            sliderFirstMove: function() { window._isSwipingCards = true; },
+                            touchEnd: function(sw) {
+                                if (window._isSwipingCards) {
+                                    window._lastCardsSwipe = Date.now();
+                                    setTimeout(() => { window._isSwipingCards = false; }, 0);
                                 }
                             }
                         }
@@ -2244,8 +2224,8 @@ document.addEventListener('keydown', (e) => {
         const openModal = document.querySelector('.event_tickets');
         const orderForm = document.getElementById('order-event-form');
         if (openModal || (orderForm && orderForm.style.display === 'flex')) {
-            if (typeof closeCurrentModal === 'function') {
-                closeCurrentModal();
+            if (typeof window.closeShowModal === 'function') {
+                window.closeShowModal();
             } else if (openModal) {
                 openModal.style.setProperty('display', 'none', 'important');
                 try { openModal.remove(); } catch(err) {}
@@ -2265,8 +2245,8 @@ function handleOutsideModalClick(e) {
     if (e.target.closest('.event_tickets')) return;
     if (e.target.closest('#order-event-form')) return;
     if (e.target.closest('.event_tickets_overlay')) return;
-    if (typeof closeCurrentModal === 'function') {
-        closeCurrentModal();
+    if (typeof window.closeShowModal === 'function') {
+        window.closeShowModal();
     }
 }
 document.addEventListener('click', handleOutsideModalClick);

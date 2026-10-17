@@ -5,11 +5,17 @@
   "scripts": {
     "dev": "node server.js",
     "start": "node server.js",
-    "build": "echo 'No build step required'"
+    "build": "echo 'No build step required'",
+    "test": "node --test tests/content.test.cjs tests/server.test.cjs",
+    "test:browser": "node tests/browser.cjs",
+    "check": "node scripts/check-site.cjs"
   },
   "dependencies": {
     "compression": "^1.8.2",
     "express": "^4.18.2",
     "multer": "^2.4.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
   }
 }

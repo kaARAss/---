@@ -8,7 +8,8 @@
     "build": "echo 'No build step required'",
     "test": "node --test tests/content.test.cjs tests/server.test.cjs tests/crypto.test.cjs tests/video-poster.test.cjs",
     "test:browser": "node tests/browser.cjs",
-    "check": "node scripts/check-site.cjs"
+    "check": "node scripts/check-site.cjs",
+    "test:layout": "node tests/layout-scroll.cjs"
   },
   "dependencies": {
     "compression": "^1.8.2",

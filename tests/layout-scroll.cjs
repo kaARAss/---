@@ -1,0 +1,23 @@
+/* Local-only responsive and scroll regression test. Never publishes or logs in. */
+const {chromium}=require('playwright'),assert=require('node:assert/strict'),fs=require('fs');
+const BASE=process.env.TAIS_TEST_URL||'http://127.0.0.1:8765';
+(async()=>{const b=await chromium.launch({executablePath:'/usr/local/bin/chromium',headless:true,args:['--no-sandbox']});try{
+for(const width of [390,960,1024,1280,1440,1600,1920,2560]){
+ const p=await b.newPage({viewport:{width,height:1080}});await p.route('**/*',route=>new URL(route.request().url()).origin===BASE?route.continue():route.abort());await p.goto(BASE,{waitUntil:'networkidle'});await p.locator('#cookie-accept-btn').click().catch(()=>{});
+ const layout=await p.locator('.event-seasons .event-item').evaluateAll(cards=>cards.map(e=>{const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}}));assert.equal(layout.length,10);assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
+ if(width>960){assert.equal(new Set(layout.map(r=>Math.round(r.y))).size,2,'exactly 2 rows at '+width);assert.equal(new Set(layout.slice(0,5).map(r=>Math.round(r.y))).size,1);assert.equal(new Set(layout.slice(5).map(r=>Math.round(r.y))).size,1);for(const r of layout)assert.ok(Math.abs(r.w/r.h-1.5)<.02);assert.ok(layout[5].y>=layout[0].y+layout[0].h+15);console.log('PASS '+width+'px: 5 columns × 2 rows; card '+layout[0].w.toFixed(1)+' × '+layout[0].h.toFixed(1));}
+ else {assert.equal(await p.locator('.events-slider-container').evaluate(e=>!!e.swiper),true);console.log('PASS '+width+'px: native mobile slider retained');}
+ if(width===1920){
+  await p.evaluate(()=>scrollTo({top:0,behavior:'instant'}));
+  const prevented=await p.evaluate(()=>{const e=new WheelEvent('wheel',{deltaY:240,bubbles:true,cancelable:true});document.body.dispatchEvent(e);return e.defaultPrevented});assert.ok(prevented);await p.waitForTimeout(40);const mid=await p.evaluate(()=>scrollY);assert.ok(mid>0&&mid<235,'intermediate smooth wheel position '+mid);await p.waitForTimeout(800);assert.ok(Math.abs(await p.evaluate(()=>scrollY)-240)<=1,'wheel animation settles');
+  const native=await p.evaluate(()=>{const e=new WheelEvent('wheel',{deltaY:10.5,bubbles:true,cancelable:true});document.body.dispatchEvent(e);return !e.defaultPrevented});assert.ok(native,'precise trackpad remains native');
+  assert.ok(await p.evaluate(()=>{const e=new WheelEvent('wheel',{deltaY:120,ctrlKey:true,bubbles:true,cancelable:true});document.body.dispatchEvent(e);return !e.defaultPrevented}),'browser zoom remains native');
+  await p.emulateMedia({reducedMotion:'reduce'});assert.equal(await p.evaluate(()=>getComputedStyle(document.documentElement).scrollBehavior),'auto');assert.ok(await p.evaluate(()=>{const e=new WheelEvent('wheel',{deltaY:120,bubbles:true,cancelable:true});document.body.dispatchEvent(e);return !e.defaultPrevented}));await p.emulateMedia({reducedMotion:'no-preference'});
+  await p.evaluate(()=>{const box=document.createElement('div');box.id='scroll-fixture';box.style.cssText='height:60px;overflow:auto';box.innerHTML='<div style="height:300px">nested</div>';document.body.append(box)});assert.ok(await p.evaluate(()=>{const e=new WheelEvent('wheel',{deltaY:120,bubbles:true,cancelable:true});document.querySelector('#scroll-fixture').dispatchEvent(e);return !e.defaultPrevented}));await p.locator('#scroll-fixture').evaluate(e=>e.remove());
+  await p.locator('header a[href="#contacts"]').click();await p.waitForTimeout(60);const anchorMid=await p.evaluate(()=>scrollY);await p.waitForTimeout(1800);const anchorEnd=await p.evaluate(()=>scrollY);assert.ok(anchorEnd>anchorMid,'anchor scroll animates');assert.ok(await p.locator('#contacts').evaluate(e=>e.getBoundingClientRect().top<innerHeight),'contacts anchor reached');
+  await p.locator('.events').evaluate(e=>e.scrollIntoView({behavior:'instant'}));await p.waitForTimeout(1400);await p.locator('.events').screenshot({path:'/data/tais-review/grid5-desktop.png'});
+  await p.locator('.event-item').first().click();await p.locator('.event_tickets.new_modal_layout').filter({visible:true}).waitFor();const locked=await p.evaluate(()=>scrollY);await p.mouse.wheel(0,240);await p.waitForTimeout(500);assert.equal(await p.evaluate(()=>scrollY),locked,'modal background stays locked');await p.locator('.event_tickets.new_modal_layout:visible .close_event_tickets').click();console.log('PASS smooth wheel, trackpad/zoom bypass, reduced motion, nested scroller, anchors and modal scroll lock');
+ }
+ await p.close();
+}
+}finally{await b.close()}})().catch(e=>{console.error(e);process.exit(1)});

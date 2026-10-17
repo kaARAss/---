@@ -1426,9 +1426,13 @@
     .events .events-slider-container .event-seasons {
         width: 100% !important;
         max-width: none !important;
-        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
         gap: clamp(18px, 1.3vw, 32px) !important;
         padding: 24px 0 !important;
+    }
+    .events .events-slider-container .event-seasons .event-item {
+        aspect-ratio: 3 / 2 !important;
+        min-width: 0 !important;
     }
     .about .about_show {
         width: 94% !important;
@@ -1466,16 +1470,8 @@
         line-height: 1.6 !important;
     }
 }
-@media (min-width: 1440px) {
-    .events .events-slider-container .event-seasons {
-        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    }
-}
-@media (min-width: 2200px) {
-    .events .events-slider-container .event-seasons {
-        grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
-    }
-}
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto !important; } }
 </style>
 
 <body style="">
@@ -2800,11 +2796,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 const dest = document.querySelector(hash);
                 if (dest) {
                     e.preventDefault();
-                    dest.scrollIntoView({ behavior: 'smooth' });
+                    dest.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
                 }
             }
         }
-    }, { passive: true });
+    }, { passive: false });
 });
 </script>
 
@@ -3002,4 +2998,5 @@ document.addEventListener('keydown', function(e) {
 });
 </script>
 
+<script src="./smooth-scroll.js?v=20261017-grid5"></script>
 </body></html>

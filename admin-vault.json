@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "algorithm": "PBKDF2-SHA256/AES-256-GCM",
+  "binding": "tais-admin:kaARAss/---:v1",
+  "iterations": 600000,
+  "salt": "UvSsp3mORusgZdDi0FE2oCRdx0DCTfXcAGyHzR5Kgrk=",
+  "iv": "CnT88TGhECR+7ucj",
+  "ciphertext": "psDTEnFTTpVJcEAb1Sd4UtBM3RH7uWdLUPepas2cPksBAVMqCBwIvoq6zxvmFU5tdo7NJgaO6oS84o5pB42f1+K+KGITQjnVeQmvGmDjZ8pyN7kCCWHj8kW73fzcmzArdVosNBz8MD4nV+0cJWwV1C4WTh9k8zO+yHwbKe4VqZSUZ0UT+qE6ENbMj5Qu3pkUbf0MfpG6JOC+enM7B6/+"
+}

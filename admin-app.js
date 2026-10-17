@@ -56,6 +56,17 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
             } catch { serverAvailable = false; }
             return serverAvailable;
         }
+        let staticVault = null;
+        let staticVaultPromise;
+        function getStaticVault() {
+            if (!staticVaultPromise) staticVaultPromise = (async () => {
+                const response = await fetch('/admin-vault.json?v=20261017-password1', {cache:'no-store', signal:AbortSignal.timeout(15000)});
+                if (response.status === 404) return null;
+                if (!response.ok) throw new Error('Не удалось загрузить конфигурацию входа. Повторите позже.');
+                return TaisAdminCrypto.validate(await response.json());
+            })();
+            return staticVaultPromise;
+        }
         function setAuthenticated(value) {
             appState.authenticated = value;
             document.getElementById('login-screen').style.display = value ? 'none' : 'flex';
@@ -72,15 +83,16 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
             if (await isServerAvailable()) {
                 try { await jsonRequest('/api/admin/check-auth'); setAuthenticated(true); await loadData(); return; } catch {}
             } else {
-                document.querySelector('label[for="password"]').textContent = 'Личный GitHub-токен';
-                pass.placeholder = 'GitHub token: доступ Contents → Read and write';
+                staticVault = await getStaticVault();
+                document.querySelector('label[for="password"]').textContent = staticVault ? 'Пароль' : 'Личный GitHub-токен';
+                pass.placeholder = staticVault ? 'Введите ваш пароль' : 'GitHub token: доступ Contents → Read and write';
                 user.value = appState.github.owner;
                 const note = document.createElement('p');
                 note.style.cssText = 'color:#c7bea9;font-size:12px;line-height:1.6;margin:12px 0';
-                note.textContent = 'Статический сайт: вход подтверждается через GitHub. Нужен личный токен только для репозитория kaARAss/--- с правом Contents: Read and write. Токен хранится лишь в памяти этой вкладки, не публикуется и не сохраняется в браузере. Старый пароль не защищал доступ к публикации.';
+                note.textContent = staticVault ? 'Вход по паролю. Ключ публикации зашифрован; после входа он используется только в памяти вкладки. Пароль не отправляется на сервер и не записывается в сайт.' : 'Для этого статического сайта нужен личный GitHub-токен с доступом Contents: Read and write только к репозиторию kaARAss/---. Токен используется лишь в памяти вкладки.';
                 document.getElementById('login-form').appendChild(note);
                 const form = document.getElementById('change-pass-form');
-                form.innerHTML = '<p style="line-height:1.7">Доступ к публикации подтверждается GitHub. Пароль и двухфакторную защиту меняйте в настройках GitHub. Для закрытия этой сессии используйте «Выйти». Черновики хранятся только в этом браузере; их можно удалить отдельно.</p><button type="button" id="clear-local-draft" class="btn">Удалить локальный черновик</button>';
+                form.innerHTML = '<p style="line-height:1.7">' + (staticVault ? 'Ключ GitHub хранится в зашифрованной конфигурации, пароль — только у владельца. Для смены пароля или ключа конфигурацию нужно перешифровать и опубликовать заново. Старые версии доступны в Git-истории: при утечке пароля отзовите старый токен и замените оба секрета. Статический сайт не защищает от офлайн-подбора пароля. Если срок действия ключа закончится, его также нужно заменить.' : 'Доступ к публикации подтверждается личным токеном GitHub.') + ' Для закрытия этой сессии используйте «Выйти». Черновики хранятся только в этом браузере.</p><button type="button" id="clear-local-draft" class="btn">Удалить локальный черновик</button>';
                 document.getElementById('clear-local-draft').onclick = async () => { if (confirm('Удалить черновик и выбранные файлы из этого браузера?')) { await draftDelete(); showToast('Локальный черновик удалён'); } };
             }
             setAuthenticated(false);
@@ -94,17 +106,19 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
                 if (await isServerAvailable()) {
                     await jsonRequest('/api/admin/login', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({username:document.getElementById('username').value.trim(),password:document.getElementById('password').value}) });
                 } else {
-                    const token = document.getElementById('password').value.trim();
-                    if (!token) throw new Error('Введите личный GitHub-токен');
+                    const vault = await getStaticVault();
+                    const entered = document.getElementById('password').value;
+                    const token = vault ? await TaisAdminCrypto.decrypt(vault, entered) : entered.trim();
+                    if (!token) throw new Error(vault ? 'Введите пароль' : 'Введите личный GitHub-токен');
                     const headers = {'Authorization':'Bearer ' + token, 'Accept':'application/vnd.github+json'};
                     const repo = await jsonRequest('https://api.github.com/repos/' + appState.github.owner + '/' + appState.github.repo, {headers});
-                    if (!repo.permissions || !repo.permissions.push) throw new Error('У этого GitHub-токена нет прав на запись в репозиторий');
+                    if (!repo.permissions || !repo.permissions.push) throw new Error('У ключа публикации нет прав на запись в репозиторий');
                     appState.github.token = token;
                 }
                 document.getElementById('password').value = '';
                 setAuthenticated(true);
                 await loadData();
-            } catch (err) { appState.github.token = ''; setAuthenticated(false); error.textContent = err.message; error.style.display = 'block'; }
+            } catch (err) { document.getElementById('password').value = ''; appState.github.token = ''; setAuthenticated(false); error.textContent = err.message; error.style.display = 'block'; }
             finally { button.disabled = false; }
         });
         document.getElementById('btn-logout').addEventListener('click', async () => {

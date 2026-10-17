@@ -1,0 +1,3 @@
+/* Run privately with TAIS_GITHUB_TOKEN and TAIS_ADMIN_PASSWORD in the environment. */
+const fs=require('fs');const path=require('path');const C=require('../admin-crypto');
+(async()=>{const token=process.env.TAIS_GITHUB_TOKEN,password=process.env.TAIS_ADMIN_PASSWORD;if(!token||!password)throw new Error('Задайте TAIS_GITHUB_TOKEN и TAIS_ADMIN_PASSWORD в приватном окружении; не передавайте их аргументами командной строки.');const vault=await C.encrypt(token,password);fs.writeFileSync(path.join(__dirname,'../admin-vault.json'),JSON.stringify(vault,null,2)+'\n');console.log('Зашифрованная конфигурация создана. Опубликуйте admin-vault.json; исходные секреты не публикуйте.');})().catch(e=>{console.error(e.message);process.exit(1)});

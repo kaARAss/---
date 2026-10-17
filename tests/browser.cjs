@@ -1,5 +1,6 @@
 /* Isolated integration test: all GitHub responses are mocked, no real token or publish. */
 const {chromium}=require('playwright');const fs=require('fs');const path=require('path');const assert=require('node:assert/strict');const C=require('../content-utils');
+const Crypto=require('../admin-crypto');const TEST_PASSWORD='fixture-only-long-password';let testVault;
 const ROOT=path.resolve(__dirname,'..');const BASE=process.env.TAIS_TEST_URL||'http://127.0.0.1:8765';
 let published=fs.readFileSync(path.join(ROOT,'index.html'),'utf8'),head='base-commit',sequence=0;const blobs=new Map(),trees=new Map(),commits=new Map(),assets=new Map();let patchCount=0,lastPaths=[],failBlob=false;
 function ghResponse(route){
@@ -18,8 +19,8 @@ function ghResponse(route){
  }else throw new Error('Unexpected mocked GitHub path '+req.method()+' '+p);
  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(body)});
 }
-async function routeAll(route){const u=new URL(route.request().url());if(u.hostname==='api.github.com')return ghResponse(route);if(u.origin!==BASE)return route.abort();if(u.pathname==='/api/admin/check-auth')return route.fulfill({status:404,body:'not found'});if(u.pathname==='/'||u.pathname==='/index.html')return route.fulfill({contentType:'text/html; charset=utf-8',body:published});if(assets.has(u.pathname))return route.fulfill({contentType:/\.mp4$/.test(u.pathname)?'video/mp4':'image/png',body:assets.get(u.pathname)});return route.continue();}
-async function login(p){await p.locator('#password').fill('test-only-mocked-token');await p.locator('#username').fill('kaARAss');await p.locator('#btn-login-submit').click();await p.locator('#dashboard-screen').waitFor({state:'visible'});await p.waitForFunction(()=>appState.data?.monthsData.length===10 && !appState.loading);}
+async function routeAll(route){const u=new URL(route.request().url());if(u.hostname==='api.github.com')return ghResponse(route);if(u.origin!==BASE)return route.abort();if(u.pathname==='/admin-vault.json')return route.fulfill({contentType:'application/json',body:JSON.stringify(testVault)});if(u.pathname==='/api/admin/check-auth')return route.fulfill({status:404,body:'not found'});if(u.pathname==='/'||u.pathname==='/index.html')return route.fulfill({contentType:'text/html; charset=utf-8',body:published});if(assets.has(u.pathname))return route.fulfill({contentType:/\.mp4$/.test(u.pathname)?'video/mp4':'image/png',body:assets.get(u.pathname)});return route.continue();}
+async function login(p){await p.locator('#password').fill(TEST_PASSWORD);await p.locator('#username').fill('kaARAss');await p.locator('#btn-login-submit').click();await p.locator('#dashboard-screen').waitFor({state:'visible'});await p.waitForFunction(()=>appState.data?.monthsData.length===10 && !appState.loading);}
 async function pick(p,id,file){await p.locator(id).setInputFiles(path.join(__dirname,'fixtures',file));await p.waitForTimeout(80);}
 async function chooseShow(p,index){await p.locator('[data-tab="tab-shows"]').click();await p.locator('#shows-selector .show-pill').nth(index).click();}
 async function checkShows(browser,width){
@@ -43,8 +44,12 @@ async function checkShows(browser,width){
  await p.locator('a[onclick*="openOrderMessengerModal"]').last().click();assert.equal(await p.locator('.order-messenger-btn-tg').getAttribute('data-url'),'https://t.me/test_changed');assert.equal(await p.locator('.order-messenger-btn-tg').getAttribute('onclick'),null);assert.equal(errors.length,0,errors.join('\n'));await context.close();console.log('PASS all 10 shows, gallery, contacts and '+(width===390?'buttons/native swipe':'desktop')+' at '+width+'px');
 }
 (async()=>{
+ testVault=await Crypto.encrypt('test-only-mocked-token',TEST_PASSWORD);
  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||(fs.existsSync('/usr/local/bin/chromium')?'/usr/local/bin/chromium':chromium.executablePath()),headless:true,args:['--no-sandbox']});try{
- const context=await browser.newContext({viewport:{width:1440,height:1000}});await context.route('**/*',routeAll);const p=await context.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('dialog',d=>d.accept());await p.goto(BASE+'/admin/',{waitUntil:'networkidle'});await login(p);
+ const context=await browser.newContext({viewport:{width:1440,height:1000}});await context.route('**/*',routeAll);const p=await context.newPage();const errors=[];p.on('pageerror',e=>errors.push(e.message));p.on('dialog',d=>d.accept());await p.goto(BASE+'/admin/',{waitUntil:'networkidle'});
+ await p.locator('#password').fill('wrong-password');await p.locator('#btn-login-submit').click();await p.locator('#login-error-msg').waitFor({state:'visible'});assert.equal(await p.evaluate(()=>appState.authenticated),false);assert.equal(await p.evaluate(()=>appState.github.token),'');assert.equal(await p.locator('#password').inputValue(),'');
+ await login(p);assert.equal(await p.locator('label[for="password"]').textContent(),'Пароль');
+ const stores=await p.evaluate(()=>JSON.stringify({local:{...localStorage},session:{...sessionStorage}}));assert.ok(!stores.includes(TEST_PASSWORD));assert.ok(!stores.includes('test-only-mocked-token'));
  const unchanged=await p.evaluate(()=>TaisContent.stringify(appState.data));
  for(let i=0;i<10;i++){await chooseShow(p,i);await p.evaluate(()=>saveCurrentShowFormToState());}
  assert.equal(await p.evaluate(()=>TaisContent.stringify(appState.data)),unchanged,'viewing and saving shows preserves original HTML');

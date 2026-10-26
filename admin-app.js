@@ -815,6 +815,42 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
             });
         }
 
+        // Reorder whole media objects, keeping video/poster/crop and pending uploads together.
+        function createMediaOrderControls(show, index, placement) {
+            const controls = document.createElement('div');
+            controls.className = 'media-order-controls';
+            const items = show.media || [];
+            const name = items[index]?.label || (items[index]?.type === 'video' ? 'Видео' : 'Фото');
+            for (const [direction, delta, text] of [['up', -1, '↑ Выше'], ['down', 1, '↓ Ниже']]) {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'btn btn-secondary btn-media-move-' + direction;
+                button.textContent = text;
+                button.setAttribute('aria-label', name + ': ' + (delta < 0 ? 'переместить выше' : 'переместить ниже'));
+                button.disabled = index + delta < 0 || index + delta >= items.length;
+                button.addEventListener('click', () => {
+                    if (publishing || processingMedia || appState.loading) return;
+                    const target = index + delta;
+                    if (target < 0 || target >= items.length) return;
+                    const scrollList = document.getElementById('side-materials-scroll-list');
+                    const scrollTop = scrollList?.scrollTop || 0;
+                    const [item] = items.splice(index, 1);
+                    items.splice(target, 0, item);
+                    renderShowMediaGrid(show);
+                    if (scrollList) scrollList.scrollTop = scrollTop;
+                    const container = document.getElementById(placement === 'side' ? 'side-materials-scroll-list' : 'current-show-media-grid');
+                    const movedRow = container?.children[target];
+                    const focusButton = movedRow?.querySelector('.btn-media-move-' + direction + ':not(:disabled)') || movedRow?.querySelector('.media-order-controls button:not(:disabled)');
+                    focusButton?.focus({preventScroll: true});
+                    const status = document.getElementById('media-order-status');
+                    if (status) status.textContent = 'Порядок изменён: позиция ' + (target + 1) + ' из ' + items.length + '. Для сайта нажмите «Опубликовать».';
+                    scheduleDraft();
+                });
+                controls.appendChild(button);
+            }
+            return controls;
+        }
+
         // Render Media Items Grid, Side Materials List, and Live Rail for selected show
         function renderShowMediaGrid(show) {
             const grid = document.getElementById('current-show-media-grid');
@@ -894,6 +930,12 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
                             <button type="button" class="side-material-del-btn btn-side-delete" data-index="${idx}" title="Удалить из карточки">✕</button>
                         `;
 
+                        const actions = document.createElement('div');
+                        actions.className = 'side-material-actions';
+                        actions.appendChild(createMediaOrderControls(show, idx, 'side'));
+                        for (const action of sideItem.querySelectorAll('.btn-side-adjust, .btn-side-delete')) actions.appendChild(action);
+                        sideItem.appendChild(actions);
+
                         const adjBtn = sideItem.querySelector('.btn-side-adjust');
                         if (adjBtn) {
                             adjBtn.addEventListener('click', () => {
@@ -955,6 +997,8 @@ function fileToBase64(file) { return new Promise((resolve,reject)=>{const r=new 
                         </div>
                     </div>
                 `;
+
+                card.insertBefore(createMediaOrderControls(show, idx, 'grid'), card.querySelector('.media-actions'));
 
                 // Update label on change
                 const labelInput = card.querySelector('.media-label-input');
